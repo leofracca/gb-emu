@@ -1,5 +1,6 @@
 /*
  * See pages 8 to 18 of the documentation (docs/GB.pdf)
+ * See https://gbdev.io/pandocs/Memory_Map.html
  */
 
 #include "../include/memory.h" // Memory

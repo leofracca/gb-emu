@@ -1,5 +1,6 @@
 /*
  * See pages 60 to 64 of the documentation (docs/GB.pdf)
+ * See https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
  */
 
 #include "../include/registers.h"// Registers

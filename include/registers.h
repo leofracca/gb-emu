@@ -6,6 +6,7 @@
 
 /*
  * See pages 60 to 64 of the documentation (docs/GB.pdf)
+ * See https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
  */
 
 #pragma once
@@ -24,7 +25,6 @@ namespace gameboy
 
     /**
      * @brief Registers class used to manipulate the registers of the Gameboy
-     *
      */
     class Registers
     {
@@ -32,11 +32,14 @@ namespace gameboy
         /**
          * @brief Registers
          * @details The Game Boy has eight 8-bit registers A,B,C,D,E,F,H,L
-         *           and two 16-bit registers SP & PC.
-         *           Some instructions, however, allow you to use the
-         *           registers A,B,C,D,E,H, & L as 16-bit registers by
-         *           pairing them up in the following manner: AF,BC,DE, &
-         *           HL.
+         *          and two 16-bit registers SP & PC.
+         *          Some instructions, however, allow you to use the
+         *          registers A,B,C,D,E,H, & L as 16-bit registers by
+         *          pairing them up in the following manner: AF,BC,DE, &
+         *          HL.
+         *          The following structure comes from this observation.
+         *          In this way, one can use the registers alone or in
+         *          pairs.
          */
         struct
         {
