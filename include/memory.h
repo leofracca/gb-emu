@@ -15,6 +15,8 @@
 
 namespace gameboy
 {
+    constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
+
     class Memory
     {
     public:
