@@ -30,7 +30,7 @@ namespace gameboy
             memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
 
             // Store the joypad state that triggered the interrupt
-            memory->joypadState = m_currentJoypadState;
+            memory->m_joypadState = m_currentJoypadState;
             // Reset the joypad state
             m_currentJoypadState = 0;
         }
