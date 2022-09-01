@@ -15,9 +15,9 @@ namespace gameboy
     {
         // Remember that the joypad state is inverted (0 = pressed, 1 = not pressed)
         if (pressed)
-            m_currentJoypadState = m_memory->joypad & ~(static_cast<uint8_t>(button));
+            m_currentJoypadState = m_memory->m_joypadState & ~(static_cast<uint8_t>(button));
         else
-            m_currentJoypadState = m_memory->joypad | static_cast<uint8_t>(button);
+            m_currentJoypadState = m_memory->m_joypadState | static_cast<uint8_t>(button);
     }
 
     void Input::sendInterrupt(Memory *memory)

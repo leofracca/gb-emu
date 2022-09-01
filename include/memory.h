@@ -25,7 +25,7 @@ namespace gameboy
 
         uint8_t m_memory[0x10000]; ///< The memory of the Gameboy
 
-        uint8_t joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
+        uint8_t m_joypadState = 0; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         /**
          * @brief Construct a new Memory object
