@@ -13,6 +13,17 @@ namespace gameboy
 
     uint8_t Memory::read(uint16_t address)
     {
+        // Joypad
+        if (address == JOYPAD_ADDRESS)
+        {
+            uint8_t actionOrDirection = memory[JOYPAD_ADDRESS] & 0x30;
+
+            if(actionOrDirection == 0x20) // Direction
+                return ((joypad >> 4) & 0xF) | 0x20;
+            else if(actionOrDirection == 0x10) // Action
+                return (joypad & 0xF) | 0x10;
+        }
+
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             return m_cartridge->read(address);
