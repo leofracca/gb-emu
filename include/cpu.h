@@ -234,7 +234,7 @@ namespace gameboy
          *            Z - Set if result is zero.
          *            N - Set.
          *            H - Set if no borrow from bit 4.
-         *            C - Set if no borrow.
+         *            C - Not affected.
          *
          * @param n The register to decrement.
          */
