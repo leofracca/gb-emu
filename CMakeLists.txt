@@ -8,4 +8,6 @@ add_executable(GBEmu
         src/mbc.cpp include/mbc.h
         src/cartridge.cpp include/cartridge.h
         src/memory.cpp include/memory.h
-        src/timer.cpp include/timer.h)
+        src/timer.cpp include/timer.h
+        src/input.cpp include/input.h
+        src/cpu.cpp include/cpu.h)

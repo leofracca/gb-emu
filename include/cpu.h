@@ -87,6 +87,21 @@ namespace gameboy
         bool m_halted; ///< True if the cpu is halted
         bool m_ime; ///< True if the cpu is in the interrupt master enable mode
 
+        // Push and pop
+        /**
+         * @brief Push a value onto the stack.
+         *
+         * @param value The value to push onto the stack.
+         */
+        void push(uint16_t value);
+
+        /**
+         * @brief Pop a value from the stack.
+         *
+         * @return The value popped from the stack.
+         */
+        uint16_t pop();
+
         // CPU instructions
         /**
          * @brief Add the value n to A.
@@ -356,7 +371,7 @@ namespace gameboy
         void di();
 
         /**
-         * @brief Enable interrupts. This intruction enables interrupts
+         * @brief Enable interrupts. This instruction enables interrupts
          *        but not immediately. Interrupts are enabled after
          *        instruction after EI is executed.
          */
