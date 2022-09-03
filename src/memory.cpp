@@ -16,7 +16,7 @@ namespace gameboy
         // Joypad
         if (address == JOYPAD_ADDRESS)
         {
-            uint8_t actionOrDirection = memory[JOYPAD_ADDRESS] & 0x30;
+            uint8_t actionOrDirection = m_memory[JOYPAD_ADDRESS] & 0x30;
 
             if(actionOrDirection == 0x20) // Direction
                 return ((m_joypadState >> 4) & 0xF) | 0x20;

@@ -35,9 +35,9 @@ namespace gameboy
         else if (address < 0x8000)
         {
             if (m_mode)
-                return rom[(m_romBank & 0x1f) * 0x4000 + address - 0x4000];
+                return m_rom[(m_romBank & 0x1f) * 0x4000 + address - 0x4000];
 
-            return rom[(m_romBank & 0x7f) * 0x4000 + address - 0x4000];
+            return m_rom[(m_romBank & 0x7f) * 0x4000 + address - 0x4000];
         }
         else if (address >= 0xA000 && address < 0xC000)
         {
@@ -80,7 +80,7 @@ namespace gameboy
         if (address < 0x4000)
             return m_rom[address];
         else if (address < 0x8000)
-            return rom[m_romBank * 0x4000 + address - 0x4000];
+            return m_rom[m_romBank * 0x4000 + address - 0x4000];
         else if (address >= 0xA000 && address < 0xC000)
         {
             if (m_ramEnabled)
@@ -115,7 +115,7 @@ namespace gameboy
         if (address < 0x4000)
             return m_rom[address];
         else if (address < 0x8000)
-            return rom[m_romBank * 0x4000 + address - 0x4000];
+            return m_rom[m_romBank * 0x4000 + address - 0x4000];
         else if (address >= 0xA000 && address < 0xC000)
         {
             if (m_ramEnabled)
@@ -155,7 +155,7 @@ namespace gameboy
         if (address < 0x4000)
             return m_rom[address];
         else if (address < 0x8000)
-            return rom[m_romBank * 0x4000 + address - 0x4000];
+            return m_rom[m_romBank * 0x4000 + address - 0x4000];
         else if (address >= 0xA000 && address < 0xC000)
         {
             if (m_ramEnabled)

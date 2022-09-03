@@ -12,6 +12,8 @@
 
 #include "mbc.h" // MBC
 
+#include <string> // std::string
+
 namespace gameboy
 {
     constexpr uint16_t CARTRIDGE_TYPE_ADDRESS = 0x0147; ///< The address of the cartridge type in the header
