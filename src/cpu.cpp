@@ -6,12 +6,773 @@
 
 #include "../include/cpu.h" // CPU
 
+#include <stdexcept> // std::runtime_error
+
 namespace gameboy
 {
     CPU::CPU(Memory *memory, Registers *registers)
         : m_memory(memory),
           m_registers(registers)
     {}
+
+    uint8_t CPU::execute_opcode(uint8_t opcode)
+    {
+        int cycles = OPCODE_CYCLES[opcode];
+
+        uint8_t value = 0; // Temp variable used for some opcodes
+
+        switch (opcode)
+        {
+            case 0x00: // NOP
+                break;
+            case 0x01: // LD BC, nn
+                m_registers->bc = m_memory->readWord(m_registers->pc);
+                m_registers->pc += 2;
+                break;
+            case 0x02: // LD (BC), A
+                m_memory->write(m_registers->bc, m_registers->a);
+                break;
+            case 0x03: // INC BC
+                m_registers->bc++;
+                break;
+            case 0x04: // INC B
+                inc(m_registers->b);
+                break;
+            case 0x05: // DEC B
+                dec(m_registers->b);
+                break;
+            case 0x06: // LD B, n
+                m_registers->b = m_memory->read(m_registers->pc++);
+                break;
+            case 0x07: // RLCA
+                rlca();
+                break;
+            case 0x08: // LD (nn), SP
+                m_memory->writeWord(m_memory->readWord(m_registers->pc), m_registers->sp);
+                m_registers->pc += 2;
+                break;
+            case 0x09: // ADD HL, BC
+                add_hl(m_registers->bc);
+                break;
+            case 0x0A: // LD A, (BC)
+                m_registers->a = m_memory->read(m_registers->bc);
+                break;
+            case 0x0B: // DEC BC
+                m_registers->bc--;
+                break;
+            case 0x0C: // INC C
+                inc(m_registers->c);
+                break;
+            case 0x0D: // DEC C
+                dec(m_registers->c);
+                break;
+            case 0x0E: // LD C, n
+                m_registers->c = m_memory->read(m_registers->pc++);
+                break;
+            case 0x0F: // RRCA
+                rrca();
+                break;
+            case 0x10: // STOP
+                break;
+            case 0x11: // LD DE, nn
+                m_registers->de = m_memory->readWord(m_registers->pc);
+                m_registers->pc += 2;
+                break;
+            case 0x12: // LD (DE), A
+                m_memory->write(m_registers->de, m_registers->a);
+                break;
+            case 0x13: // INC DE
+                m_registers->de++;
+                break;
+            case 0x14: // INC D
+                inc(m_registers->d);
+                break;
+            case 0x15: // DEC D
+                dec(m_registers->d);
+                break;
+            case 0x16: // LD D, n
+                m_registers->d = m_memory->read(m_registers->pc++);
+                break;
+            case 0x17: // RLA
+                rla();
+                break;
+            case 0x18: // JR n
+                jr();
+                break;
+            case 0x19: // ADD HL, DE
+                add_hl(m_registers->de);
+                break;
+            case 0x1A: // LD A, (DE)
+                m_registers->a = m_memory->read(m_registers->de);
+                break;
+            case 0x1B: // DEC DE
+                m_registers->de--;
+                break;
+            case 0x1C: // INC E
+                inc(m_registers->e);
+                break;
+            case 0x1D: // DEC E
+                dec(m_registers->e);
+                break;
+            case 0x1E: // LD E, n
+                m_registers->e = m_memory->read(m_registers->pc++);
+                break;
+            case 0x1F: // RRA
+                rra();
+                break;
+            case 0x20: // JR NZ, n
+                jr(!m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0x21: // LD HL, nn
+                m_registers->hl = m_memory->readWord(m_registers->pc);
+                m_registers->pc += 2;
+                break;
+            case 0x22: // LD (HL+), A
+                m_memory->write(m_registers->hl++, m_registers->a);
+                break;
+            case 0x23: // INC HL
+                m_registers->hl++;
+                break;
+            case 0x24: // INC H
+                inc(m_registers->h);
+                break;
+            case 0x25: // DEC H
+                dec(m_registers->h);
+                break;
+            case 0x26: // LD H, n
+                m_registers->h = m_memory->read(m_registers->pc++);
+                break;
+            case 0x27: // DAA
+                daa();
+                break;
+            case 0x28: // JR Z, n
+                jr(m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0x29: // ADD HL, HL
+                add_hl(m_registers->hl);
+                break;
+            case 0x2A: // LD A, (HL+)
+                m_registers->a = m_memory->read(m_registers->hl++);
+                break;
+            case 0x2B: // DEC HL
+                m_registers->hl--;
+                break;
+            case 0x2C: // INC L
+                inc(m_registers->l);
+                break;
+            case 0x2D: // DEC L
+                dec(m_registers->l);
+                break;
+            case 0x2E: // LD L, n
+                m_registers->l = m_memory->read(m_registers->pc++);
+                break;
+            case 0x2F: // CPL
+                cpl();
+                break;
+            case 0x30: // JR NC, n
+                jr(!m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0x31: // LD SP, nn
+                m_registers->sp = m_memory->readWord(m_registers->pc);
+                m_registers->pc += 2;
+                break;
+            case 0x32: // LD (HL-), A
+                m_memory->write(m_registers->hl--, m_registers->a);
+                break;
+            case 0x33: // INC SP
+                m_registers->sp++;
+                break;
+            case 0x34: // INC (HL)
+                value = m_memory->read(m_registers->hl);
+                inc(value);
+                m_memory->write(m_registers->hl, value);
+                break;
+            case 0x35: // DEC (HL)
+                value = m_memory->read(m_registers->hl);
+                dec(value);
+                m_memory->write(m_registers->hl, value);
+                break;
+            case 0x36: // LD (HL), n
+                m_memory->write(m_registers->hl, m_memory->read(m_registers->pc++));
+                break;
+            case 0x37: // SCF
+                scf();
+                break;
+            case 0x38: // JR C, n
+                jr(m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0x39: // ADD HL, SP
+                add_hl(m_registers->sp);
+                break;
+            case 0x3A: // LD A, (HL-)
+                m_registers->a = m_memory->read(m_registers->hl--);
+                break;
+            case 0x3B: // DEC SP
+                m_registers->sp--;
+                break;
+            case 0x3C: // INC A
+                inc(m_registers->a);
+                break;
+            case 0x3D: // DEC A
+                dec(m_registers->a);
+                break;
+            case 0x3E: // LD A, n
+                m_registers->a = m_memory->read(m_registers->pc++);
+                break;
+            case 0x3F: // CCF
+                ccf();
+                break;
+            case 0x40: // LD B, B
+                m_registers->b = m_registers->b;
+                break;
+            case 0x41: // LD B, C
+                m_registers->b = m_registers->c;
+                break;
+            case 0x42: // LD B, D
+                m_registers->b = m_registers->d;
+                break;
+            case 0x43: // LD B, E
+                m_registers->b = m_registers->e;
+                break;
+            case 0x44: // LD B, H
+                m_registers->b = m_registers->h;
+                break;
+            case 0x45: // LD B, L
+                m_registers->b = m_registers->l;
+                break;
+            case 0x46: // LD B, (HL)
+                m_registers->b = m_memory->read(m_registers->hl);
+                break;
+            case 0x47: // LD B, A
+                m_registers->b = m_registers->a;
+                break;
+            case 0x48: // LD C, B
+                m_registers->c = m_registers->b;
+                break;
+            case 0x49: // LD C, C
+                m_registers->c = m_registers->c;
+                break;
+            case 0x4A: // LD C, D
+                m_registers->c = m_registers->d;
+                break;
+            case 0x4B: // LD C, E
+                m_registers->c = m_registers->e;
+                break;
+            case 0x4C: // LD C, H
+                m_registers->c = m_registers->h;
+                break;
+            case 0x4D: // LD C, L
+                m_registers->c = m_registers->l;
+                break;
+            case 0x4E: // LD C, (HL)
+                m_registers->c = m_memory->read(m_registers->hl);
+                break;
+            case 0x4F: // LD C, A
+                m_registers->c = m_registers->a;
+                break;
+            case 0x50: // LD D, B
+                m_registers->d = m_registers->b;
+                break;
+            case 0x51: // LD D, C
+                m_registers->d = m_registers->c;
+                break;
+            case 0x52: // LD D, D
+                m_registers->d = m_registers->d;
+                break;
+            case 0x53: // LD D, E
+                m_registers->d = m_registers->e;
+                break;
+            case 0x54: // LD D, H
+                m_registers->d = m_registers->h;
+                break;
+            case 0x55: // LD D, L
+                m_registers->d = m_registers->l;
+                break;
+            case 0x56: // LD D, (HL)
+                m_registers->d = m_memory->read(m_registers->hl);
+                break;
+            case 0x57: // LD D, A
+                m_registers->d = m_registers->a;
+                break;
+            case 0x58: // LD E, B
+                m_registers->e = m_registers->b;
+                break;
+            case 0x59: // LD E, C
+                m_registers->e = m_registers->c;
+                break;
+            case 0x5A: // LD E, D
+                m_registers->e = m_registers->d;
+                break;
+            case 0x5B: // LD E, E
+                m_registers->e = m_registers->e;
+                break;
+            case 0x5C: // LD E, H
+                m_registers->e = m_registers->h;
+                break;
+            case 0x5D: // LD E, L
+                m_registers->e = m_registers->l;
+                break;
+            case 0x5E: // LD E, (HL)
+                m_registers->e = m_memory->read(m_registers->hl);
+                break;
+            case 0x5F: // LD E, A
+                m_registers->e = m_registers->a;
+                break;
+            case 0x60: // LD H, B
+                m_registers->h = m_registers->b;
+                break;
+            case 0x61: // LD H, C
+                m_registers->h = m_registers->c;
+                break;
+            case 0x62: // LD H, D
+                m_registers->h = m_registers->d;
+                break;
+            case 0x63: // LD H, E
+                m_registers->h = m_registers->e;
+                break;
+            case 0x64: // LD H, H
+                m_registers->h = m_registers->h;
+                break;
+            case 0x65: // LD H, L
+                m_registers->h = m_registers->l;
+                break;
+            case 0x66: // LD H, (HL)
+                m_registers->h = m_memory->read(m_registers->hl);
+                break;
+            case 0x67: // LD H, A
+                m_registers->h = m_registers->a;
+                break;
+            case 0x68: // LD L, B
+                m_registers->l = m_registers->b;
+                break;
+            case 0x69: // LD L, C
+                m_registers->l = m_registers->c;
+                break;
+            case 0x6A: // LD L, D
+                m_registers->l = m_registers->d;
+                break;
+            case 0x6B: // LD L, E
+                m_registers->l = m_registers->e;
+                break;
+            case 0x6C: // LD L, H
+                m_registers->l = m_registers->h;
+                break;
+            case 0x6D: // LD L, L
+                m_registers->l = m_registers->l;
+                break;
+            case 0x6E: // LD L, (HL)
+                m_registers->l = m_memory->read(m_registers->hl);
+                break;
+            case 0x6F: // LD L, A
+                m_registers->l = m_registers->a;
+                break;
+            case 0x70: // LD (HL), B
+                m_memory->write(m_registers->hl, m_registers->b);
+                break;
+            case 0x71: // LD (HL), C
+                m_memory->write(m_registers->hl, m_registers->c);
+                break;
+            case 0x72: // LD (HL), D
+                m_memory->write(m_registers->hl, m_registers->d);
+                break;
+            case 0x73: // LD (HL), E
+                m_memory->write(m_registers->hl, m_registers->e);
+                break;
+            case 0x74: // LD (HL), H
+                m_memory->write(m_registers->hl, m_registers->h);
+                break;
+            case 0x75: // LD (HL), L
+                m_memory->write(m_registers->hl, m_registers->l);
+                break;
+            case 0x76: // HALT
+                halt();
+                break;
+            case 0x77: // LD (HL), A
+                m_memory->write(m_registers->hl, m_registers->a);
+                break;
+            case 0x78: // LD A, B
+                m_registers->a = m_registers->b;
+                break;
+            case 0x79: // LD A, C
+                m_registers->a = m_registers->c;
+                break;
+            case 0x7A: // LD A, D
+                m_registers->a = m_registers->d;
+                break;
+            case 0x7B: // LD A, E
+                m_registers->a = m_registers->e;
+                break;
+            case 0x7C: // LD A, H
+                m_registers->a = m_registers->h;
+                break;
+            case 0x7D: // LD A, L
+                m_registers->a = m_registers->l;
+                break;
+            case 0x7E: // LD A, (HL)
+                m_registers->a = m_memory->read(m_registers->hl);
+                break;
+            case 0x7F: // LD A, A
+                m_registers->a = m_registers->a;
+                break;
+            case 0x80: // ADD A, B
+                add(m_registers->b);
+                break;
+            case 0x81: // ADD A, C
+                add(m_registers->c);
+                break;
+            case 0x82: // ADD A, D
+                add(m_registers->d);
+                break;
+            case 0x83: // ADD A, E
+                add(m_registers->e);
+                break;
+            case 0x84: // ADD A, H
+                add(m_registers->h);
+                break;
+            case 0x85: // ADD A, L
+                add(m_registers->l);
+                break;
+            case 0x86: // ADD A, (HL)
+                add(m_memory->read(m_registers->hl));
+                break;
+            case 0x87: // ADD A, A
+                add(m_registers->a);
+                break;
+            case 0x88: // ADC A, B
+                adc(m_registers->b);
+                break;
+            case 0x89: // ADC A, C
+                adc(m_registers->c);
+                break;
+            case 0x8A: // ADC A, D
+                adc(m_registers->d);
+                break;
+            case 0x8B: // ADC A, E
+                adc(m_registers->e);
+                break;
+            case 0x8C: // ADC A, H
+                adc(m_registers->h);
+                break;
+            case 0x8D: // ADC A, L
+                adc(m_registers->l);
+                break;
+            case 0x8E: // ADC A, (HL)
+                adc(m_memory->read(m_registers->hl));
+                break;
+            case 0x8F: // ADC A, A
+                adc(m_registers->a);
+                break;
+            case 0x90: // SUB B
+                sub(m_registers->b);
+                break;
+            case 0x91: // SUB C
+                sub(m_registers->c);
+                break;
+            case 0x92: // SUB D
+                sub(m_registers->d);
+                break;
+            case 0x93: // SUB E
+                sub(m_registers->e);
+                break;
+            case 0x94: // SUB H
+                sub(m_registers->h);
+                break;
+            case 0x95: // SUB L
+                sub(m_registers->l);
+                break;
+            case 0x96: // SUB (HL)
+                sub(m_memory->read(m_registers->hl));
+                break;
+            case 0x97: // SUB A
+                sub(m_registers->a);
+                break;
+            case 0x98: // SBC A, B
+                sbc(m_registers->b);
+                break;
+            case 0x99: // SBC A, C
+                sbc(m_registers->c);
+                break;
+            case 0x9A: // SBC A, D
+                sbc(m_registers->d);
+                break;
+            case 0x9B: // SBC A, E
+                sbc(m_registers->e);
+                break;
+            case 0x9C: // SBC A, H
+                sbc(m_registers->h);
+                break;
+            case 0x9D: // SBC A, L
+                sbc(m_registers->l);
+                break;
+            case 0x9E: // SBC A, (HL)
+                sbc(m_memory->read(m_registers->hl));
+                break;
+            case 0x9F: // SBC A, A
+                sbc(m_registers->a);
+                break;
+            case 0xA0: // AND B
+                and_(m_registers->b);
+                break;
+            case 0xA1: // AND C
+                and_(m_registers->c);
+                break;
+            case 0xA2: // AND D
+                and_(m_registers->d);
+                break;
+            case 0xA3: // AND E
+                and_(m_registers->e);
+                break;
+            case 0xA4: // AND H
+                and_(m_registers->h);
+                break;
+            case 0xA5: // AND L
+                and_(m_registers->l);
+                break;
+            case 0xA6: // AND (HL)
+                and_(m_memory->read(m_registers->hl));
+                break;
+            case 0xA7: // AND A
+                and_(m_registers->a);
+                break;
+            case 0xA8: // XOR B
+                xor_(m_registers->b);
+                break;
+            case 0xA9: // XOR C
+                xor_(m_registers->c);
+                break;
+            case 0xAA: // XOR D
+                xor_(m_registers->d);
+                break;
+            case 0xAB: // XOR E
+                xor_(m_registers->e);
+                break;
+            case 0xAC: // XOR H
+                xor_(m_registers->h);
+                break;
+            case 0xAD: // XOR L
+                xor_(m_registers->l);
+                break;
+            case 0xAE: // XOR (HL)
+                xor_(m_memory->read(m_registers->hl));
+                break;
+            case 0xAF: // XOR A
+                xor_(m_registers->a);
+                break;
+            case 0xB0: // OR B
+                or_(m_registers->b);
+                break;
+            case 0xB1: // OR C
+                or_(m_registers->c);
+                break;
+            case 0xB2: // OR D
+                or_(m_registers->d);
+                break;
+            case 0xB3: // OR E
+                or_(m_registers->e);
+                break;
+            case 0xB4: // OR H
+                or_(m_registers->h);
+                break;
+            case 0xB5: // OR L
+                or_(m_registers->l);
+                break;
+            case 0xB6: // OR (HL)
+                or_(m_memory->read(m_registers->hl));
+                break;
+            case 0xB7: // OR A
+                or_(m_registers->a);
+                break;
+            case 0xB8: // CP B
+                cp(m_registers->b);
+                break;
+            case 0xB9: // CP C
+                cp(m_registers->c);
+                break;
+            case 0xBA: // CP D
+                cp(m_registers->d);
+                break;
+            case 0xBB: // CP E
+                cp(m_registers->e);
+                break;
+            case 0xBC: // CP H
+                cp(m_registers->h);
+                break;
+            case 0xBD: // CP L
+                cp(m_registers->l);
+                break;
+            case 0xBE: // CP (HL)
+                cp(m_memory->read(m_registers->hl));
+                break;
+            case 0xBF: // CP A
+                cp(m_registers->a);
+                break;
+            case 0xC0: // RET NZ
+                ret(!m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xC1: // POP BC
+                m_registers->bc = pop();
+                break;
+            case 0xC2: // JP NZ, nn
+                jp(!m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xC3: // JP nn
+                jp();
+                break;
+            case 0xC4: // CALL NZ, nn
+                call(!m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xC5: // PUSH BC
+                push(m_registers->bc);
+                break;
+            case 0xC6: // ADD A, n
+                add(m_memory->read(m_registers->pc++));
+                break;
+            case 0xC7: // RST 00H
+                rst(0x00);
+                break;
+            case 0xC8: // RET Z
+                ret(m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xC9: // RET
+                ret();
+                break;
+            case 0xCA: // JP Z, nn
+                jp(m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xCB: // CB prefix
+                // TODO: CB opcodes
+                break;
+            case 0xCC: // CALL Z, nn
+                call(m_registers->getFlag(ZERO_FLAG));
+                break;
+            case 0xCD: // CALL nn
+                call();
+                break;
+            case 0xCE: // ADC A, n
+                adc(m_memory->read(m_registers->pc++));
+                break;
+            case 0xCF: // RST 08H
+                rst(0x08);
+                break;
+            case 0xD0: // RET NC
+                ret(!m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xD1: // POP DE
+                m_registers->de = pop();
+                break;
+            case 0xD2: // JP NC, nn
+                jp(!m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xD4: // CALL NC, nn
+                call(!m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xD5: // PUSH DE
+                push(m_registers->de);
+                break;
+            case 0xD6: // SUB n
+                sub(m_memory->read(m_registers->pc++));
+                break;
+            case 0xD7: // RST 10H
+                rst(0x10);
+                break;
+            case 0xD8: // RET C
+                ret(m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xD9: // RETI
+                reti();
+                break;
+            case 0xDA: // JP C, nn
+                jp(m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xDC: // CALL C, nn
+                call(m_registers->getFlag(CARRY_FLAG));
+                break;
+            case 0xDE: // SBC A, n
+                sbc(m_memory->read(m_registers->pc++));
+                break;
+            case 0xDF: // RST 18H
+                rst(0x18);
+                break;
+            case 0xE0: // LDH (n), A
+                m_memory->write(LD_START_ADDRESS + m_memory->read(m_registers->pc++), m_registers->a);
+                break;
+            case 0xE1: // POP HL
+                m_registers->hl = pop();
+                break;
+            case 0xE2: // LD (C), A
+                m_memory->write(LD_START_ADDRESS + m_registers->c, m_registers->a);
+                break;
+            case 0xE5: // PUSH HL
+                push(m_registers->hl);
+                break;
+            case 0xE6: // AND n
+                and_(m_memory->read(m_registers->pc++));
+                break;
+            case 0xE7: // RST 20H
+                rst(0x20);
+                break;
+            case 0xE8: // ADD SP, n
+                add_sp(static_cast<int8_t>(m_memory->read(m_registers->pc++)));
+                break;
+            case 0xE9: // JP (HL)
+                m_registers->pc = m_registers->hl;
+                break;
+            case 0xEA: // LD (nn), A
+                m_memory->write(m_memory->readWord(m_registers->pc), m_registers->a);
+                m_registers->pc += 2;
+                break;
+            case 0xEE: // XOR n
+                xor_(m_memory->read(m_registers->pc++));
+                break;
+            case 0xEF: // RST 28H
+                rst(0x28);
+                break;
+            case 0xF0: // LDH A, (n)
+                m_registers->a = m_memory->read(LD_START_ADDRESS + m_memory->read(m_registers->pc++));
+                break;
+            case 0xF1: // POP AF
+                m_registers->af = pop();
+                break;
+            case 0xF2: // LD A, (C)
+                m_registers->a = m_memory->read(LD_START_ADDRESS + m_registers->c);
+                break;
+            case 0xF3: // DI
+                di();
+                break;
+            case 0xF5: // PUSH AF
+                push(m_registers->af);
+                break;
+            case 0xF6: // OR n
+                or_(m_memory->read(m_registers->pc++));
+                break;
+            case 0xF7: // RST 30H
+                rst(0x30);
+                break;
+            case 0xF8: // LD HL, SP+n
+                ldhl(static_cast<int8_t>(m_memory->read(m_registers->pc++)));
+                break;
+            case 0xF9: // LD SP, HL
+                m_registers->sp = m_registers->hl;
+                break;
+            case 0xFA: // LD A, (nn)
+                m_registers->a = m_memory->read(m_memory->readWord(m_registers->pc));
+                m_registers->pc += 2;
+                break;
+            case 0xFB: // EI
+                ei();
+                break;
+            case 0xFE: // CP n
+                cp(m_memory->read(m_registers->pc++));
+                break;
+            case 0xFF: // RST 38H
+                rst(0x38);
+                break;
+            default:
+                throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
+        }
+
+        return cycles;
+    }
 
     void CPU::push(uint16_t value)
     {

@@ -87,6 +87,8 @@ namespace gameboy
         bool m_halted; ///< True if the cpu is halted
         bool m_ime; ///< True if the cpu is in the interrupt master enable mode
 
+        constexpr static uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
+
         // Push and pop
         /**
          * @brief Push a value onto the stack.
