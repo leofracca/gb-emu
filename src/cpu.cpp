@@ -773,6 +773,9 @@ namespace gameboy
                 throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
         }
 
+        if (branched)
+            cycles = OPCODE_CYCLES_BRANCHED[opcode];
+
         return cycles;
     }
 
@@ -1810,7 +1813,7 @@ namespace gameboy
         // Set the half-carry flag according to operation
         m_registers->setFlag(HALF_CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x10) == 0x10);
         // Set the carry flag according to operation
-        m_registers->setFlag(HALF_CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x100) == 0x100);
+        m_registers->setFlag(CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x100) == 0x100);
 
         // Set the value of the register SP to the result
         m_registers->sp = static_cast<uint16_t>(resultFull);
@@ -1827,7 +1830,7 @@ namespace gameboy
         // Set the half-carry flag according to operation
         m_registers->setFlag(HALF_CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x10) == 0x10);
         // Set the carry flag according to operation
-        m_registers->setFlag(HALF_CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x100) == 0x100);
+        m_registers->setFlag(CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x100) == 0x100);
 
         // Set the value of the register SP to the result
         m_registers->hl = static_cast<uint16_t>(resultFull);
@@ -2088,11 +2091,12 @@ namespace gameboy
     void CPU::jp(bool condition)
     {
         if (condition)
+        {
             jp();
+            branched = true;
+        }
         else
             m_registers->pc += 2;
-
-        // TODO: Handle cycles based on condition
     }
 
     void CPU::jr()
@@ -2105,11 +2109,12 @@ namespace gameboy
     void CPU::jr(bool condition)
     {
         if (condition)
+        {
             jr();
+            branched = true;
+        }
         else
             m_registers->pc++;
-
-        // TODO: Handle cycles based on condition
     }
 
     void CPU::call()
@@ -2122,11 +2127,12 @@ namespace gameboy
     void CPU::call(bool condition)
     {
         if (condition)
+        {
             call();
+            branched = true;
+        }
         else
             m_registers->pc += 2;
-
-        // TODO: Handle cycles based on condition
     }
 
     void CPU::rst(uint8_t n)
@@ -2143,9 +2149,10 @@ namespace gameboy
     void CPU::ret(bool condition)
     {
         if (condition)
+        {
             ret();
-
-        // TODO: Handle cycles based on condition
+            branched = true;
+        }
     }
 
     void CPU::reti()
