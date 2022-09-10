@@ -58,7 +58,7 @@ namespace gameboy
             m_memory[address] = value;
 
         if(address >= 0x8000 && address < 0x9800)
-            UpdateTile(address, value);
+            UpdateTile(address);
 
         if(address >= 0xFE00 && address <= 0xFE9F)
             UpdateSprite(address, value);
