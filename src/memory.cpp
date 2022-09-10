@@ -33,11 +33,35 @@ namespace gameboy
 
     void Memory::write(uint16_t address, uint8_t value)
     {
+        if(address == 0xFF40){
+            m_memory[address] =  value;
+            if (!(value & (1 << 7))){
+                m_memory[0xFF44] = 0x00;
+                m_memory[0xFF41] &= 0x7C;
+            }
+        }
+
+        // DMA Transfer
+        if(address == 0xFF46)
+            for(uint16_t i = 0; i < 160; i++)
+                write(0xFE00 + i, read((value << 8) + i));
+
+        // Update colour palette
+        else if(address == 0xff47) UpdatePalette(palette_BGP, value);
+        else if(address == 0xff48) UpdatePalette(palette_OBP0, value);
+        else if(address == 0xff49) UpdatePalette(palette_OBP1, value);
+
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             m_cartridge->write(address, value);
         else
             m_memory[address] = value;
+
+        if(address >= 0x8000 && address < 0x9800)
+            UpdateTile(address, value);
+
+        if(address >= 0xFE00 && address <= 0xFE9F)
+            UpdateSprite(address, value);
     }
 
     uint16_t Memory::readWord(uint16_t address)
@@ -54,5 +78,50 @@ namespace gameboy
         uint8_t hi = (value >> 8) & 0xFF;
         write(address, lo);
         write(address + 1, hi);
+    }
+
+    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/memory.cpp
+    void Memory::UpdateTile(uint16_t laddress) {
+        uint16_t address = laddress & 0xFFFE;
+
+        uint16_t tile = (address >> 4) & 511;
+        uint16_t y = (address >> 1) & 7;
+
+        uint8_t bitIndex;
+        for(uint8_t x = 0; x < 8; x++) {
+            bitIndex = 1 << (7 - x);
+
+            tiles[tile].pixels[y][x] = ((m_memory[address] & bitIndex) ? 1 : 0) + ((m_memory[address + 1] & bitIndex) ? 2 : 0);
+        }
+    }
+
+    void Memory::UpdateSprite(uint16_t laddress, uint8_t value) {
+        uint16_t address = laddress - 0xFE00;
+        Sprite *sprite = &sprites[address >> 2];
+        sprite->ready = false;
+        switch(address & 3){
+            case 0:
+                sprite->y = value - 16;
+                break;
+            case 1:
+                sprite->x = value - 8;
+                break;
+            case 2:
+                sprite->tile = value;
+                break;
+            case 3:
+                sprite->options.value = value;
+                sprite->colourPalette = (sprite->options.paletteNumber) ? palette_OBP1 : palette_OBP0;
+                sprite->ready = true;
+                break;
+        }
+    }
+
+    void Memory::UpdatePalette(Colour *palette, uint8_t value) {
+        palette[0] = palette_colours[value & 0x3];
+        palette[1] = palette_colours[(value >> 2) & 0x3];
+        palette[2] = palette_colours[(value >> 4) & 0x3];
+        palette[3] = palette_colours[(value >> 6) & 0x3];
+
     }
 } // namespace gameboy

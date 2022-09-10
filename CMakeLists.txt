@@ -10,4 +10,5 @@ add_executable(GBEmu src/main.cpp
         src/memory.cpp include/memory.h
         src/timer.cpp include/timer.h
         src/input.cpp include/input.h
-        src/cpu.cpp include/cpu.h)
+        src/cpu.cpp include/cpu.h
+        src/ppu.cpp include/ppu.h)
