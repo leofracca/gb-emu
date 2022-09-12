@@ -5,8 +5,9 @@
  */
 
 /*
- * See pages 60 to 64 of the documentation (docs/GB.pdf)
+ * See pages 17-18 and 60 to 64 of the documentation (docs/GB.pdf)
  * See https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
+ * See https://gbdev.io/pandocs/Power_Up_Sequence.html
  */
 
 #pragma once
@@ -97,6 +98,12 @@ namespace gameboy
         uint16_t pc; ///< Program Counter
 
     public:
+        /**
+         * @brief Registers constructor
+         * @details Initialize the registers with the values they must have at the start
+         */
+        Registers();
+
         // Flag register getter and setter
         /**
          * @brief Set the value of a bit of the flag register

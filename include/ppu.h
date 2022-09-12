@@ -17,6 +17,8 @@
 #include "memory.h" // Memory
 #include "registers.h" // Registers
 
+#include <array> // std::array
+
 namespace gameboy
 {
     constexpr uint32_t SCREEN_WIDTH = 160; ///< The width of the screen in pixels
@@ -51,6 +53,9 @@ namespace gameboy
         VRAM = 3 ///< The PPU is in the VRAM mode
     };
 
+    /**
+     * @brief The PPU class emulates the behavior of the PPU (Pixel Processing Unit) of a Gameboy.
+     */
     class PPU
     {
     public:
@@ -69,10 +74,31 @@ namespace gameboy
          */
         void cycle(uint64_t cycles);
 
+        /**
+         * @brief Get the frame buffer
+         *
+         * @return The frame buffer
+         */
+        Colour* getFrameBuffer();
+
+        /**
+         * @biref Return whether the rendering is enabled
+         *
+         * @return true if the rendering is enabled
+         */
+        bool isRenderingEnabled() const;
+
+        /**
+         * @brief Set/Reset the variable that indicates whether the rendering is enabled
+         *
+         * @param enabled True if the rendering is enabled, false otherwise
+         */
+        void setRenderingEnabled(bool enabled);
+
     private:
         Memory *m_memory; ///< The memory
 
-        Colour m_frameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT]; ///< The frame buffer
+        std::array<Colour, SCREEN_WIDTH * SCREEN_HEIGHT> m_frameBuffer; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen
 
         uint64_t m_cycles = 0; ///< The number of cycles since the last frame

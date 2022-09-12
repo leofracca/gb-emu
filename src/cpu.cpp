@@ -15,6 +15,16 @@ namespace gameboy
           m_registers(registers)
     {}
 
+    uint8_t CPU::tick()
+    {
+        if(m_halted)
+            return 1;
+
+        uint8_t instruction = m_memory->read(m_registers->pc++);
+
+        return execute_opcode(instruction);
+    }
+
     uint8_t CPU::execute_opcode(uint8_t opcode)
     {
         int cycles = OPCODE_CYCLES[opcode];
@@ -641,8 +651,7 @@ namespace gameboy
                 jp(m_registers->getFlag(ZERO_FLAG));
                 break;
             case 0xCB: // CB prefix
-                cbOpcode = m_memory->read(m_registers->pc++);
-                cycles += execute_CB_opcode(cbOpcode);
+                cycles += execute_CB_opcode(m_memory->read(m_registers->pc++));
                 break;
             case 0xCC: // CALL Z, nn
                 call(m_registers->getFlag(ZERO_FLAG));
@@ -734,6 +743,7 @@ namespace gameboy
                 break;
             case 0xF1: // POP AF
                 m_registers->af = pop();
+                m_registers->f &= 0xf0;
                 break;
             case 0xF2: // LD A, (C)
                 m_registers->a = m_memory->read(LD_START_ADDRESS + m_registers->c);
@@ -1633,17 +1643,19 @@ namespace gameboy
 
     void CPU::add(uint8_t n)
     {
+        uint16_t result = m_registers->a + n;
+
         // Set the zero flag if the result is 0
-        m_registers->setFlag(ZERO_FLAG, m_registers->a + n == 0);
+        m_registers->setFlag(ZERO_FLAG, static_cast<uint8_t>(result) == 0);
         // Set the subtract flag to 0
         m_registers->setFlag(SUBTRACT_FLAG, false);
         // Set the half carry flag if there is a carry from bit 3
         m_registers->setFlag(HALF_CARRY_FLAG, (m_registers->a & 0x0F) + (n & 0x0F) > 0x0F);
         // Set the carry flag if there is a carry from bit 7
-        m_registers->setFlag(CARRY_FLAG, m_registers->a + n > 0xFF);
+        m_registers->setFlag(CARRY_FLAG, result > 0xFF);
 
         // Add n to the value of the register A
-        m_registers->a += n;
+        m_registers->a = static_cast<uint8_t>(result);
     }
 
     void CPU::adc(uint8_t n)

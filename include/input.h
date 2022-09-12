@@ -13,6 +13,8 @@
 
 #include "memory.h" // Memory
 
+#include "SDL2/SDL.h"
+
 namespace gameboy
 {
     /**
@@ -53,7 +55,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        void sendInterrupt(Memory *memory);
+        void sendInterrupt();
 
     private:
         /**

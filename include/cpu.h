@@ -92,6 +92,13 @@ namespace gameboy
         CPU(Memory *memory, Registers *registers);
 
         /**
+         * @brief Get the opcode of the next instruction, increment the program counter and execute the instruction.
+         *
+         * @return The number of cycles used by the instruction.
+         */
+        uint8_t tick();
+
+        /**
          * @brief Executes the next instruction.
          * @details Call the appropriate function depending on the opcode and execute the next instruction.
          *
@@ -104,7 +111,7 @@ namespace gameboy
         Memory *m_memory; ///< The memory
         Registers *m_registers; ///< The registers
 
-        bool m_halted; ///< True if the cpu is halted
+        bool m_halted = false; ///< True if the cpu is halted
         bool m_ime; ///< True if the cpu is in the interrupt master enable mode
 
         constexpr static uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2

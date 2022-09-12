@@ -20,17 +20,17 @@ namespace gameboy
             m_currentJoypadState = m_memory->m_joypadState | static_cast<uint8_t>(button);
     }
 
-    void Input::sendInterrupt(Memory *memory)
+    void Input::sendInterrupt()
     {
         if (m_currentJoypadState != 0)
         {
             // Set the interrupt
-            uint8_t interruptFlag = memory->read(INTERRUPT_FLAG_ADDRESS);
+            uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
             interruptFlag |= 0x10;
-            memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
 
             // Store the joypad state that triggered the interrupt
-            memory->m_joypadState = m_currentJoypadState;
+            m_memory->m_joypadState = m_currentJoypadState;
             // Reset the joypad state
             m_currentJoypadState = 0;
         }

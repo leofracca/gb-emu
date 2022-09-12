@@ -317,4 +317,19 @@ namespace gameboy
             }
         }
     }
+
+    Colour* PPU::getFrameBuffer()
+    {
+        return m_frameBuffer.data();
+    }
+
+    bool PPU::isRenderingEnabled() const
+    {
+        return m_renderingEnabled;
+    }
+
+    void PPU::setRenderingEnabled(bool enabled)
+    {
+        m_renderingEnabled = enabled;
+    }
 } // namespace gameboy
