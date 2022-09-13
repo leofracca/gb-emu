@@ -17,6 +17,7 @@ namespace gameboy
 {
     constexpr uint16_t JOYPAD_ADDRESS = 0xFF00; ///< The address of the register containing info about the joypad
     constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
+    constexpr uint16_t INTERRUPT_ENABLE_ADDRESS = 0xFFFF; ///< The address of the Interrupt Enable Register
 
     struct Colour
     {
@@ -37,7 +38,7 @@ namespace gameboy
 
         uint8_t m_memory[0x10000]; ///< The memory of the Gameboy
 
-        uint8_t m_joypadState = 0; ///< A temporary variable used to store the joypad state when an interrupt is sent
+        uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         struct Tile {
             uint8_t  pixels[8][8] = {0};

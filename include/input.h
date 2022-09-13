@@ -57,6 +57,8 @@ namespace gameboy
          */
         void sendInterrupt();
 
+        int joypadCycles = 0;
+
     private:
         /**
          * @brief The current state of the joypad
@@ -69,7 +71,7 @@ namespace gameboy
          *          To get the joypad state like the Gameboy does (and the games expect), we need to call the read function of the memory.
          *          This is done by the Memory class.
          */
-        uint8_t m_currentJoypadState = 0; ///< The joypad state
+        uint8_t m_currentJoypadState = 0xFF; ///< The joypad state
 
         Memory *m_memory; ///< The memory
     };

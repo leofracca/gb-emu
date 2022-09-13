@@ -1,5 +1,7 @@
 #include "../include/gb.h" // GB
 
+#include <iostream>
+
 namespace gameboy
 {
     GB::GB(std::string rom)
@@ -35,7 +37,7 @@ namespace gameboy
                 ppu->setRenderingEnabled(false);
             }
 
-            quit = platform->processInput(input);
+            quit = platform->processInput(input, cycles);
             // std::cout << cycles << std::endl;
         }
     }

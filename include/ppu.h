@@ -98,7 +98,7 @@ namespace gameboy
     private:
         Memory *m_memory; ///< The memory
 
-        std::array<Colour, SCREEN_WIDTH * SCREEN_HEIGHT> m_frameBuffer; ///< The frame buffer
+        std::array<Colour, SCREEN_WIDTH * (SCREEN_HEIGHT + 9)> m_frameBuffer; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen
 
         uint64_t m_cycles = 0; ///< The number of cycles since the last frame

@@ -17,7 +17,9 @@ namespace gameboy
 
     uint8_t CPU::tick()
     {
-        // TODO: handle interrupts
+        int cycles = handleInterrupts();
+        if (cycles > 0)
+            return cycles;
 
         if(m_halted)
             return 1;
@@ -25,6 +27,44 @@ namespace gameboy
         uint8_t instruction = m_memory->read(m_registers->pc++);
 
         return execute_opcode(instruction);
+    }
+
+    uint8_t CPU::handleInterrupts()
+    {
+        // Interrupts are disabled
+        if (!m_ime)
+            return 0;
+
+        // If here, interrupts are enabled
+        // Get the requested interrupt
+        uint8_t interrupt = m_memory->read(INTERRUPT_FLAG_ADDRESS) & m_memory->read(INTERRUPT_ENABLE_ADDRESS);
+        if (interrupt == 0)
+            return 0;
+
+        m_halted = false;
+        push(m_registers->pc);
+
+        // Handle the interrupt
+        for (uint8_t interruptBit = 0; interruptBit < 5; interruptBit++)
+        {
+            bool isInterrupt = handleInterrupt(interruptBit, interruptValues[interruptBit], interrupt);
+            if (isInterrupt)
+                return 5;
+        }
+
+        return 0;
+    }
+
+    bool CPU::handleInterrupt(uint8_t interruptBit, uint16_t interruptAddress, uint8_t interruptFlagBit)
+    {
+        if ((interruptFlagBit & (1 << interruptBit)) != 0)
+        {
+            m_ime = false;
+            m_registers->pc = interruptAddress;
+            m_memory->write(INTERRUPT_FLAG_ADDRESS, m_memory->read(INTERRUPT_FLAG_ADDRESS) & ~(1 << interruptBit));
+            return true;
+        }
+        return false;
     }
 
     uint8_t CPU::execute_opcode(uint8_t opcode)

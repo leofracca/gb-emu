@@ -118,6 +118,12 @@ namespace gameboy
 
         bool branched = false; // Used to check if a branch was taken (for conditional opcodes (jump, call, return))
 
+        uint16_t interruptValues[5] = {0x40, 0x48, 0x50, 0x58, 0x60}; ///< Interrupt values
+
+        uint8_t handleInterrupts();
+
+        bool handleInterrupt(uint8_t interruptBit, uint16_t interruptAddress, uint8_t interruptFlagBit);
+
         /**
          * @brief Executes the next instruction.
          * @details Call the appropriate function depending on the cb opcode and execute the next instruction.
