@@ -17,6 +17,8 @@ namespace gameboy
 
     uint8_t CPU::tick()
     {
+        // TODO: handle interrupts
+
         if(m_halted)
             return 1;
 
@@ -1865,8 +1867,36 @@ namespace gameboy
 
     void CPU::daa()
     {
-        // TODO
         // See https://en.wikipedia.org/wiki/Binary-coded_decimal
+
+        uint8_t a = m_registers->a;
+        uint8_t adjust = m_registers->getFlag(CARRY_FLAG) ? 0x60 : 0x00;
+
+        if (m_registers->getFlag(HALF_CARRY_FLAG))
+            adjust |= 0x06;
+
+        if (m_registers->getFlag(SUBTRACT_FLAG))
+            a -= adjust;
+        else
+        {
+            if ((a & 0x0F) > 0x09)
+                adjust |= 0x06;
+
+            if (a > 0x99)
+                adjust |= 0x60;
+
+            a += adjust;
+        }
+
+        // Set the zero flag if the result is 0
+        m_registers->setFlag(ZERO_FLAG, a == 0);
+        // Subtract flag not affected
+        // Set the half-carry flag to 0
+        m_registers->setFlag(HALF_CARRY_FLAG, false);
+        // Set the carry flag if there is a carry from bit 7
+        m_registers->setFlag(CARRY_FLAG, adjust >= 0x60);
+
+        m_registers->a = a;
     }
 
     void CPU::cpl()
