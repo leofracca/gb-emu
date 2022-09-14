@@ -45,5 +45,8 @@ namespace gameboy
         PPU *ppu;
         Registers *registers;
         Timer *timer;
+
+        constexpr static int FPS = 60;
+        constexpr static int FRAMERATE = 1000 / FPS;
     };
 } // namespace gameboy

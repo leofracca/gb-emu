@@ -1,6 +1,6 @@
 #include "../include/gb.h" // GB
 
-#include <iostream>
+#include <SDL2/SDL_timer.h> // SDL_GetTicks
 
 namespace gameboy
 {
@@ -19,26 +19,30 @@ namespace gameboy
     void GB::run()
     {
         int cycles = 0;
-
         bool quit = false;
+
+        auto lastCycleTime = SDL_GetTicks64();
 
         while (!quit)
         {
             cycles = 0;
 
             cycles = cpu->tick();
-            timer->addCycles(4 * cycles);
+            timer->addCycles(cycles);
             ppu->cycle(cycles);
 
             if (ppu->isRenderingEnabled())
             {
-                // std::cout << "rendering enabled\n";
+                if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
+                    SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
+
                 platform->update(ppu->getFrameBuffer());
                 ppu->setRenderingEnabled(false);
+
+                lastCycleTime = SDL_GetTicks64();
             }
 
             quit = platform->processInput(input, cycles);
-            // std::cout << cycles << std::endl;
         }
     }
 } // namespace gameboy
