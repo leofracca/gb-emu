@@ -24,12 +24,6 @@ namespace gameboy
     class Cartridge
     {
     public:
-        std::string m_ROMFilename; ///< The filename of the ROM
-        MBC *m_MBC; ///< The MBC of the cartridge
-
-        uint8_t m_rom[127 * 16384]; ///< The rom of the cartridge (max size is 127 banks of 16KB = 2MB)
-        uint8_t m_ram[127 * 256]; ///< The ram of the cartridge (max size is 127 banks of 256B = 32KB)
-
         /**
          * @brief Construct a new Cartridge object
          * @details Call the method loadROM to load the ROM
@@ -39,22 +33,6 @@ namespace gameboy
          * @see loadROM
          */
         Cartridge(std::string filename);
-
-        /**
-         * @brief Load the ROM into the cartridge
-         * @details Save the filename, load the ROM into the cartridge and check the cartridge type
-         *
-         * @see checkCartridge
-         */
-        void loadROM();
-
-        /**
-         * @brief Check the cartridge type
-         * @details Check the cartridge type and set the MBC accordingly
-         *
-         * @see MBC
-         */
-        void checkCartridge();
 
         /**
          * @brief Read a byte from the cartridge
@@ -73,5 +51,28 @@ namespace gameboy
          * @param value The value to write
          */
         void write(uint16_t address, uint8_t value);
+
+    private:
+        std::string m_ROMFilename; ///< The filename of the ROM
+        MBC *m_MBC; ///< The MBC of the cartridge
+
+        uint8_t m_rom[127 * 16384]; ///< The rom of the cartridge (max size is 127 banks of 16KB = 2MB)
+        uint8_t m_ram[127 * 256]; ///< The ram of the cartridge (max size is 127 banks of 256B = 32KB)
+
+        /**
+         * @brief Load the ROM into the cartridge
+         * @details Save the filename, load the ROM into the cartridge and check the cartridge type
+         *
+         * @see checkCartridge
+         */
+        void loadROM();
+
+        /**
+         * @brief Check the cartridge type
+         * @details Check the cartridge type and set the MBC accordingly
+         *
+         * @see MBC
+         */
+        void checkCartridge();
     };
 } // namespace gameboy

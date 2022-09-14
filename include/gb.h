@@ -37,16 +37,25 @@ namespace gameboy
         void run();
 
     private:
-        Cartridge *cartridge;
-        CPU *cpu;
-        Input *input;
-        Memory *mmu;
-        Platform *platform;
-        PPU *ppu;
-        Registers *registers;
-        Timer *timer;
+        Cartridge *m_cartridge;
+        CPU *m_cpu;
+        Input *m_input;
+        Memory *m_memory;
+        Platform *m_platform;
+        PPU *m_ppu;
+        Registers *m_registers;
+        Timer *m_timer;
 
         constexpr static int FPS = 60;
         constexpr static int FRAMERATE = 1000 / FPS;
+
+        /**
+         * @brief Update the screen
+         * @details If the PPU is rendering, update the screen and return the current time
+         *
+         * @param lastCycleTime The last time the screen was updated
+         * @return uint64_t The current time
+         */
+        uint64_t updateScreen(uint64_t lastCycleTime);
     };
 } // namespace gameboy

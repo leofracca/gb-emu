@@ -97,7 +97,7 @@ namespace gameboy
         uint16_t sp; ///< Stack Pointer
         uint16_t pc; ///< Program Counter
 
-    public:
+
         /**
          * @brief Registers constructor
          * @details Initialize the registers with the values they must have at the start

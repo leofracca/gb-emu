@@ -22,10 +22,12 @@ namespace gameboy
 
     bool Platform::processInput(Input *input, int cycles)
     {
-        input->joypadCycles += cycles;
-        if(input->joypadCycles < 65536)
+        static int joypadCycles = 0; // Cycles since the last joypad interrupt
+
+        joypadCycles += cycles;
+        if(joypadCycles < 65536)
             return false;
-        input->joypadCycles -= 65536;
+        joypadCycles -= 65536;
 
         SDL_Event event;
         SDL_PollEvent(&event);

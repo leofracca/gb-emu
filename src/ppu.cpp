@@ -143,6 +143,21 @@ namespace gameboy
         }
     }
 
+    Colour* PPU::getFrameBuffer()
+    {
+        return m_frameBuffer.data();
+    }
+
+    bool PPU::isRenderingEnabled() const
+    {
+        return m_renderingEnabled;
+    }
+
+    void PPU::setRenderingEnabled(bool enabled)
+    {
+        m_renderingEnabled = enabled;
+    }
+
     void PPU::setCoincidenceFlag()
     {
         uint8_t lyc = m_memory->read(LYC_REG_ADDRESS);
@@ -164,7 +179,6 @@ namespace gameboy
     }
 
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.h
-
     void PPU::draw()
     {
         bool rowPixels[160] = {0};
@@ -316,20 +330,5 @@ namespace gameboy
                     m_frameBuffer[pixelOffset] = sprite.colourPalette[colour];
             }
         }
-    }
-
-    Colour* PPU::getFrameBuffer()
-    {
-        return m_frameBuffer.data();
-    }
-
-    bool PPU::isRenderingEnabled() const
-    {
-        return m_renderingEnabled;
-    }
-
-    void PPU::setRenderingEnabled(bool enabled)
-    {
-        m_renderingEnabled = enabled;
     }
 } // namespace gameboy

@@ -37,25 +37,13 @@ namespace gameboy
         Timer(Memory *memory);
 
         /**
-         * @brief Get the current value of the timer registers
-         * @details Save the current value of the registers in the member variables of this class
-         */
-        void getRegisters();
-
-        /**
-         * @brief Set the value of the timer registers
-         * @details Set the value of the timer registers in the memory
-         */
-        void setRegisters();
-
-        /**
          * @brief Increment and manipulate the timer registers
          * @details Manipulate the timer registers and set the interrupt flag if necessary.
          *          At the end save the new value of the registers in memory.
          *
          * @param cycles The number of cycles to increment the timer by
          */
-        void addCycles(uint64_t cycles);
+        void cycle(uint64_t cycles);
 
     private:
         Memory *m_memory; ///< The memory
@@ -96,5 +84,17 @@ namespace gameboy
 
         uint64_t m_divCycles; ///< Divider register cycles
         uint64_t m_timaCycles; ///< Timer counter cycles
+
+        /**
+         * @brief Get the current value of the timer registers
+         * @details Save the current value of the registers in the member variables of this class
+         */
+        void getRegisters();
+
+        /**
+         * @brief Set the value of the timer registers
+         * @details Set the value of the timer registers in the memory
+         */
+        void setRegisters();
     };
 } // namespace gameboy

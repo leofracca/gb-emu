@@ -6,14 +6,14 @@ namespace gameboy
 {
     GB::GB(std::string rom)
     {
-        cartridge = new Cartridge(rom);
-        registers = new Registers();
-        mmu = new Memory(cartridge);
-        cpu = new CPU(mmu, registers);
-        ppu = new PPU(mmu);
-        timer = new Timer(mmu);
-        input = new Input(mmu);
-        platform = new Platform();
+        m_cartridge = new Cartridge(rom);
+        m_registers = new Registers();
+        m_memory = new Memory(m_cartridge);
+        m_cpu = new CPU(m_memory, m_registers);
+        m_ppu = new PPU(m_memory);
+        m_timer = new Timer(m_memory);
+        m_input = new Input(m_memory);
+        m_platform = new Platform();
     }
 
     void GB::run()
@@ -27,22 +27,29 @@ namespace gameboy
         {
             cycles = 0;
 
-            cycles = cpu->tick();
-            timer->addCycles(cycles);
-            ppu->cycle(cycles);
+            cycles = m_cpu->cycle();
+            m_timer->cycle(cycles);
+            m_ppu->cycle(cycles);
 
-            if (ppu->isRenderingEnabled())
-            {
-                if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
-                    SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
+            lastCycleTime = updateScreen(lastCycleTime);
 
-                platform->update(ppu->getFrameBuffer());
-                ppu->setRenderingEnabled(false);
-
-                lastCycleTime = SDL_GetTicks64();
-            }
-
-            quit = platform->processInput(input, cycles);
+            quit = m_platform->processInput(m_input, cycles);
         }
+    }
+
+    uint64_t GB::updateScreen(uint64_t lastCycleTime)
+    {
+        if (m_ppu->isRenderingEnabled())
+        {
+            if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
+                SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
+
+            m_platform->update(m_ppu->getFrameBuffer());
+            m_ppu->setRenderingEnabled(false);
+
+            return SDL_GetTicks64();
+        }
+
+        return lastCycleTime;
     }
 } // namespace gameboy

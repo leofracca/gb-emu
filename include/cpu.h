@@ -96,16 +96,7 @@ namespace gameboy
          *
          * @return The number of cycles used by the instruction.
          */
-        uint8_t tick();
-
-        /**
-         * @brief Executes the next instruction.
-         * @details Call the appropriate function depending on the opcode and execute the next instruction.
-         *
-         * @param opcode The opcode of the instruction.
-         * @return The number of cycles used by the instruction.
-         */
-        uint8_t execute_opcode(uint8_t opcode);
+        uint8_t cycle();
 
     private:
         Memory *m_memory; ///< The memory
@@ -120,9 +111,33 @@ namespace gameboy
 
         uint16_t interruptValues[5] = {0x40, 0x48, 0x50, 0x58, 0x60}; ///< Interrupt values
 
+        /**
+         * @brief Check if interrupts are enabled and if an interrupt has been requested.
+         *        Then execute the interrupt if it is the case.
+         *
+         * @return 0 if no interrupt has been executed, 5 if an interrupt has been executed.
+         * @see handleInterrupt
+         */
         uint8_t handleInterrupts();
 
+        /**
+         * @brief Execute the interrupt.
+         *
+         * @param interruptBit The bit of the interrupt to execute.
+         * @param interruptAddress The address of the interrupt to execute.
+         * @param interruptFlagBit The bit of the interrupt flag to reset.
+         * @return True if the interrupt has been executed, false otherwise.
+         */
         bool handleInterrupt(uint8_t interruptBit, uint16_t interruptAddress, uint8_t interruptFlagBit);
+
+        /**
+         * @brief Executes the next instruction.
+         * @details Call the appropriate function depending on the opcode and execute the next instruction.
+         *
+         * @param opcode The opcode of the instruction.
+         * @return The number of cycles used by the instruction.
+         */
+        uint8_t execute_opcode(uint8_t opcode);
 
         /**
          * @brief Executes the next instruction.

@@ -21,9 +21,6 @@ namespace gameboy
     class MBC
     {
     public:
-        uint8_t *m_rom; ///< The ROM of the cartridge
-        uint8_t *m_ram; ///< The RAM of the cartridge
-
         /**
          * @brief Construct a new MBC object
          * @details Initialize the ROM and RAM of the cartridge
@@ -50,6 +47,10 @@ namespace gameboy
          * @param value The value to write
          */
         virtual void write(uint16_t address, uint8_t value) = 0;
+
+    protected:
+        uint8_t *m_rom; ///< The ROM of the cartridge
+        uint8_t *m_ram; ///< The RAM of the cartridge
     };
 
     class ROMOnly : public MBC

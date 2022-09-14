@@ -15,17 +15,21 @@ namespace gameboy
           m_registers(registers)
     {}
 
-    uint8_t CPU::tick()
+    uint8_t CPU::cycle()
     {
+        // Check interrupts
         int cycles = handleInterrupts();
         if (cycles > 0)
             return cycles;
 
-        if(m_halted)
+        // No operation because the CPU is halted
+        if (m_halted)
             return 1;
 
+        // Fetch opcode
         uint8_t instruction = m_memory->read(m_registers->pc++);
 
+        // Decode and execute opcode
         return execute_opcode(instruction);
     }
 

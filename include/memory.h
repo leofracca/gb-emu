@@ -72,11 +72,7 @@ namespace gameboy
                     uint8_t value;
                 };
             } options;
-        }sprites[40] = {Sprite()};
-
-        void UpdateTile(uint16_t address);
-        void UpdateSprite(uint16_t address, uint8_t value);
-        void UpdatePalette(Colour *palette, uint8_t value);
+        } sprites[40] = {Sprite()};
 
         /**
          * @brief Construct a new Memory object
@@ -143,5 +139,9 @@ namespace gameboy
             { 0, 0, 0, 255 },
             { 0, 0, 0, 255 },
         };
+
+        void UpdateTile(uint16_t address);
+        void UpdateSprite(uint16_t address, uint8_t value);
+        void UpdatePalette(Colour *palette, uint8_t value);
     };
 }

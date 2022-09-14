@@ -8,7 +8,7 @@
 
 #include "input.h" // Input
 
-#include <SDL2/SDL.h>
+#include <SDL2/SDL.h> // SDL_Window, SDL_Renderer, SDL_Texture
 
 namespace gameboy
 {

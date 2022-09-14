@@ -13,8 +13,6 @@
 
 #include "memory.h" // Memory
 
-#include "SDL2/SDL.h"
-
 namespace gameboy
 {
     /**
@@ -56,8 +54,6 @@ namespace gameboy
          * @param memory The memory
          */
         void sendInterrupt();
-
-        int joypadCycles = 0;
 
     private:
         /**
