@@ -15,4 +15,27 @@ add_executable(GBEmu src/main.cpp
         src/ppu.cpp include/ppu.h
         src/gb.cpp include/gb.h
         src/platform.cpp include/platform.h)
+target_compile_options(GBEmu PRIVATE -Wall -Wextra -Wpedantic)
 target_link_libraries(GBEmu PRIVATE SDL2::SDL2)
+
+# Doxygen
+find_package(Doxygen)
+
+# Check if Doxygen is installed
+if (DOXYGEN_FOUND)
+    # Set input and output files
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    # Configure the file
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Doxygen build started")
+
+    add_custom_target(doc ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
+else (DOXYGEN_FOUND)
+    message("Doxygen need to be installed to generate the doxygen documentation")
+endif (DOXYGEN_FOUND)

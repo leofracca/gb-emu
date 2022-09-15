@@ -76,7 +76,6 @@ namespace gameboy
         int cycles = OPCODE_CYCLES[opcode];
 
         uint8_t value = 0; // Temp variable used for some opcodes
-        uint8_t cbOpcode = 0; // Temp variable used for CB opcodes
 
         switch (opcode)
         {

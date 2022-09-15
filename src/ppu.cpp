@@ -245,7 +245,7 @@ namespace gameboy
         int y = (*ly - m_memory->read(WY_REG_ADDRESS)) & 7;
         int x = 0;
 
-        int pixelOffset = *ly * 160;
+        unsigned pixelOffset = *ly * 160;
         pixelOffset += m_memory->read(WX_REG_ADDRESS) - 7;
         for (uint16_t tile_address = address; tile_address < address + 20; tile_address++)
         {
@@ -256,7 +256,7 @@ namespace gameboy
 
             for (; x < 8; x++)
             {
-                if(pixelOffset > sizeof(m_frameBuffer)) continue;
+                if (pixelOffset > sizeof(m_frameBuffer)) continue;
                 int colour = m_memory->tiles[tile].pixels[y][x];
                 m_frameBuffer[pixelOffset++] = m_memory->palette_BGP[colour];
             }

@@ -25,7 +25,11 @@ namespace gameboy
         return 0;
     }
 
-    void ROMOnly::write(uint16_t address, uint8_t value) { /* Nothing to do here */ }
+    void ROMOnly::write(uint16_t address, uint8_t value)
+    {
+        /* Nothing to do here */
+        m_rom[address] = value;
+    }
 
     MBC1::MBC1(uint8_t *rom, uint8_t *ram) : MBC(rom, ram) {}
 

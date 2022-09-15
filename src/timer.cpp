@@ -49,7 +49,7 @@ namespace gameboy
              * When the value overflows (exceeds $FF) it is reset to the value specified in TMA (FF06)
              * and an interrupt is requested.
              */
-            int clockFrequencyThreshold = -1;
+            unsigned clockFrequencyThreshold = -1;
             // The frequency is represented by the bit 0-1 of the TAC register
             switch (m_tac & 0x03)
             {

@@ -42,56 +42,45 @@ namespace gameboy
          *          In this way, one can use the registers alone or in
          *          pairs.
          */
-        struct
+        union
         {
-            union
+            struct
             {
-                struct
-                {
-                    uint8_t f;
-                    uint8_t a;
-                };
-                uint16_t af;
+                uint8_t f;
+                uint8_t a;
             };
+            uint16_t af;
         };
 
-        struct
+
+        union
         {
-            union
+            struct
             {
-                struct
-                {
-                    uint8_t c;
-                    uint8_t b;
-                };
-                uint16_t bc;
+                uint8_t c;
+                uint8_t b;
             };
+            uint16_t bc;
         };
 
-        struct
+        union
         {
-            union
+            struct
             {
-                struct
-                {
-                    uint8_t e;
-                    uint8_t d;
-                };
-                uint16_t de;
+                uint8_t e;
+                uint8_t d;
             };
+            uint16_t de;
         };
 
-        struct
+        union
         {
-            union
+            struct
             {
-                struct
-                {
-                    uint8_t l;
-                    uint8_t h;
-                };
-                uint16_t hl;
+                uint8_t l;
+                uint8_t h;
             };
+            uint16_t hl;
         };
 
         uint16_t sp; ///< Stack Pointer
