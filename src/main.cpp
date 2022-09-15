@@ -2,7 +2,12 @@
 
 int main(int argc, char *argv[])
 {
-    gameboy::GB gameboy(argv[1]);
+    // Parse the arguments
+    std::string romFilename = argv[1];
+    int scale = (argc == 3) ? std::stoi(argv[2]) : 1;
+
+    gameboy::GB gameboy(romFilename, scale);
     gameboy.run();
+
     return 0;
 }

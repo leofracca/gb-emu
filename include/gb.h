@@ -28,7 +28,7 @@ namespace gameboy
          *
          * @param rom The path to the rom file
          */
-        GB(std::string rom);
+        GB(std::string rom, int scale);
 
         /**
          * @brief Run the emulator

@@ -4,7 +4,7 @@
 
 namespace gameboy
 {
-    GB::GB(std::string rom)
+    GB::GB(std::string rom, int scale)
     {
         m_cartridge = new Cartridge(rom);
         m_registers = new Registers();
@@ -13,7 +13,7 @@ namespace gameboy
         m_ppu = new PPU(m_memory);
         m_timer = new Timer(m_memory);
         m_input = new Input(m_memory);
-        m_platform = new Platform();
+        m_platform = new Platform(scale);
     }
 
     void GB::run()
