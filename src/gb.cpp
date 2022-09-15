@@ -1,6 +1,6 @@
 #include "../include/gb.h" // GB
 
-#include <SDL2/SDL_timer.h> // SDL_GetTicks
+#include <SDL2/SDL_timer.h> // SDL_GetTicks64, SDL_Delay
 
 namespace gameboy
 {
@@ -31,13 +31,11 @@ namespace gameboy
             m_timer->cycle(cycles);
             m_ppu->cycle(cycles);
 
-            lastCycleTime = updateScreen(lastCycleTime);
-
-            quit = m_platform->processInput(m_input, cycles);
+            quit = updatePlatform(lastCycleTime);
         }
     }
 
-    uint64_t GB::updateScreen(uint64_t lastCycleTime)
+    bool GB::updatePlatform(uint64_t &lastCycleTime)
     {
         if (m_ppu->isRenderingEnabled())
         {
@@ -47,9 +45,11 @@ namespace gameboy
             m_platform->update(m_ppu->getFrameBuffer());
             m_ppu->setRenderingEnabled(false);
 
-            return SDL_GetTicks64();
+            lastCycleTime = SDL_GetTicks64();
+
+            return m_platform->processInput(m_input);
         }
 
-        return lastCycleTime;
+        return false;
     }
 } // namespace gameboy

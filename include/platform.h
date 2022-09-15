@@ -1,7 +1,7 @@
 /**
  * @file platform.h
  * @brief This file contains the declaration of the Platform class.
- *        It is responsible for creating the window and updating the screen.
+ *        It is responsible for creating the window, updating the screen and handling the inputs.
  */
 
 #pragma once
@@ -20,6 +20,8 @@ namespace gameboy
     public:
         /**
          * @brief Create and initialize the window
+         *
+         * @param scale The scale of the window
          */
         Platform(int scale);
 
@@ -33,9 +35,10 @@ namespace gameboy
         /**
          * @brief Get the input from the user
          *
+         * @param input The input object
          * @return True if the user wants to quit, false otherwise
          */
-        bool processInput(Input *input, int cycles);
+        bool processInput(Input *input);
 
     private:
         SDL_Window *window;

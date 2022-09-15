@@ -1,7 +1,7 @@
 /**
  * @file gb.h
  * @brief This file contains the declaration of the GB class.
- *        It includes all the other classes and is responsbile for the emulator to run.
+ *        It includes all the other classes and is responsible for the emulator to run.
  */
 
 #pragma once
@@ -27,6 +27,7 @@ namespace gameboy
          * @brief Create and initialize the emulator
          *
          * @param rom The path to the rom file
+         * @param scale The scale of the window
          */
         GB(std::string rom, int scale);
 
@@ -50,12 +51,12 @@ namespace gameboy
         constexpr static int FRAMERATE = 1000 / FPS;
 
         /**
-         * @brief Update the screen
-         * @details If the PPU is rendering, update the screen and return the current time
+         * @brief Update the screen and handle the inputs
+         * @details If the PPU is rendering, update the screen and handle the inputs
          *
          * @param lastCycleTime The last time the screen was updated
-         * @return uint64_t The current time
+         * @return True if the user wants to quit, false otherwise
          */
-        uint64_t updateScreen(uint64_t lastCycleTime);
+        bool updatePlatform(uint64_t &lastCycleTime);
     };
 } // namespace gameboy

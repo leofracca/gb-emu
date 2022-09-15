@@ -34,11 +34,7 @@ namespace gameboy
     class Memory
     {
     public:
-        Cartridge *m_cartridge; ///< The cartridge
-
         uint8_t m_memory[0x10000]; ///< The memory of the Gameboy
-
-        uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         struct Tile {
             uint8_t  pixels[8][8] = {0};
@@ -118,7 +114,17 @@ namespace gameboy
          */
         void writeWord(uint16_t address, uint16_t value);
 
+        /**
+         * @brief Save the joypad state
+         *
+         * @param state The new joypad state
+         */
+        void setJoypadState(uint8_t state);
+
     private:
+        Cartridge *m_cartridge; ///< The cartridge
+        uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
+
         const Colour palette_colours[4] = {
             { 255, 255, 255, 255},
             { 192,192,192,255},
