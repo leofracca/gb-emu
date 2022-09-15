@@ -14,11 +14,12 @@ add_executable(GBEmu src/main.cpp
         src/cpu.cpp include/cpu.h
         src/ppu.cpp include/ppu.h
         src/gb.cpp include/gb.h
-        src/platform.cpp include/platform.h)
-target_compile_options(GBEmu PRIVATE -Wall -Wextra -Wpedantic)
+        src/platform.cpp include/platform.h
+        )
+target_compile_options(GBEmu PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_link_libraries(GBEmu PRIVATE SDL2::SDL2)
 
-# Doxygen
+## Doxygen
 find_package(Doxygen)
 
 # Check if Doxygen is installed

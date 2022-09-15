@@ -82,14 +82,14 @@ namespace gameboy
             case 0x00: // NOP
                 break;
             case 0x01: // LD BC, nn
-                m_registers->bc = m_memory->readWord(m_registers->pc);
+                m_registers->setBC(m_memory->readWord(m_registers->pc));
                 m_registers->pc += 2;
                 break;
             case 0x02: // LD (BC), A
-                m_memory->write(m_registers->bc, m_registers->a);
+                m_memory->write(m_registers->getBC(), m_registers->a);
                 break;
             case 0x03: // INC BC
-                m_registers->bc++;
+                m_registers->setBC(m_registers->getBC() + 1);
                 break;
             case 0x04: // INC B
                 inc(m_registers->b);
@@ -108,13 +108,13 @@ namespace gameboy
                 m_registers->pc += 2;
                 break;
             case 0x09: // ADD HL, BC
-                add_hl(m_registers->bc);
+                add_hl(m_registers->getBC());
                 break;
             case 0x0A: // LD A, (BC)
-                m_registers->a = m_memory->read(m_registers->bc);
+                m_registers->a = m_memory->read(m_registers->getBC());
                 break;
             case 0x0B: // DEC BC
-                m_registers->bc--;
+                m_registers->setBC(m_registers->getBC() - 1);
                 break;
             case 0x0C: // INC C
                 inc(m_registers->c);
@@ -131,14 +131,14 @@ namespace gameboy
             case 0x10: // STOP
                 break;
             case 0x11: // LD DE, nn
-                m_registers->de = m_memory->readWord(m_registers->pc);
+                m_registers->setDE(m_memory->readWord(m_registers->pc));
                 m_registers->pc += 2;
                 break;
             case 0x12: // LD (DE), A
-                m_memory->write(m_registers->de, m_registers->a);
+                m_memory->write(m_registers->getDE(), m_registers->a);
                 break;
             case 0x13: // INC DE
-                m_registers->de++;
+                m_registers->setDE(m_registers->getDE() + 1);
                 break;
             case 0x14: // INC D
                 inc(m_registers->d);
@@ -156,13 +156,13 @@ namespace gameboy
                 jr();
                 break;
             case 0x19: // ADD HL, DE
-                add_hl(m_registers->de);
+                add_hl(m_registers->getDE());
                 break;
             case 0x1A: // LD A, (DE)
-                m_registers->a = m_memory->read(m_registers->de);
+                m_registers->a = m_memory->read(m_registers->getDE());
                 break;
             case 0x1B: // DEC DE
-                m_registers->de--;
+                m_registers->setDE(m_registers->getDE() - 1);
                 break;
             case 0x1C: // INC E
                 inc(m_registers->e);
@@ -180,14 +180,15 @@ namespace gameboy
                 jr(!m_registers->getFlag(ZERO_FLAG));
                 break;
             case 0x21: // LD HL, nn
-                m_registers->hl = m_memory->readWord(m_registers->pc);
+                m_registers->setHL(m_memory->readWord(m_registers->pc));
                 m_registers->pc += 2;
                 break;
             case 0x22: // LD (HL+), A
-                m_memory->write(m_registers->hl++, m_registers->a);
+                m_memory->write(m_registers->getHL(), m_registers->a);
+                m_registers->setHL(m_registers->getHL() + 1);
                 break;
             case 0x23: // INC HL
-                m_registers->hl++;
+                m_registers->setHL(m_registers->getHL() + 1);
                 break;
             case 0x24: // INC H
                 inc(m_registers->h);
@@ -205,13 +206,14 @@ namespace gameboy
                 jr(m_registers->getFlag(ZERO_FLAG));
                 break;
             case 0x29: // ADD HL, HL
-                add_hl(m_registers->hl);
+                add_hl(m_registers->getHL());
                 break;
             case 0x2A: // LD A, (HL+)
-                m_registers->a = m_memory->read(m_registers->hl++);
+                m_registers->a = m_memory->read(m_registers->getHL());
+                m_registers->setHL(m_registers->getHL() + 1);
                 break;
             case 0x2B: // DEC HL
-                m_registers->hl--;
+                m_registers->setHL(m_registers->getHL() - 1);
                 break;
             case 0x2C: // INC L
                 inc(m_registers->l);
@@ -233,23 +235,24 @@ namespace gameboy
                 m_registers->pc += 2;
                 break;
             case 0x32: // LD (HL-), A
-                m_memory->write(m_registers->hl--, m_registers->a);
+                m_memory->write(m_registers->getHL(), m_registers->a);
+                m_registers->setHL(m_registers->getHL() - 1);
                 break;
             case 0x33: // INC SP
                 m_registers->sp++;
                 break;
             case 0x34: // INC (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 inc(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x35: // DEC (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 dec(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x36: // LD (HL), n
-                m_memory->write(m_registers->hl, m_memory->read(m_registers->pc++));
+                m_memory->write(m_registers->getHL(), m_memory->read(m_registers->pc++));
                 break;
             case 0x37: // SCF
                 scf();
@@ -261,7 +264,8 @@ namespace gameboy
                 add_hl(m_registers->sp);
                 break;
             case 0x3A: // LD A, (HL-)
-                m_registers->a = m_memory->read(m_registers->hl--);
+                m_registers->a = m_memory->read(m_registers->getHL());
+                m_registers->setHL(m_registers->getHL() - 1);
                 break;
             case 0x3B: // DEC SP
                 m_registers->sp--;
@@ -297,7 +301,7 @@ namespace gameboy
                 m_registers->b = m_registers->l;
                 break;
             case 0x46: // LD B, (HL)
-                m_registers->b = m_memory->read(m_registers->hl);
+                m_registers->b = m_memory->read(m_registers->getHL());
                 break;
             case 0x47: // LD B, A
                 m_registers->b = m_registers->a;
@@ -321,7 +325,7 @@ namespace gameboy
                 m_registers->c = m_registers->l;
                 break;
             case 0x4E: // LD C, (HL)
-                m_registers->c = m_memory->read(m_registers->hl);
+                m_registers->c = m_memory->read(m_registers->getHL());
                 break;
             case 0x4F: // LD C, A
                 m_registers->c = m_registers->a;
@@ -345,7 +349,7 @@ namespace gameboy
                 m_registers->d = m_registers->l;
                 break;
             case 0x56: // LD D, (HL)
-                m_registers->d = m_memory->read(m_registers->hl);
+                m_registers->d = m_memory->read(m_registers->getHL());
                 break;
             case 0x57: // LD D, A
                 m_registers->d = m_registers->a;
@@ -369,7 +373,7 @@ namespace gameboy
                 m_registers->e = m_registers->l;
                 break;
             case 0x5E: // LD E, (HL)
-                m_registers->e = m_memory->read(m_registers->hl);
+                m_registers->e = m_memory->read(m_registers->getHL());
                 break;
             case 0x5F: // LD E, A
                 m_registers->e = m_registers->a;
@@ -393,7 +397,7 @@ namespace gameboy
                 m_registers->h = m_registers->l;
                 break;
             case 0x66: // LD H, (HL)
-                m_registers->h = m_memory->read(m_registers->hl);
+                m_registers->h = m_memory->read(m_registers->getHL());
                 break;
             case 0x67: // LD H, A
                 m_registers->h = m_registers->a;
@@ -417,34 +421,34 @@ namespace gameboy
                 m_registers->l = m_registers->l;
                 break;
             case 0x6E: // LD L, (HL)
-                m_registers->l = m_memory->read(m_registers->hl);
+                m_registers->l = m_memory->read(m_registers->getHL());
                 break;
             case 0x6F: // LD L, A
                 m_registers->l = m_registers->a;
                 break;
             case 0x70: // LD (HL), B
-                m_memory->write(m_registers->hl, m_registers->b);
+                m_memory->write(m_registers->getHL(), m_registers->b);
                 break;
             case 0x71: // LD (HL), C
-                m_memory->write(m_registers->hl, m_registers->c);
+                m_memory->write(m_registers->getHL(), m_registers->c);
                 break;
             case 0x72: // LD (HL), D
-                m_memory->write(m_registers->hl, m_registers->d);
+                m_memory->write(m_registers->getHL(), m_registers->d);
                 break;
             case 0x73: // LD (HL), E
-                m_memory->write(m_registers->hl, m_registers->e);
+                m_memory->write(m_registers->getHL(), m_registers->e);
                 break;
             case 0x74: // LD (HL), H
-                m_memory->write(m_registers->hl, m_registers->h);
+                m_memory->write(m_registers->getHL(), m_registers->h);
                 break;
             case 0x75: // LD (HL), L
-                m_memory->write(m_registers->hl, m_registers->l);
+                m_memory->write(m_registers->getHL(), m_registers->l);
                 break;
             case 0x76: // HALT
                 halt();
                 break;
             case 0x77: // LD (HL), A
-                m_memory->write(m_registers->hl, m_registers->a);
+                m_memory->write(m_registers->getHL(), m_registers->a);
                 break;
             case 0x78: // LD A, B
                 m_registers->a = m_registers->b;
@@ -465,7 +469,7 @@ namespace gameboy
                 m_registers->a = m_registers->l;
                 break;
             case 0x7E: // LD A, (HL)
-                m_registers->a = m_memory->read(m_registers->hl);
+                m_registers->a = m_memory->read(m_registers->getHL());
                 break;
             case 0x7F: // LD A, A
                 m_registers->a = m_registers->a;
@@ -489,7 +493,7 @@ namespace gameboy
                 add(m_registers->l);
                 break;
             case 0x86: // ADD A, (HL)
-                add(m_memory->read(m_registers->hl));
+                add(m_memory->read(m_registers->getHL()));
                 break;
             case 0x87: // ADD A, A
                 add(m_registers->a);
@@ -513,7 +517,7 @@ namespace gameboy
                 adc(m_registers->l);
                 break;
             case 0x8E: // ADC A, (HL)
-                adc(m_memory->read(m_registers->hl));
+                adc(m_memory->read(m_registers->getHL()));
                 break;
             case 0x8F: // ADC A, A
                 adc(m_registers->a);
@@ -537,7 +541,7 @@ namespace gameboy
                 sub(m_registers->l);
                 break;
             case 0x96: // SUB (HL)
-                sub(m_memory->read(m_registers->hl));
+                sub(m_memory->read(m_registers->getHL()));
                 break;
             case 0x97: // SUB A
                 sub(m_registers->a);
@@ -561,7 +565,7 @@ namespace gameboy
                 sbc(m_registers->l);
                 break;
             case 0x9E: // SBC A, (HL)
-                sbc(m_memory->read(m_registers->hl));
+                sbc(m_memory->read(m_registers->getHL()));
                 break;
             case 0x9F: // SBC A, A
                 sbc(m_registers->a);
@@ -585,7 +589,7 @@ namespace gameboy
                 and_(m_registers->l);
                 break;
             case 0xA6: // AND (HL)
-                and_(m_memory->read(m_registers->hl));
+                and_(m_memory->read(m_registers->getHL()));
                 break;
             case 0xA7: // AND A
                 and_(m_registers->a);
@@ -609,7 +613,7 @@ namespace gameboy
                 xor_(m_registers->l);
                 break;
             case 0xAE: // XOR (HL)
-                xor_(m_memory->read(m_registers->hl));
+                xor_(m_memory->read(m_registers->getHL()));
                 break;
             case 0xAF: // XOR A
                 xor_(m_registers->a);
@@ -633,7 +637,7 @@ namespace gameboy
                 or_(m_registers->l);
                 break;
             case 0xB6: // OR (HL)
-                or_(m_memory->read(m_registers->hl));
+                or_(m_memory->read(m_registers->getHL()));
                 break;
             case 0xB7: // OR A
                 or_(m_registers->a);
@@ -657,7 +661,7 @@ namespace gameboy
                 cp(m_registers->l);
                 break;
             case 0xBE: // CP (HL)
-                cp(m_memory->read(m_registers->hl));
+                cp(m_memory->read(m_registers->getHL()));
                 break;
             case 0xBF: // CP A
                 cp(m_registers->a);
@@ -666,7 +670,7 @@ namespace gameboy
                 ret(!m_registers->getFlag(ZERO_FLAG));
                 break;
             case 0xC1: // POP BC
-                m_registers->bc = pop();
+                m_registers->setBC(pop());
                 break;
             case 0xC2: // JP NZ, nn
                 jp(!m_registers->getFlag(ZERO_FLAG));
@@ -678,7 +682,7 @@ namespace gameboy
                 call(!m_registers->getFlag(ZERO_FLAG));
                 break;
             case 0xC5: // PUSH BC
-                push(m_registers->bc);
+                push(m_registers->getBC());
                 break;
             case 0xC6: // ADD A, n
                 add(m_memory->read(m_registers->pc++));
@@ -714,7 +718,7 @@ namespace gameboy
                 ret(!m_registers->getFlag(CARRY_FLAG));
                 break;
             case 0xD1: // POP DE
-                m_registers->de = pop();
+                m_registers->setDE(pop());
                 break;
             case 0xD2: // JP NC, nn
                 jp(!m_registers->getFlag(CARRY_FLAG));
@@ -723,7 +727,7 @@ namespace gameboy
                 call(!m_registers->getFlag(CARRY_FLAG));
                 break;
             case 0xD5: // PUSH DE
-                push(m_registers->de);
+                push(m_registers->getDE());
                 break;
             case 0xD6: // SUB n
                 sub(m_memory->read(m_registers->pc++));
@@ -753,13 +757,13 @@ namespace gameboy
                 m_memory->write(LD_START_ADDRESS + m_memory->read(m_registers->pc++), m_registers->a);
                 break;
             case 0xE1: // POP HL
-                m_registers->hl = pop();
+                m_registers->setHL(pop());
                 break;
             case 0xE2: // LD (C), A
                 m_memory->write(LD_START_ADDRESS + m_registers->c, m_registers->a);
                 break;
             case 0xE5: // PUSH HL
-                push(m_registers->hl);
+                push(m_registers->getHL());
                 break;
             case 0xE6: // AND n
                 and_(m_memory->read(m_registers->pc++));
@@ -771,7 +775,7 @@ namespace gameboy
                 add_sp(static_cast<int8_t>(m_memory->read(m_registers->pc++)));
                 break;
             case 0xE9: // JP (HL)
-                m_registers->pc = m_registers->hl;
+                m_registers->pc = m_registers->getHL();
                 break;
             case 0xEA: // LD (nn), A
                 m_memory->write(m_memory->readWord(m_registers->pc), m_registers->a);
@@ -787,7 +791,7 @@ namespace gameboy
                 m_registers->a = m_memory->read(LD_START_ADDRESS + m_memory->read(m_registers->pc++));
                 break;
             case 0xF1: // POP AF
-                m_registers->af = pop();
+                m_registers->setAF(pop());
                 m_registers->f &= 0xf0;
                 break;
             case 0xF2: // LD A, (C)
@@ -797,7 +801,7 @@ namespace gameboy
                 di();
                 break;
             case 0xF5: // PUSH AF
-                push(m_registers->af);
+                push(m_registers->getAF());
                 break;
             case 0xF6: // OR n
                 or_(m_memory->read(m_registers->pc++));
@@ -809,7 +813,7 @@ namespace gameboy
                 ldhl(static_cast<int8_t>(m_memory->read(m_registers->pc++)));
                 break;
             case 0xF9: // LD SP, HL
-                m_registers->sp = m_registers->hl;
+                m_registers->sp = m_registers->getHL();
                 break;
             case 0xFA: // LD A, (nn)
                 m_registers->a = m_memory->read(m_memory->readWord(m_registers->pc));
@@ -861,9 +865,9 @@ namespace gameboy
                 rlc(m_registers->l);
                 break;
             case 0x06: // RLC (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 rlc(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x07: // RLC A
                 rlc(m_registers->a);
@@ -887,9 +891,9 @@ namespace gameboy
                 rrc(m_registers->l);
                 break;
             case 0x0E: // RRC (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 rrc(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x0F: // RRC A
                 rrc(m_registers->a);
@@ -913,9 +917,9 @@ namespace gameboy
                 rl(m_registers->l);
                 break;
             case 0x16: // RL (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 rl(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x17: // RL A
                 rl(m_registers->a);
@@ -939,9 +943,9 @@ namespace gameboy
                 rr(m_registers->l);
                 break;
             case 0x1E: // RR (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 rr(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x1F: // RR A
                 rr(m_registers->a);
@@ -965,9 +969,9 @@ namespace gameboy
                 sla(m_registers->l);
                 break;
             case 0x26: // SLA (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 sla(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x27: // SLA A
                 sla(m_registers->a);
@@ -991,9 +995,9 @@ namespace gameboy
                 sra(m_registers->l);
                 break;
             case 0x2E: // SRA (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 sra(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x2F: // SRA A
                 sra(m_registers->a);
@@ -1017,9 +1021,9 @@ namespace gameboy
                 swap(m_registers->l);
                 break;
             case 0x36: // SWAP (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 swap(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x37: // SWAP A
                 swap(m_registers->a);
@@ -1043,9 +1047,9 @@ namespace gameboy
                 srl(m_registers->l);
                 break;
             case 0x3E: // SRL (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 srl(value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x3F: // SRL A
                 srl(m_registers->a);
@@ -1069,7 +1073,7 @@ namespace gameboy
                 bit(0, m_registers->l);
                 break;
             case 0x46: // BIT 0, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(0, value);
                 break;
             case 0x47: // BIT 0, A
@@ -1094,7 +1098,7 @@ namespace gameboy
                 bit(1, m_registers->l);
                 break;
             case 0x4E: // BIT 1, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(1, value);
                 break;
             case 0x4F: // BIT 1, A
@@ -1119,7 +1123,7 @@ namespace gameboy
                 bit(2, m_registers->l);
                 break;
             case 0x56: // BIT 2, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(2, value);
                 break;
             case 0x57: // BIT 2, A
@@ -1144,7 +1148,7 @@ namespace gameboy
                 bit(3, m_registers->l);
                 break;
             case 0x5E: // BIT 3, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(3, value);
                 break;
             case 0x5F: // BIT 3, A
@@ -1169,7 +1173,7 @@ namespace gameboy
                 bit(4, m_registers->l);
                 break;
             case 0x66: // BIT 4, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(4, value);
                 break;
             case 0x67: // BIT 4, A
@@ -1194,7 +1198,7 @@ namespace gameboy
                 bit(5, m_registers->l);
                 break;
             case 0x6E: // BIT 5, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(5, value);
                 break;
             case 0x6F: // BIT 5, A
@@ -1219,7 +1223,7 @@ namespace gameboy
                 bit(6, m_registers->l);
                 break;
             case 0x76: // BIT 6, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(6, value);
                 break;
             case 0x77: // BIT 6, A
@@ -1244,7 +1248,7 @@ namespace gameboy
                 bit(7, m_registers->l);
                 break;
             case 0x7E: // BIT 7, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 bit(7, value);
                 break;
             case 0x7F: // BIT 7, A
@@ -1269,9 +1273,9 @@ namespace gameboy
                 res(0, m_registers->l);
                 break;
             case 0x86: // RES 0, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(0, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x87: // RES 0, A
                 res(0, m_registers->a);
@@ -1295,9 +1299,9 @@ namespace gameboy
                 res(1, m_registers->l);
                 break;
             case 0x8E: // RES 1, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(1, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x8F: // RES 1, A
                 res(1, m_registers->a);
@@ -1321,9 +1325,9 @@ namespace gameboy
                 res(2, m_registers->l);
                 break;
             case 0x96: // RES 2, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(2, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x97: // RES 2, A
                 res(2, m_registers->a);
@@ -1347,9 +1351,9 @@ namespace gameboy
                 res(3, m_registers->l);
                 break;
             case 0x9E: // RES 3, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(3, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0x9F: // RES 3, A
                 res(3, m_registers->a);
@@ -1373,9 +1377,9 @@ namespace gameboy
                 res(4, m_registers->l);
                 break;
             case 0xA6: // RES 4, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(4, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xA7: // RES 4, A
                 res(4, m_registers->a);
@@ -1399,9 +1403,9 @@ namespace gameboy
                 res(5, m_registers->l);
                 break;
             case 0xAE: // RES 5, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(5, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xAF: // RES 5, A
                 res(5, m_registers->a);
@@ -1425,9 +1429,9 @@ namespace gameboy
                 res(6, m_registers->l);
                 break;
             case 0xB6: // RES 6, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(6, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xB7: // RES 6, A
                 res(6, m_registers->a);
@@ -1451,9 +1455,9 @@ namespace gameboy
                 res(7, m_registers->l);
                 break;
             case 0xBE: // RES 7, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 res(7, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xBF: // RES 7, A
                 res(7, m_registers->a);
@@ -1477,9 +1481,9 @@ namespace gameboy
                 set(0, m_registers->l);
                 break;
             case 0xC6: // SET 0, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(0, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xC7: // SET 0, A
                 set(0, m_registers->a);
@@ -1503,9 +1507,9 @@ namespace gameboy
                 set(1, m_registers->l);
                 break;
             case 0xCE: // SET 1, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(1, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xCF: // SET 1, A
                 set(1, m_registers->a);
@@ -1529,9 +1533,9 @@ namespace gameboy
                 set(2, m_registers->l);
                 break;
             case 0xD6: // SET 2, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(2, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xD7: // SET 2, A
                 set(2, m_registers->a);
@@ -1555,9 +1559,9 @@ namespace gameboy
                 set(3, m_registers->l);
                 break;
             case 0xDE: // SET 3, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(3, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xDF: // SET 3, A
                 set(3, m_registers->a);
@@ -1581,9 +1585,9 @@ namespace gameboy
                 set(4, m_registers->l);
                 break;
             case 0xE6: // SET 4, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(4, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xE7: // SET 4, A
                 set(4, m_registers->a);
@@ -1607,9 +1611,9 @@ namespace gameboy
                 set(5, m_registers->l);
                 break;
             case 0xEE: // SET 5, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(5, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xEF: // SET 5, A
                 set(5, m_registers->a);
@@ -1633,9 +1637,9 @@ namespace gameboy
                 set(6, m_registers->l);
                 break;
             case 0xF6: // SET 6, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(6, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xF7: // SET 6, A
                 set(6, m_registers->a);
@@ -1659,9 +1663,9 @@ namespace gameboy
                 set(7, m_registers->l);
                 break;
             case 0xFE: // SET 7, (HL)
-                value = m_memory->read(m_registers->hl);
+                value = m_memory->read(m_registers->getHL());
                 set(7, value);
-                m_memory->write(m_registers->hl, value);
+                m_memory->write(m_registers->getHL(), value);
                 break;
             case 0xFF: // SET 7, A
                 set(7, m_registers->a);
@@ -1845,18 +1849,18 @@ namespace gameboy
 
     void CPU::add_hl(uint16_t nn)
     {
-        unsigned int resultFull = m_registers->hl + nn; // Save the result in a temporary variable to check for carry from bit 15
+        unsigned int resultFull = m_registers->getHL() + nn; // Save the result in a temporary variable to check for carry from bit 15
 
         // Zero flag not affected
         // Set the subtract flag to 0
         m_registers->setFlag(SUBTRACT_FLAG, false);
         // Set the half-carry flag if there is a carry from bit 11
-        m_registers->setFlag(HALF_CARRY_FLAG, (m_registers->hl & 0x0FFF) + (nn & 0x0FFF) > 0x0FFF);
+        m_registers->setFlag(HALF_CARRY_FLAG, (m_registers->getHL() & 0x0FFF) + (nn & 0x0FFF) > 0x0FFF);
         // Set the carry flag if there is a carry from bit 15
         m_registers->setFlag(CARRY_FLAG, resultFull > 0xFFFF);
 
         // Set the value of the register HL to the result
-        m_registers->hl = static_cast<uint16_t>(resultFull);
+        m_registers->setHL(static_cast<uint16_t>(resultFull));
     }
 
     void CPU::add_sp(int8_t n)
@@ -1890,7 +1894,7 @@ namespace gameboy
         m_registers->setFlag(CARRY_FLAG, ((m_registers->sp ^ n ^ (resultFull & 0xFFFF)) & 0x100) == 0x100);
 
         // Set the value of the register SP to the result
-        m_registers->hl = static_cast<uint16_t>(resultFull);
+        m_registers->setHL(static_cast<uint16_t>(resultFull));
     }
 
     void CPU::swap(uint8_t &n)

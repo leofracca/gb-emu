@@ -35,63 +35,76 @@ namespace gameboy
          * @details The Game Boy has eight 8-bit registers A,B,C,D,E,F,H,L
          *          and two 16-bit registers SP & PC.
          *          Some instructions, however, allow you to use the
-         *          registers A,B,C,D,E,H, & L as 16-bit registers by
+         *          registers A,B,C,D,E,F,H, & L as 16-bit registers by
          *          pairing them up in the following manner: AF,BC,DE, &
          *          HL.
-         *          The following structure comes from this observation.
-         *          In this way, one can use the registers alone or in
-         *          pairs.
          */
-        union
-        {
-            struct
-            {
-                uint8_t f;
-                uint8_t a;
-            };
-            uint16_t af;
-        };
-
-
-        union
-        {
-            struct
-            {
-                uint8_t c;
-                uint8_t b;
-            };
-            uint16_t bc;
-        };
-
-        union
-        {
-            struct
-            {
-                uint8_t e;
-                uint8_t d;
-            };
-            uint16_t de;
-        };
-
-        union
-        {
-            struct
-            {
-                uint8_t l;
-                uint8_t h;
-            };
-            uint16_t hl;
-        };
+        uint8_t a;
+        uint8_t f;
+        uint8_t b;
+        uint8_t c;
+        uint8_t d;
+        uint8_t e;
+        uint8_t h;
+        uint8_t l;
 
         uint16_t sp; ///< Stack Pointer
         uint16_t pc; ///< Program Counter
-
 
         /**
          * @brief Registers constructor
          * @details Initialize the registers with the values they must have at the start
          */
         Registers();
+
+        // Getter and setter for pairs of registers (2 bytes instead of 1)
+        /**
+         * @brief Get the pair AF
+         * @return The value of the pair AF
+         */
+        uint16_t getAF() const;
+
+        /**
+         * @brief Get the pair BC
+         * @return The value of the pair BC
+         */
+        uint16_t getBC() const;
+
+        /**
+         * @brief Get the pair DE
+         * @return The value of the pair DE
+         */
+        uint16_t getDE() const;
+
+        /**
+         * @brief Get the pair HL
+         * @return The value of the pair HL
+         */
+        uint16_t getHL() const;
+
+        /**
+         * @brief Set the pair AF
+         * @param value The value to set the pair AF to
+         */
+        void setAF(uint16_t value);
+
+        /**
+         * @brief Set the pair BC
+         * @param value The value to set the pair BC to
+         */
+        void setBC(uint16_t value);
+
+        /**
+         * @brief Set the pair DE
+         * @param value The value to set the pair DE to
+         */
+        void setDE(uint16_t value);
+
+        /**
+         * @brief Set the pair HL
+         * @param value The value to set the pair HL to
+         */
+        void setHL(uint16_t value);
 
         // Flag register getter and setter
         /**
@@ -156,5 +169,24 @@ namespace gameboy
          * @see RegisterFlag
          */
         bool getFlag(uint8_t flag) const;
+
+    private:
+        /**
+         * @brief Get the value of a pair of registers
+         *
+         * @param high The high register of the pair
+         * @param low The low register of the pair
+         * @return The value of the pair
+         */
+        uint16_t getRegisterPair(uint8_t high, uint8_t low) const;
+
+        /**
+         * @brief Set the value of a pair of registers
+         *
+         * @param high The high register of the pair
+         * @param low The low register of the pair
+         * @param value The value to set the pair to
+         */
+        void setRegisterPair(uint8_t &high, uint8_t &low, uint16_t value);
     };
 } // namespace gameboy

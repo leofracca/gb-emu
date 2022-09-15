@@ -21,14 +21,7 @@ namespace gameboy
 
     struct Colour
     {
-        union
-        {
-            struct
-            {
-                uint8_t r, g, b, a;
-            };
-            uint8_t colours[4];
-        };
+        uint8_t colours[4];
     };
 
     class Memory
@@ -64,7 +57,7 @@ namespace gameboy
                         uint8_t xFlip : 1;
                         uint8_t yFlip : 1;
                         uint8_t renderPriority : 1;
-                    };
+                    } bits;
                     uint8_t value;
                 };
             } options;

@@ -121,7 +121,7 @@ namespace gameboy
                 break;
             case 3:
                 sprite->options.value = value;
-                sprite->colourPalette = (sprite->options.paletteNumber) ? palette_OBP1 : palette_OBP0;
+                sprite->colourPalette = (sprite->options.bits.paletteNumber) ? palette_OBP1 : palette_OBP0;
                 sprite->ready = true;
                 break;
         }

@@ -301,7 +301,7 @@ namespace gameboy
 
             // Flip vertically
             int pixel_y = *ly - sprite.y;
-            pixel_y = sprite.options.yFlip ? (7 + 8 * (*lcdc & 0x04)) - pixel_y : pixel_y;
+            pixel_y = sprite.options.bits.yFlip ? (7 + 8 * (*lcdc & 0x04)) - pixel_y : pixel_y;
 
             for (int x = 0; x < 8; x++)
             {
@@ -315,7 +315,7 @@ namespace gameboy
                 int pixelOffset = *this->ly * 160 + x_temp;
 
                 // Flip horizontally
-                uint8_t pixel_x = sprite.options.xFlip ? 7 - x : x;
+                uint8_t pixel_x = sprite.options.bits.xFlip ? 7 - x : x;
 
                 if ((*lcdc & 0x04) && (pixel_y >= 8))
                     colour = m_memory->tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
@@ -326,7 +326,7 @@ namespace gameboy
                 if (!colour)
                     continue;
 
-                if (!rowPixels[x_temp] || !sprite.options.renderPriority)
+                if (!rowPixels[x_temp] || !sprite.options.bits.renderPriority)
                     m_frameBuffer[pixelOffset] = sprite.colourPalette[colour];
             }
         }

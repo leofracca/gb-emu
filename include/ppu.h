@@ -15,7 +15,6 @@
 #pragma once
 
 #include "memory.h" // Memory
-#include "registers.h" // Registers
 
 #include <array> // std::array
 
