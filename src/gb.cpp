@@ -45,7 +45,7 @@ namespace gameboy
 
             lastCycleTime = SDL_GetTicks64();
 
-            return m_platform.processInput(&input);
+            return m_platform.processInput(input);
         }
 
         return false;

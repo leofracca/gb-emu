@@ -20,40 +20,43 @@ namespace gameboy
         SDL_RenderPresent(renderer);
     }
 
-    bool Platform::processInput(Input *input)
+    bool Platform::processInput(Input &input)
     {
         SDL_Event event;
         SDL_PollEvent(&event);
-        switch (event.type) {
+        switch (event.type)
+        {
             case SDL_KEYUP:
-                switch(event.key.keysym.sym){
-                    case SDLK_RIGHT: 	input->setButton(JoypadButton::DIRECTION_RIGHT, false); break;
-                    case SDLK_LEFT:  	input->setButton(JoypadButton::DIRECTION_LEFT, false); break;
-                    case SDLK_UP:    	input->setButton(JoypadButton::DIRECTION_UP, false); break;
-                    case SDLK_DOWN:  	input->setButton(JoypadButton::DIRECTION_DOWN, false); break;
-                    case SDLK_a:     	input->setButton(JoypadButton::BUTTON_A, false); break;
-                    case SDLK_s:     	input->setButton(JoypadButton::BUTTON_B, false); break;
-                    case SDLK_SPACE: 	input->setButton(JoypadButton::BUTTON_START, false); break;
-                    case SDLK_RETURN: 	input->setButton(JoypadButton::BUTTON_SELECT, false); break;
+                switch(event.key.keysym.sym)
+                {
+                    case SDLK_RIGHT: 	input.setButton(JoypadButton::DIRECTION_RIGHT, false); break;
+                    case SDLK_LEFT:  	input.setButton(JoypadButton::DIRECTION_LEFT, false); break;
+                    case SDLK_UP:    	input.setButton(JoypadButton::DIRECTION_UP, false); break;
+                    case SDLK_DOWN:  	input.setButton(JoypadButton::DIRECTION_DOWN, false); break;
+                    case SDLK_a:     	input.setButton(JoypadButton::BUTTON_A, false); break;
+                    case SDLK_s:     	input.setButton(JoypadButton::BUTTON_B, false); break;
+                    case SDLK_SPACE: 	input.setButton(JoypadButton::BUTTON_START, false); break;
+                    case SDLK_RETURN: 	input.setButton(JoypadButton::BUTTON_SELECT, false); break;
                 }
                 break;
             case SDL_KEYDOWN:
-                switch(event.key.keysym.sym){
-                    case SDLK_RIGHT: 	input->setButton(JoypadButton::DIRECTION_RIGHT, true); break;
-                    case SDLK_LEFT:  	input->setButton(JoypadButton::DIRECTION_LEFT, true); break;
-                    case SDLK_UP:    	input->setButton(JoypadButton::DIRECTION_UP, true); break;
-                    case SDLK_DOWN:  	input->setButton(JoypadButton::DIRECTION_DOWN, true); break;
-                    case SDLK_a:     	input->setButton(JoypadButton::BUTTON_A, true); break;
-                    case SDLK_s:     	input->setButton(JoypadButton::BUTTON_B, true); break;
-                    case SDLK_SPACE: 	input->setButton(JoypadButton::BUTTON_START, true); break;
-                    case SDLK_RETURN: 	input->setButton(JoypadButton::BUTTON_SELECT, true); break;
+                switch(event.key.keysym.sym)
+                {
+                    case SDLK_RIGHT: 	input.setButton(JoypadButton::DIRECTION_RIGHT, true); break;
+                    case SDLK_LEFT:  	input.setButton(JoypadButton::DIRECTION_LEFT, true); break;
+                    case SDLK_UP:    	input.setButton(JoypadButton::DIRECTION_UP, true); break;
+                    case SDLK_DOWN:  	input.setButton(JoypadButton::DIRECTION_DOWN, true); break;
+                    case SDLK_a:     	input.setButton(JoypadButton::BUTTON_A, true); break;
+                    case SDLK_s:     	input.setButton(JoypadButton::BUTTON_B, true); break;
+                    case SDLK_SPACE: 	input.setButton(JoypadButton::BUTTON_START, true); break;
+                    case SDLK_RETURN: 	input.setButton(JoypadButton::BUTTON_SELECT, true); break;
                 }
                 break;
             case SDL_QUIT:
                 return true;
         }
 
-        input->sendInterrupt();
+        input.sendInterrupt();
         return false;
     }
 } // namespace gameboy
