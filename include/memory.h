@@ -29,10 +29,18 @@ namespace gameboy
     public:
         uint8_t m_memory[0x10000]; ///< The memory of the Gameboy
 
+        /**
+         * @brief A tile is a 8x8 pixel image. Each tile is 16 bytes long.
+         */
         struct Tile {
             uint8_t  pixels[8][8] = {0};
         } tiles[384];
 
+        /**
+         * @brief BG & Window Palette Data
+         * @details This selects the shade of grays to use for the background (BG) & window pixels.
+         *          Since each pixel uses 2 bits, the corresponding shade will be selected from here.
+         */
         Colour palette_BGP[4] = {
             { 255, 255, 255, 255},
             { 0, 0, 0, 255 },
@@ -61,7 +69,7 @@ namespace gameboy
                     uint8_t value;
                 };
             } options;
-        } sprites[40] = {Sprite()};
+        } sprites[40] = {Sprite()}; ///< The sprites
 
         /**
          * @brief Construct a new Memory object
@@ -123,8 +131,12 @@ namespace gameboy
             { 192,192,192,255},
             { 96,96,96, 255 },
             { 0, 0, 0, 255 },
-        };
+        }; ///< The 4 colours of the palette
 
+        /**
+         * @brief Object Palette 0 Data
+         * @details This selects the colour palette for sprite palette 0.
+         */
         Colour palette_OBP0[4] = {
             { 0, 0, 0, 255 },
             { 0, 0, 0, 255 },
@@ -132,6 +144,10 @@ namespace gameboy
             { 0, 0, 0, 255 },
         };
 
+        /**
+         * @brief Object Palette 1 Data
+         * @details This selects the colour palette for sprite palette 1.
+         */
         Colour palette_OBP1[4] = {
             { 0, 0, 0, 255 },
             { 0, 0, 0, 255 },
@@ -139,8 +155,28 @@ namespace gameboy
             { 0, 0, 0, 255 },
         };
 
+        /**
+         * @brief Update the tile at the specified address
+         *
+         * @param address The address of the tile
+         */
         void UpdateTile(uint16_t address);
+
+        /**
+         * @brief Update the sprite at the specified address
+         *
+         * @param address The address of the sprite
+         * @param value The value to write
+         */
         void UpdateSprite(uint16_t address, uint8_t value);
+
+        /**
+         * @brief Update the palette
+         * @details Update the palette with the new value
+         *
+         * @param address The address of the palette (BGP, OBP0 or OBP1)
+         * @param value The new value of the palette (2 bits per colour)
+         */
         void UpdatePalette(Colour *palette, uint8_t value);
     };
 }

@@ -37,7 +37,7 @@ namespace gameboy
 
     private:
         Platform m_platform;
-        Memory *m_memory;
+        Memory m_memory;
 
         constexpr static int FPS = 60;
         constexpr static int FRAMERATE = 1000 / FPS;

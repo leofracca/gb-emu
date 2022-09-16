@@ -6,31 +6,28 @@ namespace gameboy
 {
     GB::GB(const std::string &rom, const int scale)
         : m_platform(scale),
-          m_memory(new Memory(rom))
+          m_memory(rom)
     {}
 
     void GB::run()
     {
-        CPU cpu(m_memory);
-        PPU ppu(m_memory);
-        Timer timer(m_memory);
-        Input input(m_memory);
+        CPU cpu(&m_memory);
+        PPU ppu(&m_memory);
+        Timer timer(&m_memory);
+        Input input(&m_memory);
 
         int cycles = 0;
-        bool quit = false;
-
         auto lastCycleTime = SDL_GetTicks64();
 
-        while (!quit)
+        do
         {
             cycles = 0;
 
             cycles = cpu.cycle();
             timer.cycle(cycles);
             ppu.cycle(cycles);
-
-            quit = updatePlatform(lastCycleTime, ppu, input);
         }
+        while (!updatePlatform(lastCycleTime, ppu, input));
     }
 
     bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)
