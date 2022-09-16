@@ -67,9 +67,9 @@ namespace gameboy
          * @brief Construct a new Memory object
          * @details Initialize the cartridge
          *
-         * @param cartridge The cartridge of the memory
+         * @param romPath The path to the ROM file
          */
-        Memory(Cartridge *cartridge);
+        Memory(const std::string &romPath);
 
         /**
          * @brief Read a byte from the memory
@@ -115,7 +115,7 @@ namespace gameboy
         void setJoypadState(uint8_t state);
 
     private:
-        Cartridge *m_cartridge; ///< The cartridge
+        Cartridge m_cartridge; ///< The cartridge
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         const Colour palette_colours[4] = {

@@ -7,9 +7,10 @@
 
 namespace gameboy
 {
-    Memory::Memory(Cartridge *cartridge)
-        : m_cartridge(cartridge)
-    {}
+    Memory::Memory(const std::string &romPath)
+    {
+        m_cartridge.loadROM(romPath);
+    }
 
     uint8_t Memory::read(uint16_t address)
     {
@@ -26,7 +27,7 @@ namespace gameboy
 
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
-            return m_cartridge->read(address);
+            return m_cartridge.read(address);
         else
             return m_memory[address];
     }
@@ -55,7 +56,7 @@ namespace gameboy
 
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
-            m_cartridge->write(address, value);
+            m_cartridge.write(address, value);
         else
             m_memory[address] = value;
 

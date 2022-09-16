@@ -19,7 +19,7 @@ add_executable(GBEmu src/main.cpp
 target_compile_options(GBEmu PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_link_libraries(GBEmu PRIVATE SDL2::SDL2)
 
-## Doxygen
+# Doxygen
 find_package(Doxygen)
 
 # Check if Doxygen is installed

@@ -25,14 +25,13 @@ namespace gameboy
     {
     public:
         /**
-         * @brief Construct a new Cartridge object
-         * @details Call the method loadROM to load the ROM
+         * @brief Load the ROM into the cartridge
+         * @details Save the filename, load the ROM into the cartridge and check the cartridge type
          *
          * @param filename The name of the ROM file
-         *
-         * @see loadROM
+         * @see checkCartridge
          */
-        Cartridge(std::string filename);
+        void loadROM(const std::string &filename);
 
         /**
          * @brief Read a byte from the cartridge
@@ -58,14 +57,6 @@ namespace gameboy
 
         uint8_t m_rom[127 * 16384]; ///< The rom of the cartridge (max size is 127 banks of 16KB = 2MB)
         uint8_t m_ram[127 * 256]; ///< The ram of the cartridge (max size is 127 banks of 256B = 32KB)
-
-        /**
-         * @brief Load the ROM into the cartridge
-         * @details Save the filename, load the ROM into the cartridge and check the cartridge type
-         *
-         * @see checkCartridge
-         */
-        void loadROM();
 
         /**
          * @brief Check the cartridge type

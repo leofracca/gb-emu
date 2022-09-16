@@ -6,13 +6,11 @@
 
 #pragma once
 
-#include "cartridge.h" // Cartridge
 #include "cpu.h" // CPU
 #include "input.h" // Input
 #include "memory.h" // Memory
 #include "platform.h" // Platform
 #include "ppu.h" // PPU
-#include "registers.h" // Registers
 #include "timer.h" // Timer
 
 namespace gameboy
@@ -29,7 +27,7 @@ namespace gameboy
          * @param rom The path to the rom file
          * @param scale The scale of the window
          */
-        GB(std::string rom, int scale);
+        GB(const std::string &rom, const int scale);
 
         /**
          * @brief Run the emulator
@@ -38,14 +36,8 @@ namespace gameboy
         void run();
 
     private:
-        Cartridge *m_cartridge;
-        CPU *m_cpu;
-        Input *m_input;
+        Platform m_platform;
         Memory *m_memory;
-        Platform *m_platform;
-        PPU *m_ppu;
-        Registers *m_registers;
-        Timer *m_timer;
 
         constexpr static int FPS = 60;
         constexpr static int FRAMERATE = 1000 / FPS;
@@ -57,6 +49,6 @@ namespace gameboy
          * @param lastCycleTime The last time the screen was updated
          * @return True if the user wants to quit, false otherwise
          */
-        bool updatePlatform(uint64_t &lastCycleTime);
+        bool updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input);
     };
 } // namespace gameboy

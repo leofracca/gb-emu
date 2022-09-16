@@ -4,20 +4,18 @@
 
 namespace gameboy
 {
-    GB::GB(std::string rom, int scale)
-    {
-        m_cartridge = new Cartridge(rom);
-        m_registers = new Registers();
-        m_memory = new Memory(m_cartridge);
-        m_cpu = new CPU(m_memory, m_registers);
-        m_ppu = new PPU(m_memory);
-        m_timer = new Timer(m_memory);
-        m_input = new Input(m_memory);
-        m_platform = new Platform(scale);
-    }
+    GB::GB(const std::string &rom, const int scale)
+        : m_platform(scale),
+          m_memory(new Memory(rom))
+    {}
 
     void GB::run()
     {
+        CPU cpu(m_memory);
+        PPU ppu(m_memory);
+        Timer timer(m_memory);
+        Input input(m_memory);
+
         int cycles = 0;
         bool quit = false;
 
@@ -27,27 +25,27 @@ namespace gameboy
         {
             cycles = 0;
 
-            cycles = m_cpu->cycle();
-            m_timer->cycle(cycles);
-            m_ppu->cycle(cycles);
+            cycles = cpu.cycle();
+            timer.cycle(cycles);
+            ppu.cycle(cycles);
 
-            quit = updatePlatform(lastCycleTime);
+            quit = updatePlatform(lastCycleTime, ppu, input);
         }
     }
 
-    bool GB::updatePlatform(uint64_t &lastCycleTime)
+    bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)
     {
-        if (m_ppu->isRenderingEnabled())
+        if (ppu.isRenderingEnabled())
         {
             if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
                 SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
 
-            m_platform->update(m_ppu->getFrameBuffer());
-            m_ppu->setRenderingEnabled(false);
+            m_platform.update(ppu.getFrameBuffer());
+            ppu.setRenderingEnabled(false);
 
             lastCycleTime = SDL_GetTicks64();
 
-            return m_platform->processInput(m_input);
+            return m_platform.processInput(&input);
         }
 
         return false;

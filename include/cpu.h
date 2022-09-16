@@ -87,9 +87,8 @@ namespace gameboy
          * @brief Initialize the CPU.
          *
          * @param memory The memory
-         * @param registers The registers
          */
-        CPU(Memory *memory, Registers *registers);
+        CPU(Memory *memory);
 
         /**
          * @brief Get the opcode of the next instruction, increment the program counter and execute the instruction.
@@ -100,7 +99,7 @@ namespace gameboy
 
     private:
         Memory *m_memory; ///< The memory
-        Registers *m_registers; ///< The registers
+        Registers m_registers; ///< The registers
 
         bool m_halted = false; ///< True if the cpu is halted
         bool m_ime; ///< True if the cpu is in the interrupt master enable mode

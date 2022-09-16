@@ -8,14 +8,10 @@
 
 namespace gameboy
 {
-    Cartridge::Cartridge(std::string filename)
-        : m_ROMFilename(filename)
+    void Cartridge::loadROM(const std::string &filename)
     {
-        loadROM();
-    }
+        m_ROMFilename = filename;
 
-    void Cartridge::loadROM()
-    {
         // Open the file
         std::ifstream romFile(m_ROMFilename, std::ios::binary);
         if (!romFile.is_open())
