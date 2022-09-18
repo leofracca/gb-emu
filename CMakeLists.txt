@@ -26,6 +26,7 @@ enable_testing()
 find_package(Catch2 3 REQUIRED)
 add_executable(GBEmu_test
         tests/testRegisters.cpp
+        tests/testInput.cpp
         third_party/catch.hpp)
 target_link_libraries(GBEmu_test PRIVATE Catch2::Catch2WithMain)
 

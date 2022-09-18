@@ -83,6 +83,11 @@ namespace gameboy
         write(address + 1, hi);
     }
 
+    uint8_t Memory::getJoypadState()
+    {
+        return m_joypadState;
+    }
+
     void Memory::setJoypadState(uint8_t state)
     {
         m_joypadState = state;

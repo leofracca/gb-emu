@@ -56,19 +56,6 @@ namespace gameboy
         void sendInterrupt();
 
     private:
-        /**
-         * @brief The current state of the joypad
-         * @details The state is inverted (0 = pressed, 1 = not pressed),
-         *          bits 0 to 3 are used to store the state of the buttons,
-         *          bits 4 to 7 are used to store the state of the directions.
-         *          Based on which bit is set (technically, which bit is reset), the joypad will send an interrupt.
-         *
-         *          This variable does not store the state like the gameboy does/expects.
-         *          To get the joypad state like the Gameboy does (and the games expect), we need to call the read function of the memory.
-         *          This is done by the Memory class.
-         */
-        uint8_t m_currentJoypadState = 0xFF; ///< The joypad state
-
         Memory *m_memory; ///< The memory
     };
 } // namespace gameboy

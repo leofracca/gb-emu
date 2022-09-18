@@ -116,6 +116,13 @@ namespace gameboy
         void writeWord(uint16_t address, uint16_t value);
 
         /**
+         * @brief Get the joypad state
+         *
+         * @return The joypad state
+         */
+        uint8_t getJoypadState();
+
+        /**
          * @brief Save the joypad state
          *
          * @param state The new joypad state
@@ -124,6 +131,18 @@ namespace gameboy
 
     private:
         Cartridge m_cartridge; ///< The cartridge
+        /**
+         * @brief The current state of the joypad
+         * @details The state is inverted (0 = pressed, 1 = not pressed),
+         *          bits 0 to 3 are used to store the state of the buttons,
+         *          bits 4 to 7 are used to store the state of the directions.
+         *          Based on which bit is set (technically, which bit is reset), the joypad will send an interrupt.
+         *
+         *          This variable does not store the state like the gameboy does/expects.
+         *          To get the joypad state like the Gameboy does (and the games expect), we need to call the read function.
+         *
+         * @see read
+         */
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         const Colour palette_colours[4] = {

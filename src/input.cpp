@@ -13,11 +13,16 @@ namespace gameboy
 
     void Input::setButton(JoypadButton button, bool pressed)
     {
+        uint8_t currentJoypadState = m_memory->getJoypadState();
+
         // Remember that the joypad state is inverted (0 = pressed, 1 = not pressed)
         if (pressed)
-            m_currentJoypadState &= ~(static_cast<uint8_t>(button));
+            currentJoypadState &= ~(static_cast<uint8_t>(button));
         else
-            m_currentJoypadState |= static_cast<uint8_t>(button);
+            currentJoypadState |= static_cast<uint8_t>(button);
+
+        // Save the joypad state
+        m_memory->setJoypadState(currentJoypadState);
     }
 
     void Input::sendInterrupt()
@@ -26,8 +31,5 @@ namespace gameboy
         uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
         interruptFlag |= 0x10;
         m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
-
-        // Save the joypad state
-        m_memory->setJoypadState(m_currentJoypadState);
     }
 } // namespace gameboy
