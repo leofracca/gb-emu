@@ -19,6 +19,22 @@ add_executable(GBEmu src/main.cpp
 target_compile_options(GBEmu PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_link_libraries(GBEmu PRIVATE SDL2::SDL2)
 
+# For testing purposes
+enable_testing()
+
+# Catch
+find_package(Catch2 3 REQUIRED)
+add_executable(GBEmu_test
+        tests/testRegisters.cpp
+        third_party/catch.hpp)
+target_link_libraries(GBEmu_test PRIVATE Catch2::Catch2WithMain)
+
+include(CTest)
+include(Catch)
+
+# Tests to execute
+add_test(Tests GBEmu_test)
+
 # Doxygen
 find_package(Doxygen)
 
