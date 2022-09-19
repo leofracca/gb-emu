@@ -28,6 +28,12 @@ namespace gameboy
     void ROMOnly::write(uint16_t address, uint8_t value)
     {
         /* Nothing to do here */
+
+        // The address won't never be > 0x8000, so this function will always return without doing anything
+        // However I'm keeping it here because it's part of the MBC interface and with -Werror it will throw an error if the arguments are not used
+        // TODO: refactor this
+        if (address < 0x8000)
+            return;
         m_rom[address] = value;
     }
 

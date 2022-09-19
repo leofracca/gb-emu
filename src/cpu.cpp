@@ -1670,7 +1670,7 @@ namespace gameboy
                 set(7, m_registers.a);
                 break;
             default:
-                throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
+                throw std::runtime_error("Unexpected CB opcode: " + std::to_string(opcode));
         }
 
         return cycles;
