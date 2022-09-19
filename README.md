@@ -12,7 +12,7 @@ An open source GameBoy emulator written in C++.
 
 ## Dependency
 
-The emulator is currently tested only on Fedora. The required software can be installed with:
+At the moment, the emulator has been tested only on Fedora. The required software can be installed with:
 
 ```shell
 sudo dnf install make cmake g++ git SDL2 SDL2-devel
@@ -29,9 +29,11 @@ cmake ..
 make
 ```
 
-Then the executable will be created in the `/build` folder
+Then the executable will be created in the `build` folder.
 
 ## Playing
+
+To run the emulator:
 
 ```shell
 ./GBEmu path/to/rom [scale]
@@ -39,7 +41,7 @@ Then the executable will be created in the `/build` folder
 
 where `scale` represents the scale of the window.
 
-For example, let's suppose that there is a ROM called rom.gb inside the /build folder:
+For example, supposing that there is a ROM called rom.gb inside the `build` folder, the command would be:
 
 ```shell
 ./GBEmu rom.gb
@@ -51,7 +53,11 @@ or
 ./GBEmu rom.gb 4
 ```
 
+if you want a bigger window (in this case the window will be 4 times bigger than the normal).
+
 ## Testing
+
+To run the tests:
 
 ```shell
 make test
@@ -64,9 +70,11 @@ To test them run the following (supposing you are inside the build folder):
 ./GBEmu ../tests/roms/cpu_instrs.gb
 ```
 
-Thank to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms)
+Thank to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms) for the roms.
 
 ## Documentation
+
+To create the documentation:
 
 ```shell
 make doc
