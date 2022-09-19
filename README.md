@@ -2,6 +2,10 @@
 
 An open source GameBoy emulator written in C++.
 
+## Images
+
+
+
 ## Dependency
 
 The emulator is currently tested only on Fedora. The required software can be installed with:
@@ -55,6 +59,8 @@ To test them run the following (supposing you are inside the build folder):
 ```shell
 ./GBEmu ../tests/roms/cpu_instrs.gb
 ```
+
+Thank to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms)
 
 ## Documentation
 
