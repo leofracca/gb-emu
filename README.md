@@ -4,6 +4,10 @@ An open source GameBoy emulator written in C++.
 
 ## Images
 
+<p align='center'>
+  <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='30%'/>
+  <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_battle.png' width='30%'/>
+</p>
 
 
 ## Dependency
