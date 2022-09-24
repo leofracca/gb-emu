@@ -63,15 +63,22 @@ namespace gameboy
 
     class MBC1 : public MBC
     {
-    protected:
-        bool m_ramEnabled = false;
-        bool m_mode = false;
-        uint8_t m_romBank = 1;
-        uint8_t m_ramBank = 0;
     public:
         MBC1(uint8_t *rom, uint8_t *ram);
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
+
+    protected:
+        bool m_ramEnabled = false;
+        uint8_t m_romBank = 1;
+        uint8_t m_ramBank = 0;
+
+        uint8_t readROMBank(uint16_t address);
+        uint8_t readRAMBank(uint16_t address);
+        void writeRAMBank(uint16_t address, uint8_t value);
+
+    private:
+        bool m_mode = false;
     };
 
     class MBC2 : public MBC1

@@ -19,7 +19,7 @@ namespace gameboy
 
         // Save the game in the memory
         romFile.seekg(std::ios::beg);
-        romFile.read((char *)m_rom, sizeof(m_rom));
+        romFile.read(reinterpret_cast<char *>(m_rom), sizeof(m_rom));
 
         checkCartridge();
     }
