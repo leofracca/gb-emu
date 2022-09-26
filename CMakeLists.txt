@@ -25,8 +25,9 @@ enable_testing()
 # Catch
 find_package(Catch2 3 REQUIRED)
 add_executable(GBEmu_test
-        tests/testMBC.cpp
         tests/testInput.cpp
+        tests/testCartridge.cpp
+        tests/testMBC.cpp
         tests/testRegisters.cpp
         third_party/catch.hpp)
 target_link_libraries(GBEmu_test PRIVATE Catch2::Catch2WithMain)
