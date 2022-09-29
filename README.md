@@ -9,7 +9,6 @@ An open source GameBoy emulator written in C++.
   <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_battle.png' width='30%'/>
 </p>
 
-
 ## Dependency
 
 At the moment, the emulator has been tested only on Fedora. The required software can be installed with:
@@ -70,7 +69,19 @@ To test them run the following (supposing you are inside the build folder):
 ./GBEmu ../tests/roms/cpu_instrs.gb
 ```
 
-Thank to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms) for the roms.
+Thanks to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms) for the roms.
+
+## Coverage
+
+To generate the code coverage you need to pass the flag `-DCOVERAGE=ON` when building the project with cmake. Then the target `coverage` will be available.
+
+The command
+
+```shell
+make coverage
+```
+
+will generate the coverage.html file with all the statistics about the coverage.
 
 ## Documentation
 
