@@ -3,7 +3,7 @@
  * See https://gbdev.io/pandocs/MBCs.html
  */
 
-#include "../include/mbc.h" // MBC
+#include "mbc.h" // MBC
 
 #include <stdexcept> // std::runtime_error
 

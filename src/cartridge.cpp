@@ -2,7 +2,7 @@
  * See pages 8 to 16 of the documentation (docs/GB.pdf)
  */
 
-#include "../include/cartridge.h" // Cartridge
+#include "cartridge.h" // Cartridge
 
 #include <fstream> // ifstream
 

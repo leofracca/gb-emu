@@ -3,7 +3,7 @@
  * See https://gbdev.io/pandocs/Timer_and_Divider_Registers.html
  */
 
-#include "../include/timer.h" // Timer
+#include "timer.h" // Timer
 
 namespace gameboy
 {

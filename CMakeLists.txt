@@ -131,6 +131,7 @@ target_sources(GBEmu_test
 )
 target_include_directories(GBEmu_test
     PUBLIC  ${PROJECT_SOURCE_DIR}/include
+    PRIVATE ${PROJECT_SOURCE_DIR}/tests/roms
 )
 target_include_directories(GBEmu_test SYSTEM
     PUBLIC ${PROJECT_SOURCE_DIR}/third_party/catch2

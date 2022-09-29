@@ -1,6 +1,5 @@
-#include "../include/platform.h" // Platform
-
-#include "../include/ppu.h" // SCREEN_WIDTH, SCREEN_HEIGHT
+#include "platform.h" // Platform
+#include "ppu.h" // SCREEN_WIDTH, SCREEN_HEIGHT
 
 namespace gameboy
 {

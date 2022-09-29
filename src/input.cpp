@@ -3,7 +3,7 @@
  * See https://gbdev.io/pandocs/Joypad_Input.html
  */
 
-#include "../include/input.h" // Input
+#include "input.h" // Input
 
 namespace gameboy
 {

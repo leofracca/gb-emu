@@ -1,4 +1,4 @@
-#include "../include/gb.h" // GB
+#include "gb.h" // GB
 
 #include <SDL2/SDL_timer.h> // SDL_GetTicks64, SDL_Delay
 

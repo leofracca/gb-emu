@@ -4,7 +4,7 @@
  * See https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
  */
 
-#include "../include/cpu.h" // CPU
+#include "cpu.h" // CPU
 
 #include <stdexcept> // std::runtime_error
 

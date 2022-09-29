@@ -1,20 +1,22 @@
-#include "../third_party/catch2/catch.hpp"
-#include "../include/input.h"
+#include "catch.hpp"
+#include "input.h"
 
 namespace gameboyTest
 {
     using namespace gameboy;
 
+    const std::string TEST_ROM = "cpu_instrs.gb";
+
     TEST_CASE("Input init", "[input]")
     {
-        Memory memory("../tests/roms/cpu_instrs.gb");
+        Memory memory(TEST_ROM);
         Input input(&memory);
         REQUIRE(memory.getJoypadState() == 0xFF);
     }
 
     TEST_CASE("Input setButton", "[input]")
     {
-        Memory memory("../tests/roms/cpu_instrs.gb");
+        Memory memory(TEST_ROM);
         Input input(&memory);
         input.setButton(JoypadButton::BUTTON_A, true);
         REQUIRE(memory.getJoypadState() == 0xFE);
@@ -52,7 +54,7 @@ namespace gameboyTest
 
     TEST_CASE("Input sendInterrupt", "[input]")
     {
-        Memory memory("../tests/roms/cpu_instrs.gb");
+        Memory memory(TEST_ROM);
         Input input(&memory);
         input.sendInterrupt();
         REQUIRE(memory.read(0xFF0F) == 0x10);

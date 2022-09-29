@@ -3,7 +3,7 @@
  * See https://gbdev.io/pandocs/Memory_Map.html
  */
 
-#include "../include/memory.h" // Memory
+#include "memory.h" // Memory
 
 namespace gameboy
 {

@@ -5,7 +5,7 @@
  * See http://www.codeslinger.co.uk/pages/projects/gameboy/graphics.html
  */
 
-#include "../include/ppu.h" // PPU
+#include "ppu.h" // PPU
 
 namespace gameboy
 {

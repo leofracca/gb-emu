@@ -4,7 +4,7 @@
  * See https://gbdev.io/pandocs/Power_Up_Sequence.html
  */
 
-#include "../include/registers.h" // Registers
+#include "registers.h" // Registers
 
 namespace gameboy
 {

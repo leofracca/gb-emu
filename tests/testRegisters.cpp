@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "../third_party/catch2/catch.hpp"
-#include "../include/registers.h"
+#include "catch.hpp"
+#include "registers.h"
 
 namespace gameboyTest
 {

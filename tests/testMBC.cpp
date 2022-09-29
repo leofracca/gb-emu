@@ -1,11 +1,11 @@
-#include "../third_party/catch2/catch.hpp"
-#include "../include/mbc.h"
+#include "catch.hpp"
+#include "mbc.h"
 
 namespace gameboyTest
 {
     using namespace gameboy;
 
-    const std::string TEST_ROM = "../tests/roms/cpu_instrs.gb";
+    const std::string TEST_ROM = "cpu_instrs.gb";
     uint8_t rom[127 * 16384];
     uint8_t ram[127 * 256];
 
