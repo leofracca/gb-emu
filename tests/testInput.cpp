@@ -1,8 +1,5 @@
-#include "../third_party/catch.hpp"
-#include "../src/input.cpp"
-#include "../src/memory.cpp"
-#include "../src/cartridge.cpp"
-#include "../src/mbc.cpp"
+#include "../third_party/catch2/catch.hpp"
+#include "../include/input.h"
 
 namespace gameboyTest
 {

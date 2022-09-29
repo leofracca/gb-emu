@@ -1,4 +1,4 @@
-#include "../third_party/catch.hpp"
+#include "../third_party/catch2/catch.hpp"
 #include "../include/mbc.h"
 
 namespace gameboyTest
