@@ -26,6 +26,8 @@ set(LINKER_FLAGS
     $<$<BOOL:${COVERAGE}>:--coverage>
 )
 
+include_directories(include)
+
 ################
 # Source files #
 ################
