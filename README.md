@@ -62,12 +62,7 @@ To run the tests:
 make test
 ```
 
-In addition, there is a rom that tests the cpu instructions inside [/tests/roms](tests/roms).
-To test them run the following (supposing you are inside the build folder):
-
-```shell
-./GBEmu ../tests/roms/cpu_instrs.gb
-```
+Some tests are handwritten, but there is also a test that opens a window that runs a test ROM.
 
 Thanks to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms) for the roms.
 
