@@ -26,8 +26,6 @@ set(LINKER_FLAGS
     $<$<BOOL:${COVERAGE}>:--coverage>
 )
 
-include_directories(include)
-
 ################
 # Source files #
 ################
@@ -157,4 +155,8 @@ enable_testing()
 add_test(
     NAME BasicTests
     COMMAND ${CMAKE_BINARY_DIR}/GBEmu_test
+)
+add_test(
+    NAME BlarggTests
+    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/tests/roms/cpu_instrs.gb 2
 )
