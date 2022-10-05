@@ -17,6 +17,7 @@ option(USAN     OFF)
 option(COVERAGE OFF)
 
 set(COMPILER_FLAGS
+    -g
     -Wall -Wextra -Wpedantic -Werror
     $<$<BOOL:${USAN}>:-fsanitize=undefined -fno-omit-frame-pointer>
 )
@@ -159,4 +160,15 @@ add_test(
 add_test(
     NAME BlarggTests
     COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/tests/roms/cpu_instrs.gb 2
+)
+add_test(
+    NAME valgrindTests
+    COMMAND valgrind
+        --leak-check=full
+        --show-leak-kinds=all
+        --track-fds=yes
+        --track-origins=yes
+        --error-exitcode=1
+        --max-stackframe=10000000
+        ${CMAKE_BINARY_DIR}/GBEmu_test
 )

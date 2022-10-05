@@ -8,6 +8,11 @@
 
 namespace gameboy
 {
+    Cartridge::~Cartridge()
+    {
+        delete m_MBC;
+    }
+
     void Cartridge::loadROM(const std::string &filename)
     {
         m_ROMFilename = filename;

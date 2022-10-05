@@ -30,6 +30,8 @@ namespace gameboy
          */
         MBC(uint8_t *rom, uint8_t *ram);
 
+        virtual ~MBC() = default;
+
         /**
          * @brief Read a byte from the cartridge
          * @details Read a byte from the cartridge at the specified address and return it

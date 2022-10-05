@@ -10,6 +10,7 @@ namespace gameboy
     Memory::Memory(const std::string &romPath)
     {
         m_cartridge.loadROM(romPath);
+        m_memory[INTERRUPT_FLAG_ADDRESS] = 0x00;
     }
 
     uint8_t Memory::read(uint16_t address)

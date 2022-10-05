@@ -25,6 +25,11 @@ namespace gameboy
     {
     public:
         /**
+         * @brief Free the memory used by the MBC
+         */
+        ~Cartridge();
+
+        /**
          * @brief Load the ROM into the cartridge
          * @details Save the filename, load the ROM into the cartridge and check the cartridge type
          *
