@@ -27,7 +27,7 @@ namespace gameboy
          * @param rom The path to the rom file
          * @param scale The scale of the window
          */
-        GB(const std::string &rom, const int scale);
+        GB(const std::string &rom, int scale);
 
         /**
          * @brief Run the emulator

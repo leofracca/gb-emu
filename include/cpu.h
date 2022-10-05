@@ -88,7 +88,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        CPU(Memory *memory);
+        explicit CPU(Memory *memory);
 
         /**
          * @brief Get the opcode of the next instruction, increment the program counter and execute the instruction.
@@ -102,7 +102,7 @@ namespace gameboy
         Registers m_registers; ///< The registers
 
         bool m_halted = false; ///< True if the cpu is halted
-        bool m_ime; ///< True if the cpu is in the interrupt master enable mode
+        bool m_ime = true; ///< True if the cpu is in the interrupt master enable mode
 
         constexpr static uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
 

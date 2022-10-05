@@ -51,9 +51,9 @@ namespace gameboy
                 write(0xFE00 + i, read((value << 8) + i));
 
         // Update colour palette
-        if (address == 0xFF47) UpdatePalette(palette_BGP, value); // BG and Window palette
-        if (address == 0xFF48) UpdatePalette(palette_OBP0, value); // Object palette 0
-        if (address == 0xFF49) UpdatePalette(palette_OBP1, value); // Object palette 1
+        if (address == BGP_REG_ADDRESS) UpdatePalette(palette_BGP, value); // BG and Window palette
+        if (address == OBP0_REG_ADDRESS) UpdatePalette(palette_OBP0, value); // Object palette 0
+        if (address == OBP1_REG_ADDRESS) UpdatePalette(palette_OBP1, value); // Object palette 1
 
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
@@ -127,8 +127,8 @@ namespace gameboy
                 sprite->tile = value;
                 break;
             case 3:
-                sprite->options.value = value;
-                sprite->colourPalette = (sprite->options.bits.paletteNumber) ? palette_OBP1 : palette_OBP0;
+                sprite->options.flags.value = value;
+                sprite->colourPalette = (sprite->options.flags.bits.paletteNumber) ? palette_OBP1 : palette_OBP0;
                 sprite->ready = true;
                 break;
         }

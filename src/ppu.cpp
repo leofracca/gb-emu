@@ -53,14 +53,14 @@ namespace gameboy
                         m_renderingEnabled = true;
 
                         // Set the interrupt flag for VBLANK
-                        interruptFlag |= 0x01;
+                        interruptFlag |= VBLANK_INTERRUPT_FLAG;
                         m_memory->write(0xff0f, interruptFlag);
 
                         // If the bit of the VBLANK of the stat register is set (bit 4), set the interrupt flag
                         if (*stat & 0x10)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= 0x02;
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
                             m_memory->write(0xff0f, interruptFlag);
                         }
                     }
@@ -71,7 +71,7 @@ namespace gameboy
                         if (*stat & 0x20)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= 0x02;
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
                             m_memory->write(0xff0f, interruptFlag);
                         }
                         m_mode = Mode::OAM;
@@ -104,7 +104,7 @@ namespace gameboy
                         if (*stat & 0x20)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= 0x02;
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
                             m_memory->write(0xff0f, interruptFlag);
                         }
                     }
@@ -135,7 +135,7 @@ namespace gameboy
                     if (*stat & 0x08)
                     {
                         // Set the interrupt flag for LCD Status
-                        interruptFlag |= 0x02;
+                        interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
                         m_memory->write(0xff0f, interruptFlag);
                     }
                 }
@@ -173,7 +173,7 @@ namespace gameboy
         {
             // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
             uint8_t interruptFlag = m_memory->read(0xff0f);
-            interruptFlag |= 0x02;
+            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
             m_memory->write(0xff0f, interruptFlag);
         }
     }
@@ -301,12 +301,12 @@ namespace gameboy
 
             // Flip vertically
             int pixel_y = *ly - sprite.y;
-            pixel_y = sprite.options.bits.yFlip ? (7 + 8 * (*lcdc & 0x04)) - pixel_y : pixel_y;
+            pixel_y = sprite.options.flags.bits.yFlip ? (7 + 8 * (*lcdc & 0x04)) - pixel_y : pixel_y;
 
             for (int x = 0; x < 8; x++)
             {
                 int tile_num = sprite.tile & ((*lcdc & 0x04) ? 0xFE : 0xFF);
-                int colour = 0;
+                int colour;
 
                 int x_temp = sprite.x + x;
                 if(x_temp < 0 || x_temp >= 160)
@@ -315,7 +315,7 @@ namespace gameboy
                 int pixelOffset = *this->ly * 160 + x_temp;
 
                 // Flip horizontally
-                uint8_t pixel_x = sprite.options.bits.xFlip ? 7 - x : x;
+                uint8_t pixel_x = sprite.options.flags.bits.xFlip ? 7 - x : x;
 
                 if ((*lcdc & 0x04) && (pixel_y >= 8))
                     colour = m_memory->tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
@@ -326,7 +326,7 @@ namespace gameboy
                 if (!colour)
                     continue;
 
-                if (!rowPixels[x_temp] || !sprite.options.bits.renderPriority)
+                if (!rowPixels[x_temp] || !sprite.options.flags.bits.renderPriority)
                     m_frameBuffer[pixelOffset] = sprite.colourPalette[colour];
             }
         }

@@ -38,7 +38,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        Input(Memory *memory);
+        explicit Input(Memory *memory);
 
         /**
          * @brief Set/Reset the bit of the joypad state

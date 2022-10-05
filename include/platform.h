@@ -23,7 +23,7 @@ namespace gameboy
          *
          * @param scale The scale of the window
          */
-        Platform(int scale);
+        explicit Platform(int scale);
 
         /**
          * @brief Update the window with the new frame buffer

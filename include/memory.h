@@ -15,6 +15,10 @@
 
 namespace gameboy
 {
+    constexpr uint16_t BGP_REG_ADDRESS = 0xFF47; ///< The address of the BG Palette Register
+    constexpr uint16_t OBP0_REG_ADDRESS = 0xFF48; ///< The address of the Object Palette 0 Register
+    constexpr uint16_t OBP1_REG_ADDRESS = 0xFF49; ///< The address of the Object Palette 1 Register
+
     constexpr uint16_t JOYPAD_ADDRESS = 0xFF00; ///< The address of the register containing info about the joypad
     constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
     constexpr uint16_t INTERRUPT_ENABLE_ADDRESS = 0xFFFF; ///< The address of the Interrupt Enable Register
@@ -27,13 +31,13 @@ namespace gameboy
     class Memory
     {
     public:
-        uint8_t m_memory[0x10000]; ///< The memory of the Gameboy
+        uint8_t m_memory[0x10000]{}; ///< The memory of the Gameboy
 
         /**
          * @brief A tile is a 8x8 pixel image. Each tile is 16 bytes long.
          */
         struct Tile {
-            uint8_t  pixels[8][8] = {0};
+            uint8_t  pixels[8][8] = {{0}};
         } tiles[384];
 
         /**
@@ -67,7 +71,7 @@ namespace gameboy
                         uint8_t renderPriority : 1;
                     } bits;
                     uint8_t value;
-                };
+                } flags;
             } options;
         } sprites[40] = {Sprite()}; ///< The sprites
 
@@ -77,7 +81,7 @@ namespace gameboy
          *
          * @param romPath The path to the ROM file
          */
-        Memory(const std::string &romPath);
+        explicit Memory(const std::string &romPath);
 
         /**
          * @brief Read a byte from the memory

@@ -2189,7 +2189,7 @@ namespace gameboy
 
     void CPU::jr()
     {
-        int8_t offset = m_memory->read(m_registers.pc);
+        auto offset = static_cast<int8_t>(m_memory->read(m_registers.pc));
         m_registers.pc++;
         m_registers.pc += offset;
     }

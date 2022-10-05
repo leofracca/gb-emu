@@ -34,7 +34,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        Timer(Memory *memory);
+        explicit Timer(Memory *memory);
 
         /**
          * @brief Increment and manipulate the timer registers
@@ -52,7 +52,7 @@ namespace gameboy
          * @brief This register is incremented 16384 times a second.
          *        Writing any value sets it to $00.
          */
-        uint8_t m_div; ///< Divider register (0xFF04)
+        uint8_t m_div = 0; ///< Divider register (0xFF04)
 
         /**
          * @brief This register is incremented at the rate (clock
@@ -61,13 +61,13 @@ namespace gameboy
          *        it is reset to the value specified in TMA ($FF06)
          *        and an interrupt is requested.
          */
-        uint8_t m_tima; ///< Timer counter register (0xFF05)
+        uint8_t m_tima = 0; ///< Timer counter register (0xFF05)
 
         /**
          * @brief This register contains the value to
          *        load into the TIMA when the TIMA overflows.
          */
-        uint8_t m_tma; ///< Timer modulo register (0xFF06)
+        uint8_t m_tma = 0; ///< Timer modulo register (0xFF06)
 
         /**
          * @brief This register controls the timer.
@@ -80,10 +80,10 @@ namespace gameboy
          *               10: CPU Clock / 64   = 65.536 KHz  (~67.11 KHz SGB)
          *               11: CPU Clock / 256  = 16.384 KHz  (~16.78 KHz SGB)
          */
-        uint8_t m_tac; ///< Timer control register (0xFF07)
+        uint8_t m_tac = 0; ///< Timer control register (0xFF07)
 
-        uint64_t m_divCycles; ///< Divider register cycles
-        uint64_t m_timaCycles; ///< Timer counter cycles
+        uint64_t m_divCycles = 0; ///< Divider register cycles
+        uint64_t m_timaCycles = 0; ///< Timer counter cycles
 
         /**
          * @brief Get the current value of the timer registers

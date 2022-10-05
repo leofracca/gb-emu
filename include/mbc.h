@@ -58,7 +58,7 @@ namespace gameboy
     class ROMOnly : public MBC
     {
     public:
-        ROMOnly(uint8_t *rom);
+        explicit ROMOnly(uint8_t *rom);
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
     };

@@ -90,6 +90,4 @@ namespace gameboy
         high = (value >> 8) & 0xFF;
         low = value & 0xFF;
     }
-
-
 } // namespace gameboy
