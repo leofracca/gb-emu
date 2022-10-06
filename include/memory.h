@@ -124,7 +124,7 @@ namespace gameboy
          *
          * @return The joypad state
          */
-        uint8_t getJoypadState();
+        [[nodiscard]] uint8_t getJoypadState() const;
 
         /**
          * @brief Save the joypad state

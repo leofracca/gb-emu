@@ -83,7 +83,7 @@ namespace gameboy
          *
          * @return true if the rendering is enabled
          */
-        bool isRenderingEnabled() const;
+        [[nodiscard]] bool isRenderingEnabled() const;
 
         /**
          * @brief Set/Reset the variable that indicates whether the rendering is enabled
@@ -138,6 +138,6 @@ namespace gameboy
         /**
          * @brief Draw the sprites on the screen
          */
-        void drawSprites(bool *rowPixels);
+        void drawSprites(const bool *rowPixels);
     };
 } // namespace gameboy

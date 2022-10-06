@@ -181,7 +181,7 @@ namespace gameboy
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.h
     void PPU::draw()
     {
-        bool rowPixels[160] = {0};
+        bool rowPixels[160] = {false};
         drawBackground(rowPixels);
         drawWindow();
         drawSprites(rowPixels);
@@ -264,7 +264,7 @@ namespace gameboy
         }
     }
 
-    void PPU::drawSprites(bool* rowPixels){
+    void PPU::drawSprites(const bool* rowPixels){
         int sprite_height = *lcdc & 0x04 ? 16 : 8;
 
         bool visible_sprites[40];

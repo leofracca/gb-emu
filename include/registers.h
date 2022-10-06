@@ -62,25 +62,25 @@ namespace gameboy
          * @brief Get the pair AF
          * @return The value of the pair AF
          */
-        uint16_t getAF() const;
+        [[nodiscard]] uint16_t getAF() const;
 
         /**
          * @brief Get the pair BC
          * @return The value of the pair BC
          */
-        uint16_t getBC() const;
+        [[nodiscard]] uint16_t getBC() const;
 
         /**
          * @brief Get the pair DE
          * @return The value of the pair DE
          */
-        uint16_t getDE() const;
+        [[nodiscard]] uint16_t getDE() const;
 
         /**
          * @brief Get the pair HL
          * @return The value of the pair HL
          */
-        uint16_t getHL() const;
+        [[nodiscard]] uint16_t getHL() const;
 
         /**
          * @brief Set the pair AF
@@ -168,7 +168,7 @@ namespace gameboy
          *
          * @see RegisterFlag
          */
-        bool getFlag(uint8_t flag) const;
+        [[nodiscard]] bool getFlag(uint8_t flag) const;
 
     private:
         /**
@@ -178,7 +178,7 @@ namespace gameboy
          * @param low The low register of the pair
          * @return The value of the pair
          */
-        uint16_t getRegisterPair(uint8_t high, uint8_t low) const;
+        static uint16_t getRegisterPair(uint8_t high, uint8_t low) ;
 
         /**
          * @brief Set the value of a pair of registers
@@ -187,6 +187,6 @@ namespace gameboy
          * @param low The low register of the pair
          * @param value The value to set the pair to
          */
-        void setRegisterPair(uint8_t &high, uint8_t &low, uint16_t value);
+        static void setRegisterPair(uint8_t &high, uint8_t &low, uint16_t value);
     };
 } // namespace gameboy

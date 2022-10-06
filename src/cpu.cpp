@@ -1704,7 +1704,7 @@ namespace gameboy
         uint8_t carry = m_registers.getFlag(CARRY_FLAG) ? 1 : 0;
         unsigned int resultFull = m_registers.a + n + carry; // Save the result in a temporary variable to check for carry from bit 7
 
-        uint8_t result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
+        auto result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
 
         // Set the zero flag if the result is 0
         m_registers.setFlag(ZERO_FLAG, result == 0);
@@ -1739,7 +1739,7 @@ namespace gameboy
         uint8_t carry = m_registers.getFlag(CARRY_FLAG) ? 1 : 0;
         int resultFull = m_registers.a - n - carry; // Save the result in a temporary variable to check for borrow from bit 7
 
-        uint8_t result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
+        auto result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
 
         // Set the zero flag if the result is 0
         m_registers.setFlag(ZERO_FLAG, result == 0);
@@ -2047,7 +2047,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 7 of n
-        m_registers.setFlag(CARRY_FLAG, n & 0x80 ? 1 : 0);
+        m_registers.setFlag(CARRY_FLAG, (n & 0x80) != 0);
 
         n = result;
     }
@@ -2083,7 +2083,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 0 of n
-        m_registers.setFlag(CARRY_FLAG, n & 0x01 ? 1 : 0);
+        m_registers.setFlag(CARRY_FLAG, (n & 0x01) != 0);
 
         n = result;
     }

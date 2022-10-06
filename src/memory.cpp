@@ -84,7 +84,7 @@ namespace gameboy
         write(address + 1, hi);
     }
 
-    uint8_t Memory::getJoypadState()
+    uint8_t Memory::getJoypadState() const
     {
         return m_joypadState;
     }

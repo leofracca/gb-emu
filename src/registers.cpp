@@ -80,7 +80,7 @@ namespace gameboy
         setRegisterPair(h, l, value);
     }
 
-    uint16_t Registers::getRegisterPair(uint8_t high, uint8_t low) const
+    uint16_t Registers::getRegisterPair(uint8_t high, uint8_t low)
     {
         return (high << 8) | low;
     }

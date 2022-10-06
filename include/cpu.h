@@ -609,7 +609,7 @@ namespace gameboy
          * @param b The bit to set.
          * @param r The register to set.
          */
-        void set(uint8_t b, uint8_t &r);
+        static void set(uint8_t b, uint8_t &r);
 
         /**
          * @brief Reset bit b in register r.
@@ -622,7 +622,7 @@ namespace gameboy
          * @param b The bit to reset.
          * @param r The register to reset.
          */
-        void res(uint8_t b, uint8_t &r);
+        static void res(uint8_t b, uint8_t &r);
 
         /**
          * @brief Jump to address nn.
