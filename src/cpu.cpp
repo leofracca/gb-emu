@@ -282,7 +282,6 @@ namespace gameboy
                 ccf();
                 break;
             case 0x40: // LD B, B
-                m_registers.b = m_registers.b;
                 break;
             case 0x41: // LD B, C
                 m_registers.b = m_registers.c;
@@ -309,7 +308,6 @@ namespace gameboy
                 m_registers.c = m_registers.b;
                 break;
             case 0x49: // LD C, C
-                m_registers.c = m_registers.c;
                 break;
             case 0x4A: // LD C, D
                 m_registers.c = m_registers.d;
@@ -336,7 +334,6 @@ namespace gameboy
                 m_registers.d = m_registers.c;
                 break;
             case 0x52: // LD D, D
-                m_registers.d = m_registers.d;
                 break;
             case 0x53: // LD D, E
                 m_registers.d = m_registers.e;
@@ -363,7 +360,6 @@ namespace gameboy
                 m_registers.e = m_registers.d;
                 break;
             case 0x5B: // LD E, E
-                m_registers.e = m_registers.e;
                 break;
             case 0x5C: // LD E, H
                 m_registers.e = m_registers.h;
@@ -390,7 +386,6 @@ namespace gameboy
                 m_registers.h = m_registers.e;
                 break;
             case 0x64: // LD H, H
-                m_registers.h = m_registers.h;
                 break;
             case 0x65: // LD H, L
                 m_registers.h = m_registers.l;
@@ -417,7 +412,6 @@ namespace gameboy
                 m_registers.l = m_registers.h;
                 break;
             case 0x6D: // LD L, L
-                m_registers.l = m_registers.l;
                 break;
             case 0x6E: // LD L, (HL)
                 m_registers.l = m_memory->read(m_registers.getHL());
@@ -471,7 +465,6 @@ namespace gameboy
                 m_registers.a = m_memory->read(m_registers.getHL());
                 break;
             case 0x7F: // LD A, A
-                m_registers.a = m_registers.a;
                 break;
             case 0x80: // ADD A, B
                 add(m_registers.b);

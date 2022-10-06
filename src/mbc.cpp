@@ -41,7 +41,7 @@ namespace gameboy
         {
             return m_rom[address];
         }
-        else if (address >= 0x4000 && address <= 0x7FFF) // https://gbdev.io/pandocs/MBC1.html#40007fff--rom-bank-01-7f-read-only
+        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC1.html#40007fff--rom-bank-01-7f-read-only
         {
             return readROMBank(address);
         }
@@ -63,21 +63,21 @@ namespace gameboy
         {
             m_ramEnabled = (value & 0x0F) == 0x0A;
         }
-        else if (address >= 0x2000 && address <= 0x3FFF) // https://gbdev.io/pandocs/MBC1.html#20003fff--rom-bank-number-write-only
+        else if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC1.html#20003fff--rom-bank-number-write-only
         {
             value &= 0x1F;
             if (value == 0)
                 value = 1;
             m_romBank = (m_romBank & 0x60) | value;
         }
-        else if (address >= 0x4000 && address <= 0x5FFF) // https://gbdev.io/pandocs/MBC1.html#40005fff--ram-bank-number--or--upper-bits-of-rom-bank-number-write-only
+        else if (address <= 0x5FFF) // https://gbdev.io/pandocs/MBC1.html#40005fff--ram-bank-number--or--upper-bits-of-rom-bank-number-write-only
         {
             // Reset bits 5-6 of the ROM bank
             m_romBank &= 0x9F;
             // Set bits 5-6 of the ROM bank according to the value (bits 0-1)
             m_romBank |= (value & 0x03) << 5;
         }
-        else if (address >= 0x6000 && address <= 0x7FFF) // https://gbdev.io/pandocs/MBC1.html#60007fff--banking-mode-select-write-only
+        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC1.html#60007fff--banking-mode-select-write-only
         {
             m_mode = value & 0x01;
         }
@@ -119,7 +119,7 @@ namespace gameboy
         {
             return m_rom[address];
         }
-        else if (address >= 0x4000 && address <= 0x7FFF) // https://gbdev.io/pandocs/MBC2.html#40007fff--rom-bank-01-0f-read-only
+        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC2.html#40007fff--rom-bank-01-0f-read-only
         {
             return readROMBank(address);
         }
@@ -146,7 +146,7 @@ namespace gameboy
             if ((address & 0x0100) == 0)
                 m_ramEnabled = (value & 0x0F) == 0x0A;
         }
-        else if (address >= 0x2000 && address <= 0x3FFF)
+        else if (address <= 0x3FFF)
         {
             // If bit 8 of the address is set, set the lower 4 bits of the ROM bank
             if ((address & 0x0100) != 0)
@@ -157,7 +157,7 @@ namespace gameboy
                 m_romBank = value;
             }
         }
-        else if (address >= 0x4000 && address <= 0x5FFF)
+        else if (address <= 0x5FFF)
         {
             // Reset bits 5-6 of the ROM bank
             m_romBank &= 0x9F;
@@ -181,7 +181,7 @@ namespace gameboy
         {
             return m_rom[address];
         }
-        else if (address >= 0x4000 && address <= 0x7FFF) // https://gbdev.io/pandocs/MBC3.html#4000-7fff---rom-bank-01-7f-read-only
+        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC3.html#4000-7fff---rom-bank-01-7f-read-only
         {
             return readROMBank(address);
         }
@@ -206,14 +206,14 @@ namespace gameboy
         {
             m_ramEnabled = (value & 0x0F) == 0x0A;
         }
-        else if (address >= 0x2000 && address <= 0x3FFF) // https://gbdev.io/pandocs/MBC3.html#2000-3fff---rom-bank-number-write-only
+        else if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC3.html#2000-3fff---rom-bank-number-write-only
         {
             value &= 0x7F;
             if (value == 0)
                 value = 1;
             m_romBank = value;
         }
-        else if (address >= 0x4000 && address <= 0x5FFF) // https://gbdev.io/pandocs/MBC3.html#4000-5fff---ram-bank-number---or---rtc-register-select-write-only
+        else if (address <= 0x5FFF) // https://gbdev.io/pandocs/MBC3.html#4000-5fff---ram-bank-number---or---rtc-register-select-write-only
         {
             if (value <= 0x03)
             {
@@ -237,7 +237,7 @@ namespace gameboy
         {
             return m_rom[address];
         }
-        else if (address >= 0x4000 && address <= 0x7FFF) // https://gbdev.io/pandocs/MBC5.html#4000-7fff---rom-bank-00-1ff-read-only
+        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC5.html#4000-7fff---rom-bank-00-1ff-read-only
         {
             return readROMBank(address);
         }
@@ -259,17 +259,17 @@ namespace gameboy
         {
             m_ramEnabled = (value & 0x0F) == 0x0A;
         }
-        else if (address >= 0x2000 && address <= 0x2FFF) // https://gbdev.io/pandocs/MBC5.html#2000-2fff---8-least-significant-bits-of-rom-bank-number-write-only
+        else if (address <= 0x2FFF) // https://gbdev.io/pandocs/MBC5.html#2000-2fff---8-least-significant-bits-of-rom-bank-number-write-only
         {
             m_romBank &= 0x100;
             m_romBank |= value;
         }
-        else if (address >= 0x3000 && address <= 0x3FFF) // https://gbdev.io/pandocs/MBC5.html#3000-3fff---9th-bit-of-rom-bank-number-write-only
+        else if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC5.html#3000-3fff---9th-bit-of-rom-bank-number-write-only
         {
             m_romBank &= 0xFF;
             m_romBank |= (value & 0x01) << 8;
         }
-        else if (address >= 0x4000 && address <= 0x5FFF) // https://gbdev.io/pandocs/MBC5.html#4000-5fff---ram-bank-number-write-only
+        else if (address <= 0x5FFF) // https://gbdev.io/pandocs/MBC5.html#4000-5fff---ram-bank-number-write-only
         {
             m_ramBank = value & 0x0F;
         }

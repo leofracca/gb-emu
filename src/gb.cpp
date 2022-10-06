@@ -16,13 +16,11 @@ namespace gameboy
         Timer timer(&m_memory);
         Input input(&m_memory);
 
-        int cycles = 0;
+        int cycles;
         auto lastCycleTime = SDL_GetTicks64();
 
         do
         {
-            cycles = 0;
-
             cycles = cpu.cycle();
             timer.cycle(cycles);
             ppu.cycle(cycles);
