@@ -62,9 +62,11 @@ To run the tests:
 make test
 ```
 
+In addition to check the correctness of the code, the tests also check if there are memory leaks (using valgrind).
+
 Some tests are handwritten, but there is also a test that opens a window that runs a test ROM.
 
-Thanks to [Blargg's tests roms.](https://github.com/retrio/gb-test-roms) for the roms.
+Thanks to [Blargg's tests roms](https://github.com/retrio/gb-test-roms) for the roms.
 
 ## Coverage
 
