@@ -95,7 +95,8 @@ namespace gameboy
     }
 
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/memory.cpp
-    void Memory::UpdateTile(uint16_t laddress) {
+    void Memory::UpdateTile(uint16_t laddress)
+    {
         uint16_t address = laddress & 0xFFFE;
 
         uint16_t tile = (address >> 4) & 511;

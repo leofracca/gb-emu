@@ -187,7 +187,8 @@ namespace gameboy
         drawSprites(rowPixels);
     }
 
-    void PPU::drawBackground(bool* rowPixels){
+    void PPU::drawBackground(bool* rowPixels)
+    {
         uint16_t address = 0x9800;
 
         // Background tile map address
@@ -230,7 +231,8 @@ namespace gameboy
         }
     }
 
-    void PPU::drawWindow(){
+    void PPU::drawWindow()
+    {
         if (!(*lcdc & 0x20))
             return;
 
@@ -264,7 +266,8 @@ namespace gameboy
         }
     }
 
-    void PPU::drawSprites(const bool* rowPixels){
+    void PPU::drawSprites(const bool* rowPixels)
+    {
         int sprite_height = *lcdc & 0x04 ? 16 : 8;
 
         bool visible_sprites[40];
