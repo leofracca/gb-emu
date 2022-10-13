@@ -81,6 +81,13 @@ target_link_libraries(GBEmu
     PRIVATE GBEmu_lib
 )
 
+# Install
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+install(
+    FILES ${CMAKE_BINARY_DIR}/GBEmu
+    DESTINATION ${PROJECT_SOURCE_DIR}/bin
+)
+
 #################
 # Code Coverage #
 #################
@@ -147,6 +154,12 @@ target_compile_options(GBEmu_test
 )
 target_link_options(GBEmu_test
     PRIVATE ${LINKER_FLAGS}
+)
+
+# Install
+install(
+    FILES ${CMAKE_BINARY_DIR}/GBEmu_test
+    DESTINATION ${PROJECT_SOURCE_DIR}/bin
 )
 
 #########
