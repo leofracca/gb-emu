@@ -91,6 +91,7 @@ if (COVERAGE)
                       --exclude ${PROJECT_SOURCE_DIR}/tests
                       --exclude ${PROJECT_SOURCE_DIR}/third_party/catch2
                       --html
+                      --html-details
                       --output coverage.html
         COMMENT "Generating code coverage"
     )
