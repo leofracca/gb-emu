@@ -158,10 +158,6 @@ add_test(
     COMMAND ${CMAKE_BINARY_DIR}/GBEmu_test
 )
 add_test(
-    NAME BlarggTests
-    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/tests/roms/cpu_instrs.gb 2
-)
-add_test(
     NAME valgrindTests
     COMMAND valgrind
         --leak-check=full
@@ -171,4 +167,9 @@ add_test(
         --error-exitcode=1
         --max-stackframe=10000000
         ${CMAKE_BINARY_DIR}/GBEmu_test
+)
+# Blargg tests
+add_custom_target(blargg
+    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/tests/roms/cpu_instrs.gb 2
+    COMMENT "Running Blargg tests"
 )
