@@ -64,7 +64,13 @@ make test
 
 In addition to check the correctness of the code, the tests also check if there are memory leaks (using valgrind).
 
-Some tests are handwritten, but there is also a test that opens a window that runs a test ROM.
+Some tests are handwritten, but there is also a test that opens a window that runs a test ROM. Use
+
+```shell
+make blarrg
+```
+
+to run it.
 
 Thanks to [Blargg's tests roms](https://github.com/retrio/gb-test-roms) for the roms.
 
