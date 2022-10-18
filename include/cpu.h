@@ -77,6 +77,17 @@ namespace gameboy
         2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2  // F
     }; ///< Opcodes cb-prefixed machine cycles
 
+    constexpr uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
+
+    /**
+     * @brief 0x40: VBLANK interrupt start address
+     *        0x48: LCD STAT interrupt start address
+     *        0x50: TIMER interrupt start address
+     *        0x58: SERIAL interrupt start address
+     *        0x60: JOYPAD interrupt start address
+     */
+    constexpr uint16_t INTERRUPT_ADDRESS[5] = {0x40, 0x48, 0x50, 0x58, 0x60};
+
     /**
      * @brief CPU class that emulates the behavior of the CPU (logic and arithmetic).
      */
@@ -104,11 +115,7 @@ namespace gameboy
         bool m_halted = false; ///< True if the cpu is halted
         bool m_ime = true; ///< True if the cpu is in the interrupt master enable mode
 
-        constexpr static uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
-
         bool branched = false; // Used to check if a branch was taken (for conditional opcodes (jump, call, return))
-
-        uint16_t interruptValues[5] = {0x40, 0x48, 0x50, 0x58, 0x60}; ///< Interrupt values
 
         /**
          * @brief Check if interrupts are enabled and if an interrupt has been requested.

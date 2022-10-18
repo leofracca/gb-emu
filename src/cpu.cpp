@@ -50,7 +50,7 @@ namespace gameboy
         // Handle the interrupt
         for (uint8_t interruptBit = 0; interruptBit < 5; interruptBit++)
         {
-            bool isInterrupt = handleInterrupt(interruptBit, interruptValues[interruptBit], interrupt);
+            bool isInterrupt = handleInterrupt(interruptBit, INTERRUPT_ADDRESS[interruptBit], interrupt);
             if (isInterrupt)
                 return 5;
         }

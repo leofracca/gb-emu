@@ -15,6 +15,9 @@
 
 namespace gameboy
 {
+    constexpr int FPS = 60;
+    constexpr int FRAMERATE = 1000 / FPS;
+
     /**
      * @brief The GB class is responsible for the emulator to run.
      */
@@ -38,9 +41,6 @@ namespace gameboy
     private:
         Platform m_platform;
         Memory m_memory;
-
-        constexpr static int FPS = 60;
-        constexpr static int FRAMERATE = 1000 / FPS;
 
         /**
          * @brief Update the screen and handle the inputs
