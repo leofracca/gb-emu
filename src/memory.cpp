@@ -55,12 +55,12 @@ namespace gameboy
         // Joypad
         if (address == JOYPAD_ADDRESS)
         {
+            // Is the pressed button an action button or a direction button?
             uint8_t actionOrDirection = m_memory[JOYPAD_ADDRESS] & 0x30;
 
-            if (actionOrDirection == 0x20) // Direction
-                return ((m_joypadState >> 4) & 0xF) | 0x20;
-            else if (actionOrDirection == 0x10) // Action
-                return (m_joypadState & 0xF) | 0x10;
+            return actionOrDirection == 0x20 ?
+                (m_joypadState >> 4) | 0x20 : // Direction
+                 m_joypadState | 0x10;        // Action
         }
 
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge

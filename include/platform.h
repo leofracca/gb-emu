@@ -38,7 +38,7 @@ namespace gameboy
          * @param input The input object
          * @return True if the user wants to quit, false otherwise
          */
-        bool processInput(Input &input);
+        static bool processInput(Input &input);
 
     private:
         SDL_Window *window;
