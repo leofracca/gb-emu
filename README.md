@@ -102,12 +102,10 @@ make doc
 
 ## References
 
-- [Pan Docs](https://gbdev.io/pandocs/)
+- Pan Docs ([web version](https://gbdev.io/pandocs/) and [pdf](PanDocs/GB.pdf))
 
 - [The Ultimate Game Boy Talk (33c3) - YouTube](https://www.youtube.com/watch?v=HyzD8pNlpwI)
 
 - [GameBoy CPU opcodes](https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html)
 
 - [codeslinger.co.uk](http://www.codeslinger.co.uk/pages/projects/gameboy.html)
-
-Also, see the [docs](docs) folder.
