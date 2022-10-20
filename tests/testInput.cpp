@@ -5,7 +5,7 @@ namespace gameboyTest
 {
     using namespace gameboy;
 
-    const std::string TEST_ROM = "cpu_instrs.gb";
+    const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
 
     TEST_CASE("Input init", "[input]")
     {
@@ -57,6 +57,6 @@ namespace gameboyTest
         Memory memory(TEST_ROM);
         Input input(&memory);
         input.sendInterrupt();
-        REQUIRE(memory.read(INTERRUPT_FLAG_ADDRESS) == 0x10);
+        REQUIRE(memory.read(INTERRUPT_FLAG_ADDRESS) == (0xE1 | 0x10));
     }
 } // namespace gameboyTest

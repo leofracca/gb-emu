@@ -5,7 +5,7 @@ namespace gameboyTest
 {
     using namespace gameboy;
 
-    const std::string TEST_ROM = "cpu_instrs.gb";
+    const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
     uint8_t rom[127 * 16384];
     uint8_t ram[127 * 256];
 

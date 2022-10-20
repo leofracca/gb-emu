@@ -110,9 +110,11 @@ endif()
 find_package(Doxygen)
 # Check if Doxygen is installed
 if (DOXYGEN_FOUND)
+    file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/doc)
+
     add_custom_target(doc
         COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile
-        #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Generating API documentation with Doxygen"
     )
 else (DOXYGEN_FOUND)
@@ -131,7 +133,6 @@ target_sources(GBEmu_test
 )
 target_include_directories(GBEmu_test
     PUBLIC  ${PROJECT_SOURCE_DIR}/include
-    PRIVATE ${PROJECT_SOURCE_DIR}/tests/roms
 )
 target_include_directories(GBEmu_test SYSTEM
     PUBLIC ${PROJECT_SOURCE_DIR}/third_party/catch2
@@ -145,6 +146,12 @@ target_compile_options(GBEmu_test
 )
 target_link_options(GBEmu_test
     PRIVATE ${LINKER_FLAGS}
+)
+
+add_custom_command(TARGET GBEmu_test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/data/roms
+        ${CMAKE_CURRENT_BINARY_DIR}/test_roms
 )
 
 # Install
@@ -175,6 +182,6 @@ add_test(
 )
 # Blargg tests
 add_custom_target(blargg
-    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/tests/roms/cpu_instrs.gb 2
+    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/data/roms/cpu_instrs.gb 2
     COMMENT "Running Blargg tests"
 )
