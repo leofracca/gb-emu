@@ -53,10 +53,6 @@ namespace gameboy
         };
 
         struct Sprite {
-            bool ready;
-            int y;
-            int x;
-            uint8_t tile;
             Colour *colourPalette;
             struct {
                 union {
@@ -73,7 +69,11 @@ namespace gameboy
                     uint8_t value;
                 } flags;
             } options;
-        } sprites[40] = {Sprite()}; ///< The sprites
+            int y;
+            int x;
+            uint8_t tile;
+            bool ready;
+        } sprites[40] = {}; ///< The sprites
 
         /**
          * @brief Construct a new Memory object
