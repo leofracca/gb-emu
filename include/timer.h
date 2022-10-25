@@ -82,8 +82,8 @@ namespace gameboy
          */
         uint8_t m_tac = 0; ///< Timer control register (0xFF07)
 
-        uint64_t m_divCycles = 0; ///< Divider register cycles
-        uint64_t m_timaCycles = 0; ///< Timer counter cycles
+        int m_divCycles = 0; ///< Divider register cycles
+        int m_timaCycles = 0; ///< Timer counter cycles
 
         /**
          * @brief Get the current value of the timer registers

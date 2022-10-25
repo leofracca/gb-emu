@@ -95,7 +95,7 @@ namespace gameboy
         std::array<Colour, SCREEN_WIDTH * (SCREEN_HEIGHT + 9)> m_frameBuffer{}; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen
 
-        uint64_t m_cycles = 0; ///< The number of cycles since the last frame
+        int m_cycles = 0; ///< The number of cycles since the last frame
         Mode m_mode = Mode::HBLANK; ///< The current mode of the PPU
 
         // Registers
