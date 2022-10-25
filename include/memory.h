@@ -15,6 +15,7 @@
 
 namespace gameboy
 {
+    constexpr uint16_t DMA_REG_ADDRESS = 0xFF46; ///< The address of the DMA register
     constexpr uint16_t BGP_REG_ADDRESS = 0xFF47; ///< The address of the BG Palette Register
     constexpr uint16_t OBP0_REG_ADDRESS = 0xFF48; ///< The address of the Object Palette 0 Register
     constexpr uint16_t OBP1_REG_ADDRESS = 0xFF49; ///< The address of the Object Palette 1 Register

@@ -52,6 +52,10 @@ namespace gameboy
 
     uint8_t Memory::read(uint16_t address)
     {
+        // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
+        if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
+            return m_cartridge.read(address);
+
         // Joypad
         if (address == JOYPAD_ADDRESS)
         {
@@ -63,46 +67,47 @@ namespace gameboy
                  m_joypadState | 0x10;        // Action
         }
 
-        // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
-        if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
-            return m_cartridge.read(address);
-        else
-            return m_memory[address];
+        return m_memory[address];
     }
 
     void Memory::write(uint16_t address, uint8_t value)
     {
-        if (address == 0xFF40)
-        {
-            m_memory[address] =  value;
-            if (!(value & (1 << 7)))
-            {
-                m_memory[0xFF44] = 0x00;
-                m_memory[0xFF41] &= 0x7C;
-            }
-        }
-
-        // DMA Transfer
-        if (address == 0xFF46)
-            for (uint16_t i = 0; i < 160; i++)
-                write(0xFE00 + i, read((value << 8) + i));
-
-        // Update colour palette
-        if (address == BGP_REG_ADDRESS) UpdatePalette(palette_BGP, value); // BG and Window palette
-        if (address == OBP0_REG_ADDRESS) UpdatePalette(palette_OBP0, value); // Object palette 0
-        if (address == OBP1_REG_ADDRESS) UpdatePalette(palette_OBP1, value); // Object palette 1
-
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             m_cartridge.write(address, value);
         else
             m_memory[address] = value;
 
+        // VRAM
         if (address >= 0x8000 && address < 0x9800)
             UpdateTile(address);
 
-        if (address >= 0xFE00 && address <= 0xFE9F)
+        // OAM
+        else if (address >= 0xFE00 && address < 0xFEA0)
             UpdateSprite(address, value);
+
+        // Check if the LCD has been disabled (bit 7 of LCDC register)
+        else if (address == 0xFF40)
+        {
+            if (!(value & (1 << 7)))
+            {
+                m_memory[0xFF41] &= 0x7C; // Reset STAT register
+                m_memory[0xFF44] = 0x00; // Reset LY register
+            }
+        }
+
+        // DMA Transfer
+        else if (address == DMA_REG_ADDRESS)
+            for (uint16_t i = 0; i < 160; i++)
+                write(0xFE00 + i, read((value << 8) + i));
+
+        // Update colour palette
+        else if (address == BGP_REG_ADDRESS)
+            UpdatePalette(palette_BGP, value); // BG and Window palette
+        else if (address == OBP0_REG_ADDRESS)
+            UpdatePalette(palette_OBP0, value); // Object palette 0
+        else if (address == OBP1_REG_ADDRESS)
+            UpdatePalette(palette_OBP1, value); // Object palette 1
     }
 
     uint16_t Memory::readWord(uint16_t address)

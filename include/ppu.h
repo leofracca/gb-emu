@@ -29,9 +29,6 @@ namespace gameboy
     constexpr uint16_t SCX_REG_ADDRESS = 0xFF43; ///< The address of the Scroll X Register (Background X Position)
     constexpr uint16_t LY_REG_ADDRESS = 0xFF44; ///< The address of the LCDY Register
     constexpr uint16_t LYC_REG_ADDRESS = 0xFF45; ///< The address of the LY Compare Register
-    // constexpr uint16_t BGP_REG_ADDRESS = 0xFF47; ///< The address of the BG Palette Register
-    // constexpr uint16_t OBP0_REG_ADDRESS = 0xFF48; ///< The address of the Object Palette 0 Register
-    // constexpr uint16_t OBP1_REG_ADDRESS = 0xFF49; ///< The address of the Object Palette 1 Register
 
     constexpr uint16_t WY_REG_ADDRESS = 0xFF4A; ///< The address of the Window Y Position Register (Window Y Position)
     constexpr uint16_t WX_REG_ADDRESS = 0xFF4B; ///< The address of the Window X Position Register (Window X Position - 7)
