@@ -53,15 +53,15 @@ namespace gameboy
                         m_renderingEnabled = true;
 
                         // Set the interrupt flag for VBLANK
-                        interruptFlag |= VBLANK_INTERRUPT_FLAG;
-                        m_memory->write(0xff0f, interruptFlag);
+                        interruptFlag |= VBLANK_INTERRUPT_FLAG_VALUE;
+                        m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
 
                         // If the bit of the VBLANK of the stat register is set (bit 4), set the interrupt flag
                         if (*stat & 0x10)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
-                            m_memory->write(0xff0f, interruptFlag);
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                     // If LY < 144, set mode to OAM to render the next scanline
@@ -71,8 +71,8 @@ namespace gameboy
                         if (*stat & 0x20)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
-                            m_memory->write(0xff0f, interruptFlag);
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                         m_mode = Mode::OAM;
                     }
@@ -104,8 +104,8 @@ namespace gameboy
                         if (*stat & 0x20)
                         {
                             // Set the interrupt flag for LCD Status
-                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
-                            m_memory->write(0xff0f, interruptFlag);
+                            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                 }
@@ -135,8 +135,8 @@ namespace gameboy
                     if (*stat & 0x08)
                     {
                         // Set the interrupt flag for LCD Status
-                        interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
-                        m_memory->write(0xff0f, interruptFlag);
+                        interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+                        m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                     }
                 }
                 break;
@@ -172,9 +172,9 @@ namespace gameboy
         if (*ly == lyc && (*stat & 0x40))
         {
             // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
-            uint8_t interruptFlag = m_memory->read(0xff0f);
-            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG;
-            m_memory->write(0xff0f, interruptFlag);
+            uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
+            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
         }
     }
 

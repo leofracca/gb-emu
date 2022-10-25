@@ -22,6 +22,8 @@ namespace gameboy
     constexpr uint16_t TMA_REG_ADDRESS = 0xFF06; ///< The address of the Timer Modulo Register
     constexpr uint16_t TAC_REG_ADDRESS = 0xFF07; ///< The address of the Timer Control Register
 
+    constexpr uint8_t TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE = 0x04; ///< The bitmask of the Timer Interrupt Flag
+
     /**
      * @brief The Timer class emulates the behavior of the system timer of a Gameboy.
      */

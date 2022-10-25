@@ -77,7 +77,7 @@ namespace gameboy
 
                     // Set the interrupt flag
                     uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
-                    interruptFlag |= 0x04;
+                    interruptFlag |= TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE;
                     m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                 }
                 else

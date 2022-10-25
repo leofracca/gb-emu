@@ -33,8 +33,8 @@ namespace gameboy
     constexpr uint16_t WY_REG_ADDRESS = 0xFF4A; ///< The address of the Window Y Position Register (Window Y Position)
     constexpr uint16_t WX_REG_ADDRESS = 0xFF4B; ///< The address of the Window X Position Register (Window X Position - 7)
 
-    constexpr uint8_t VBLANK_INTERRUPT_FLAG = 0x01; ///< The bitmask of the VBLANK interrupt flag
-    constexpr uint8_t LCD_STATUS_INTERRUPT_FLAG = 0x02; ///< The bitmask of the LCD Status interrupt flag
+    constexpr uint8_t VBLANK_INTERRUPT_FLAG_VALUE = 0x01; ///< The bitmask of the VBLANK interrupt flag
+    constexpr uint8_t LCD_STATUS_INTERRUPT_FLAG_VALUE = 0x02; ///< The bitmask of the LCD Status interrupt flag
 
     /**
      * @brief LCD status register (STAT, 0xFF41, bit 0-1)

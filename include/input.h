@@ -30,6 +30,8 @@ namespace gameboy
         DIRECTION_DOWN = 0x80 ///< The DOWN button
     };
 
+    constexpr uint8_t JOYPAD_INTERRUPT_FLAG_VALUE = 0x10; ///< The bitmask of the joypad interrupt flag
+
     class Input
     {
     public:
