@@ -14,7 +14,7 @@ namespace gameboy
         : m_memory(memory)
     {}
 
-    uint8_t CPU::cycle()
+    int CPU::cycle()
     {
         // Check interrupts
         int cycles = handleInterrupts();
@@ -32,7 +32,7 @@ namespace gameboy
         return execute_opcode(instruction);
     }
 
-    uint8_t CPU::handleInterrupts()
+    int CPU::handleInterrupts()
     {
         // Interrupts are disabled
         if (!m_ime)
@@ -70,7 +70,7 @@ namespace gameboy
         return false;
     }
 
-    uint8_t CPU::execute_opcode(uint8_t opcode)
+    int CPU::execute_opcode(uint8_t opcode)
     {
         int cycles = OPCODE_CYCLES[opcode];
 
@@ -830,9 +830,9 @@ namespace gameboy
         return cycles;
     }
 
-    uint8_t CPU::execute_CB_opcode(uint8_t opcode)
+    int CPU::execute_CB_opcode(uint8_t opcode)
     {
-        uint8_t cycles = OPCODE_CB_CYCLES[opcode];
+        int cycles = OPCODE_CB_CYCLES[opcode];
 
         uint8_t value = 0; // Temp variable used for some opcodes
 

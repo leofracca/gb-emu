@@ -17,7 +17,7 @@
 
 namespace gameboy
 {
-    constexpr uint8_t OPCODE_CYCLES[256] =
+    constexpr int OPCODE_CYCLES[256] =
     {// 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
         1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1, // 0
         1, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1, // 1
@@ -37,7 +37,7 @@ namespace gameboy
         3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4  // F
     }; ///< Opcodes machine cycles
 
-    constexpr uint8_t OPCODE_CYCLES_BRANCHED[256] =
+    constexpr int OPCODE_CYCLES_BRANCHED[256] =
     {// 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
         1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1, // 0
         1, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1, // 1
@@ -57,7 +57,7 @@ namespace gameboy
         3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4  // F
     }; ///< Opcodes machine cycles when branched (jump, call, return)
 
-    constexpr uint8_t OPCODE_CB_CYCLES[256] =
+    constexpr int OPCODE_CB_CYCLES[256] =
     {// 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
         2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, // 0
         2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, // 1
@@ -106,7 +106,7 @@ namespace gameboy
          *
          * @return The number of cycles used by the instruction.
          */
-        uint8_t cycle();
+        int cycle();
 
     private:
         Memory *m_memory; ///< The memory
@@ -124,7 +124,7 @@ namespace gameboy
          * @return 0 if no interrupt has been executed, 5 if an interrupt has been executed.
          * @see handleInterrupt
          */
-        uint8_t handleInterrupts();
+        int handleInterrupts();
 
         /**
          * @brief Execute the interrupt.
@@ -143,7 +143,7 @@ namespace gameboy
          * @param opcode The opcode of the instruction.
          * @return The number of cycles used by the instruction.
          */
-        uint8_t execute_opcode(uint8_t opcode);
+        int execute_opcode(uint8_t opcode);
 
         /**
          * @brief Executes the next instruction.
@@ -152,7 +152,7 @@ namespace gameboy
          * @param opcode The cb opcode of the instruction.
          * @return The number of cycles used by the instruction.
          */
-        uint8_t execute_CB_opcode(uint8_t opcode);
+        int execute_CB_opcode(uint8_t opcode);
 
         // Push and pop
         /**

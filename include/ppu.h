@@ -66,7 +66,7 @@ namespace gameboy
          *
          * @param cycles The number of cycles to increment the PPU by
          */
-        void cycle(uint64_t cycles);
+        void cycle(int cycles);
 
         /**
          * @brief Get the frame buffer

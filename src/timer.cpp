@@ -28,7 +28,7 @@ namespace gameboy
         m_memory->write(TAC_REG_ADDRESS, m_tac);
     }
 
-    void Timer::cycle(uint64_t cycles)
+    void Timer::cycle(int cycles)
     {
         getRegisters();
 

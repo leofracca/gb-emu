@@ -43,7 +43,7 @@ namespace gameboy
          *
          * @param cycles The number of cycles to increment the timer by
          */
-        void cycle(uint64_t cycles);
+        void cycle(int cycles);
 
     private:
         Memory *m_memory; ///< The memory
