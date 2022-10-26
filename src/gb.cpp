@@ -23,8 +23,7 @@ namespace gameboy
             int cycles = cpu.cycle();
             timer.cycle(cycles);
             ppu.cycle(cycles);
-        }
-        while (!updatePlatform(lastCycleTime, ppu, input));
+        } while (!updatePlatform(lastCycleTime, ppu, input));
     }
 
     bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)

@@ -12,11 +12,12 @@
 
 #pragma once
 
-#include "registers.h" // Registers
 #include "memory.h" // Memory
+#include "registers.h" // Registers
 
 namespace gameboy
 {
+    // clang-format off
     constexpr int OPCODE_CYCLES[256] =
     {// 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
         1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1, // 0
@@ -76,6 +77,7 @@ namespace gameboy
         2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, // E
         2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2  // F
     }; ///< Opcodes cb-prefixed machine cycles
+    // clang-format on
 
     constexpr uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
 
@@ -729,4 +731,4 @@ namespace gameboy
          */
         void reti();
     };
-}
+} // namespace gameboy

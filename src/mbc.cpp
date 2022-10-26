@@ -89,21 +89,21 @@ namespace gameboy
             }
         }
     }
-    
+
     uint8_t MBC1::readROMBank(uint16_t address)
     {
         auto relativeAddress = address - 0x4000;
         auto bankAddress = m_romBank * 0x4000;
         return m_rom[bankAddress + relativeAddress];
     }
-    
+
     uint8_t MBC1::readRAMBank(uint16_t address)
     {
         auto relativeAddress = address - 0xA000;
         auto bankAddress = m_ramBank * 0x2000;
         return m_ram[bankAddress + relativeAddress];
     }
-    
+
     void MBC1::writeRAMBank(uint16_t address, uint8_t value)
     {
         auto relativeAddress = address - 0xA000;
@@ -123,8 +123,7 @@ namespace gameboy
         {
             return readROMBank(address);
         }
-        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC2.html#a000a1ff--built-in-ram
-                                                         // https://gbdev.io/pandocs/MBC2.html#a200bfff--15-echoes-of-a000a1ff
+        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC2.html#a000a1ff--built-in-ram and https://gbdev.io/pandocs/MBC2.html#a200bfff--15-echoes-of-a000a1ff
         {
             if (m_ramEnabled)
             {
@@ -174,7 +173,7 @@ namespace gameboy
     }
 
     MBC3::MBC3(uint8_t *rom, uint8_t *ram) : MBC1(rom, ram) {}
-    
+
     uint8_t MBC3::read(uint16_t address)
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC3.html#0000-3fff---rom-bank-00-read-only
@@ -230,7 +229,7 @@ namespace gameboy
     }
 
     MBC5::MBC5(uint8_t *rom, uint8_t *ram) : MBC1(rom, ram) {}
-    
+
     uint8_t MBC5::read(uint16_t address)
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC5.html#0000-3fff---rom-bank-00-read-only

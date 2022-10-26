@@ -26,7 +26,8 @@ namespace gameboy
         m_cycles += cycles;
 
         // Check if the LCD is enabled
-        if (!(*lcdc & 0x80)) {
+        if (!(*lcdc & 0x80))
+        {
             m_mode = Mode::HBLANK;
             return;
         }
@@ -143,7 +144,7 @@ namespace gameboy
         }
     }
 
-    Colour* PPU::getFrameBuffer()
+    Colour *PPU::getFrameBuffer()
     {
         return m_frameBuffer.data();
     }
@@ -187,7 +188,7 @@ namespace gameboy
         drawSprites(rowPixels);
     }
 
-    void PPU::drawBackground(bool* rowPixels)
+    void PPU::drawBackground(bool *rowPixels)
     {
         uint16_t address = 0x9800;
 
@@ -211,7 +212,7 @@ namespace gameboy
         {
             uint16_t tile_address = address + i;
             if (tile_address >= end_row_address)
-                tile_address  = (start_row_address + tile_address % end_row_address);
+                tile_address = (start_row_address + tile_address % end_row_address);
 
             int tile = m_memory->read(tile_address);
             if (!(*lcdc & 0x10) && tile < 128)
@@ -219,7 +220,7 @@ namespace gameboy
 
             for (; x < 8; x++)
             {
-                if(pixel >= 160) break;
+                if (pixel >= 160) break;
 
                 int colour = m_memory->tiles[tile].pixels[y][x];
                 m_frameBuffer[pixelOffset++] = m_memory->palette_BGP[colour];
@@ -266,7 +267,7 @@ namespace gameboy
         }
     }
 
-    void PPU::drawSprites(const bool* rowPixels)
+    void PPU::drawSprites(const bool *rowPixels)
     {
         int sprite_height = *lcdc & 0x04 ? 16 : 8;
 
@@ -312,7 +313,7 @@ namespace gameboy
                 int colour;
 
                 int x_temp = sprite.x + x;
-                if(x_temp < 0 || x_temp >= 160)
+                if (x_temp < 0 || x_temp >= 160)
                     continue;
 
                 int pixelOffset = *this->ly * 160 + x_temp;

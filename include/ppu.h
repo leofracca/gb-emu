@@ -73,7 +73,7 @@ namespace gameboy
          *
          * @return The frame buffer
          */
-        Colour* getFrameBuffer();
+        Colour *getFrameBuffer();
 
         /**
          * @biref Return whether the rendering is enabled
@@ -92,7 +92,7 @@ namespace gameboy
     private:
         Memory *m_memory; ///< The memory
 
-        std::array<Colour, SCREEN_WIDTH * (SCREEN_HEIGHT + 9)> m_frameBuffer{}; ///< The frame buffer
+        std::array<Colour, SCREEN_WIDTH *(SCREEN_HEIGHT + 9)> m_frameBuffer{}; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen
 
         int m_cycles = 0; ///< The number of cycles since the last frame

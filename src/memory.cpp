@@ -62,9 +62,9 @@ namespace gameboy
             // Is the pressed button an action button or a direction button?
             uint8_t actionOrDirection = m_memory[JOYPAD_ADDRESS] & 0x30;
 
-            return actionOrDirection == 0x20 ?
-                (m_joypadState >> 4) | 0x20 : // Direction
-                 m_joypadState | 0x10;        // Action
+            return actionOrDirection == 0x20
+                           ? (m_joypadState >> 4) | 0x20 // Direction
+                           : m_joypadState | 0x10; // Action
         }
 
         return m_memory[address];
@@ -158,7 +158,7 @@ namespace gameboy
         uint16_t relativeAddress = address - 0xFE00;
         Sprite *sprite = &sprites[relativeAddress >> 2];
         sprite->ready = false;
-        switch(relativeAddress & 3)
+        switch (relativeAddress & 3)
         {
             case 0:
                 sprite->y = value - 16;

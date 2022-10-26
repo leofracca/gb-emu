@@ -178,7 +178,7 @@ namespace gameboy
          * @param low The low register of the pair
          * @return The value of the pair
          */
-        static uint16_t getRegisterPair(uint8_t high, uint8_t low) ;
+        static uint16_t getRegisterPair(uint8_t high, uint8_t low);
 
         /**
          * @brief Set the value of a pair of registers
