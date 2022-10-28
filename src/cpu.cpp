@@ -1,5 +1,5 @@
 /*
- * See pages 61 to 118 of the documentation (docs/GB.pdf)
+ * See pages 61 to 118 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/CPU_Instruction_Set.html
  * See https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
  */

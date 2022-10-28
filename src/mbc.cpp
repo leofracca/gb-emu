@@ -1,5 +1,5 @@
 /*
- * See pages 8 to 16 of the documentation (docs/GB.pdf)
+ * See pages 8 to 16 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/MBCs.html
  */
 
@@ -138,7 +138,7 @@ namespace gameboy
     void MBC2::write(uint16_t address, uint8_t value)
     {
         // See https://gbdev.io/pandocs/MBC2.html#mbc2
-        // See pages 14-15 of the documentation (docs/GB.pdf)
+        // See pages 14-15 of the documentation (PanDocs/GB.pdf)
         if (address <= 0x1FFF)
         {
             // Enable RAM if bit 8 of the address is clear and the value is 0x0A

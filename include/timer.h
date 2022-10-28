@@ -5,7 +5,7 @@
  */
 
 /*
- * See pages 30 to 40 of the documentation (docs/GB.pdf)
+ * See pages 30 to 40 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/Timer_and_Divider_Registers.html
  */
 

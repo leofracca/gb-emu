@@ -5,7 +5,7 @@
  */
 
 /*
- * See pages 8 to 18 of the documentation (docs/GB.pdf)
+ * See pages 8 to 18 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/Memory_Map.html
  */
 

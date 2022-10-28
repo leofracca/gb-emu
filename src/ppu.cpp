@@ -1,5 +1,5 @@
 /*
- * See pages 22 to 27 and pages 51 to 60 of the documentation (docs/GB.pdf)
+ * See pages 22 to 27 and pages 51 to 60 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/Rendering.html
  * See http://www.codeslinger.co.uk/pages/projects/gameboy/lcd.html
  * See http://www.codeslinger.co.uk/pages/projects/gameboy/graphics.html

@@ -1,5 +1,5 @@
 /*
- * See pages 35 to 37 of the documentation (docs/GB.pdf)
+ * See pages 35 to 37 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/Joypad_Input.html
  */
 

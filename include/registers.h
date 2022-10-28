@@ -5,7 +5,7 @@
  */
 
 /*
- * See pages 17-18 and 60 to 64 of the documentation (docs/GB.pdf)
+ * See pages 17-18 and 60 to 64 of the documentation (PanDocs/GB.pdf)
  * See https://gbdev.io/pandocs/CPU_Registers_and_Flags.html
  * See https://gbdev.io/pandocs/Power_Up_Sequence.html
  */
