@@ -6,6 +6,7 @@
 
 /*
  * See pages 8 to 16 of the documentation (PanDocs/GB.pdf)
+ * See https://gbdev.io/pandocs/The_Cartridge_Header.html
  */
 
 #pragma once
@@ -59,6 +60,7 @@ namespace gameboy
     private:
         std::string m_ROMFilename; ///< The filename of the ROM
         MBC *m_MBC; ///< The MBC of the cartridge
+        std::string m_MBCAsString; ///< The MBC as a string (used for printing)
 
         uint8_t m_rom[127 * 16384]; ///< The rom of the cartridge (max size is 127 banks of 16KB = 2MB)
         uint8_t m_ram[127 * 256]; ///< The ram of the cartridge (max size is 127 banks of 256B = 32KB)
@@ -70,5 +72,56 @@ namespace gameboy
          * @see MBC
          */
         void checkCartridge();
+
+        /**
+         * @brief Print the cartridge informations
+         * @details Print title, Licensee, MBC, ROM size, RAM size
+         *
+         * @see getTitle, getLicensee, getROMSize, getRAMSize
+         */
+        void printCartridgeInfo();
+
+        /**
+         * @brief Get the cartridge title
+         * @details The title is contained in bytes 0x0134 to 0x0142
+         *
+         * @return The cartridge title
+         */
+        [[nodiscard]] std::string getTitle() const;
+
+        /**
+         * @brief Get the cartridge licensee
+         * @details The licensee is contained in byte 0x014B (old licensee)
+         *          If the licensee is 0x33, the licensee is contained in bytes 0x0144 to 0x0145 (new licensee)
+         *
+         * @return The cartridge licensee
+         * @see getNewLicensee
+         */
+        [[nodiscard]] std::string getLicensee() const;
+
+        /**
+         * @brief Get the cartridge licensee
+         * @details The licensee is contained in bytes 0x0144 to 0x0145 (as ASCII)
+         *
+         * @return The cartridge licensee
+         * @see getLicensee
+         */
+        [[nodiscard]] std::string getNewLicensee() const;
+
+        /**
+         * @brief Get the cartridge ROM size
+         * @details The ROM size is contained in byte 0x0148
+         *
+         * @return The cartridge ROM size
+         */
+        [[nodiscard]] std::string getROMSize() const;
+
+        /**
+         * @brief Get the cartridge RAM size
+         * @details The RAM size is contained in byte 0x0149
+         *
+         * @return The cartridge RAM size
+         */
+        [[nodiscard]] std::string getRAMSize() const;
     };
 } // namespace gameboy
