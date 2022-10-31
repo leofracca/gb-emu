@@ -14,6 +14,7 @@
 #include "mbc.h" // MBC
 
 #include <string> // std::string
+#include <vector> // std::vector
 
 namespace gameboy
 {
@@ -62,8 +63,8 @@ namespace gameboy
         MBC *m_MBC; ///< The MBC of the cartridge
         std::string m_MBCAsString; ///< The MBC as a string (used for printing)
 
-        uint8_t m_rom[127 * 16384]; ///< The rom of the cartridge (max size is 127 banks of 16KB = 2MB)
-        uint8_t m_ram[127 * 256]; ///< The ram of the cartridge (max size is 127 banks of 256B = 32KB)
+        std::vector<uint8_t> m_rom; ///< The ROM of the cartridge
+        std::vector<uint8_t> m_ram; ///< The RAM of the cartridge
 
         /**
          * @brief Check the cartridge type
@@ -119,9 +120,12 @@ namespace gameboy
         /**
          * @brief Get the cartridge RAM size
          * @details The RAM size is contained in byte 0x0149
+         *          The returned value is a pair of integers and string
+         *          The integer is used to initialize the RAM vector
+         *          The string is used to print the RAM size
          *
          * @return The cartridge RAM size
          */
-        [[nodiscard]] std::string getRAMSize() const;
+        [[nodiscard]] std::pair<int, std::string> getRAMSize() const;
     };
 } // namespace gameboy

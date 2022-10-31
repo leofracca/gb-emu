@@ -12,6 +12,7 @@
 #pragma once
 
 #include <cstdint> // uint8_t, uint16_t
+#include <vector> // std::vector
 
 namespace gameboy
 {
@@ -28,7 +29,7 @@ namespace gameboy
          * @param rom The ROM of the cartridge
          * @param ram The RAM of the cartridge
          */
-        MBC(uint8_t *rom, uint8_t *ram);
+        MBC(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
         virtual ~MBC() = default;
 
@@ -51,14 +52,15 @@ namespace gameboy
         virtual void write(uint16_t address, uint8_t value) = 0;
 
     protected:
-        uint8_t *m_rom; ///< The ROM of the cartridge
-        uint8_t *m_ram; ///< The RAM of the cartridge
+        std::vector<uint8_t> m_rom; ///< The ROM of the cartridge
+        std::vector<uint8_t> m_ram; ///< The RAM of the cartridge
     };
 
     class ROMOnly : public MBC
     {
     public:
-        explicit ROMOnly(uint8_t *rom);
+        explicit ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
     };
@@ -66,7 +68,8 @@ namespace gameboy
     class MBC1 : public MBC
     {
     public:
-        MBC1(uint8_t *rom, uint8_t *ram);
+        MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
 
@@ -86,7 +89,8 @@ namespace gameboy
     class MBC2 : public MBC1
     {
     public:
-        MBC2(uint8_t *rom, uint8_t *ram);
+        MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
     };
@@ -94,7 +98,8 @@ namespace gameboy
     class MBC3 : public MBC1
     {
     public:
-        MBC3(uint8_t *rom, uint8_t *ram);
+        MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
     };
@@ -102,7 +107,8 @@ namespace gameboy
     class MBC5 : public MBC1
     {
     public:
-        MBC5(uint8_t *rom, uint8_t *ram);
+        MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+
         uint8_t read(uint16_t address) override;
         void write(uint16_t address, uint8_t value) override;
     };

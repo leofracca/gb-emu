@@ -6,12 +6,12 @@ namespace gameboyTest
     using namespace gameboy;
 
     const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
-    uint8_t rom[127 * 16384];
-    uint8_t ram[127 * 256];
+    std::vector<uint8_t> rom(65536, 0x00);
+    std::vector<uint8_t> ram(0, 0x00);
 
     TEST_CASE("No MBC", "[mbc]")
     {
-        ROMOnly romOnly(rom);
+        ROMOnly romOnly(rom, ram);
 
         for (int i = 0; i < 0x8000; i++)
         {

@@ -6,16 +6,18 @@
 #include "mbc.h" // MBC
 
 #include <stdexcept> // std::runtime_error
+#include <utility>
 
 namespace gameboy
 {
-    MBC::MBC(uint8_t *rom, uint8_t *ram)
+    MBC::MBC(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
     {
         m_rom = rom;
         m_ram = ram;
     }
 
-    ROMOnly::ROMOnly(uint8_t *rom) : MBC(rom, nullptr) {}
+    ROMOnly::ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+        : MBC(rom, ram) {}
 
     uint8_t ROMOnly::read(uint16_t address)
     {
@@ -33,7 +35,8 @@ namespace gameboy
         throw std::runtime_error("Cannot write value " + std::to_string(value) + " to address " + std::to_string(address));
     }
 
-    MBC1::MBC1(uint8_t *rom, uint8_t *ram) : MBC(rom, ram) {}
+    MBC1::MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+        : MBC(rom, ram) {}
 
     uint8_t MBC1::read(uint16_t address)
     {
@@ -111,7 +114,8 @@ namespace gameboy
         m_ram[bankAddress + relativeAddress] = value;
     }
 
-    MBC2::MBC2(uint8_t *rom, uint8_t *ram) : MBC1(rom, ram) {}
+    MBC2::MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+        : MBC1(rom, ram) {}
 
     uint8_t MBC2::read(uint16_t address)
     {
@@ -172,7 +176,8 @@ namespace gameboy
         }
     }
 
-    MBC3::MBC3(uint8_t *rom, uint8_t *ram) : MBC1(rom, ram) {}
+    MBC3::MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+        : MBC1(rom, ram) {}
 
     uint8_t MBC3::read(uint16_t address)
     {
@@ -228,7 +233,8 @@ namespace gameboy
         }
     }
 
-    MBC5::MBC5(uint8_t *rom, uint8_t *ram) : MBC1(rom, ram) {}
+    MBC5::MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+        : MBC1(rom, ram) {}
 
     uint8_t MBC5::read(uint16_t address)
     {

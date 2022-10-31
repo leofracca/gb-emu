@@ -5,8 +5,10 @@
 
 #include "cartridge.h" // Cartridge
 
-#include <iostream> // std::cout, std::endl
 #include <fstream> // ifstream
+#include <iostream> // std::cout, std::endl
+#include <iterator> // std::istreambuf_iterator
+#include <utility> // std::pair
 
 namespace gameboy
 {
@@ -24,12 +26,13 @@ namespace gameboy
         if (!romFile.is_open())
             throw std::runtime_error("Could not open the file");
 
-        // Save the game in the memory
-        romFile.seekg(std::ios::beg);
-        romFile.read(reinterpret_cast<char *>(m_rom), sizeof(m_rom));
+        // Initialize ROM and RAM
+        m_rom = std::vector<uint8_t>(std::istreambuf_iterator<char>(romFile), {});
+        m_ram = std::vector<uint8_t>(getRAMSize().first, 0x00);
+
+        romFile.close();
 
         checkCartridge();
-
         printCartridgeInfo();
     }
 
@@ -44,7 +47,7 @@ namespace gameboy
             case 0x00:
             case 0x08:
             case 0x09:
-                m_MBC = new ROMOnly(m_rom);
+                m_MBC = new ROMOnly(m_rom, m_ram);
                 m_MBCAsString = "No MBC (ROM Only)";
                 break;
             case 0x01:
@@ -58,7 +61,7 @@ namespace gameboy
                 m_MBC = new MBC2(m_rom, m_ram);
                 m_MBCAsString = "MBC2";
                 break;
-            case 0x0f:
+            case 0x0F:
             case 0x10:
             case 0x11:
             case 0x12:
@@ -67,11 +70,11 @@ namespace gameboy
                 m_MBCAsString = "MBC3";
                 break;
             case 0x19:
-            case 0x1a:
-            case 0x1b:
-            case 0x1c:
-            case 0x1d:
-            case 0x1e:
+            case 0x1A:
+            case 0x1B:
+            case 0x1C:
+            case 0x1D:
+            case 0x1E:
                 m_MBC = new MBC5(m_rom, m_ram);
                 m_MBCAsString = "MBC5";
                 break;
@@ -97,14 +100,14 @@ namespace gameboy
         std::cout << "Cartridge type: " << m_MBCAsString << std::endl;
         std::cout << "Licensee: " << getLicensee() << std::endl;
         std::cout << "ROM size: " << getROMSize() << std::endl;
-        std::cout << "RAM size: " << getRAMSize() << std::endl;
+        std::cout << "RAM size: " << getRAMSize().second << std::endl;
         std::cout << "------------------------------------------------" << std::endl;
     }
 
     std::string Cartridge::getTitle() const
     {
         std::string title;
-        for (int i = 0x134; i < 0x143; i++)
+        for (int i = 0x0134; i < 0x0143; i++)
         {
             title += static_cast<char>(m_rom[i]);
         }
@@ -113,8 +116,8 @@ namespace gameboy
 
     std::string Cartridge::getLicensee() const
     {
-        // Old licensee code (0x14B)
-        switch (m_rom[0x14B])
+        // Old licensee code (0x014B)
+        switch (m_rom[0x014B])
         {
             case 0x00: return "None";
             case 0x01: return "Nintendo";
@@ -136,7 +139,7 @@ namespace gameboy
             case 0x30: return "Infogrames";
             case 0x31: return "Nintendo";
             case 0x32: return "Bandai";
-            case 0x33: return getNewLicensee(); // New licensee code (0x144-0x145)
+            case 0x33: return getNewLicensee(); // New licensee code (0x0144-0x0145)
             case 0x34: return "Konami";
             case 0x35: return "HectorSoft";
             case 0x38: return "Capcom";
@@ -358,16 +361,16 @@ namespace gameboy
         }
     }
 
-    std::string Cartridge::getRAMSize() const
+    std::pair<int, std::string> Cartridge::getRAMSize() const
     {
         switch (m_rom[0x0149])
         {
-            case 0x00: return "No RAM";
-            case 0x02: return "8 KByte (1 bank)";
-            case 0x03: return "32 KByte (4 banks of 8KByte each)";
-            case 0x04: return "128 KByte (16 banks of 8KByte each)";
-            case 0x05: return "64 KByte (8 banks of 8KByte each)";
-            default: return "Unknown";
+            case 0x00: return std::make_pair(0, "No RAM");
+            case 0x02: return std::make_pair(8192, "8 KByte (1 bank)");
+            case 0x03: return std::make_pair(32768, "32 KByte (4 banks of 8KByte each)");
+            case 0x04: return std::make_pair(131072, "128 KByte (16 banks of 8KByte each)");
+            case 0x05: return std::make_pair(65536, "64 KByte (8 banks of 8KByte each)");
+            default: return std::make_pair(0, "Unknown");
         }
     }
 } // namespace gameboy

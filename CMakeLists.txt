@@ -177,7 +177,6 @@ add_test(
         --track-fds=yes
         --track-origins=yes
         --error-exitcode=1
-        --max-stackframe=10000000
         ${CMAKE_BINARY_DIR}/GBEmu_test
 )
 # Blargg tests
