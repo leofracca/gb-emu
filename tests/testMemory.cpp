@@ -7,7 +7,7 @@ namespace gameboyTest
 
     const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
 
-    constexpr uint8_t TEST_ROM_TITLE[] = {0x43, 0x50, 0x55, 0x5f, 0x49, 0x4e, 0x53, 0x54, 0x52, 0x53}; //  = CPU_INSTRS
+    constexpr uint8_t TEST_ROM_TITLE[] = {0x43, 0x50, 0x55, 0x5F, 0x49, 0x4E, 0x53, 0x54, 0x52, 0x53}; //  = CPU_INSTRS
 
     TEST_CASE("Memory init", "[memory]")
     {
@@ -50,12 +50,16 @@ namespace gameboyTest
         REQUIRE(memory.m_memory[0xFF4B] == 0x00);
         REQUIRE(memory.m_memory[0xFFFF] == 0x00);
 
-        // Check if the ROM is loaded correctly
-        int j = 0;
-        for (int i = 0x0134; i < 0x0142; i++)
+        // Check that the ROM title is correct
+        std::string title;
+        for (int i = 0x0134; i < 0x0143; i++)
         {
-            REQUIRE(memory.read(i) == TEST_ROM_TITLE[j++]);
+            if (memory.read(i) == 0x00)
+                break;
+            title += static_cast<char>(memory.read(i));
         }
+
+        REQUIRE(title == "CPU_INSTRS");
 
         // Check the joypad
         REQUIRE(memory.getJoypadState() == 0xFF);
