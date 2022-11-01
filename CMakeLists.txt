@@ -17,7 +17,7 @@ option(USAN     OFF)
 option(COVERAGE OFF)
 
 set(COMPILER_FLAGS
-    -g
+    -O3
     -Wall -Wextra -Wpedantic -Werror
     $<$<BOOL:${USAN}>:-fsanitize=undefined -fno-omit-frame-pointer>
 )

@@ -6,7 +6,6 @@
 #include "mbc.h" // MBC
 
 #include <stdexcept> // std::runtime_error
-#include <utility>
 
 namespace gameboy
 {

@@ -13,6 +13,8 @@
 
 #include "cartridge.h" // Cartridge
 
+#include <array> // std::array
+
 namespace gameboy
 {
     constexpr uint16_t DMA_REG_ADDRESS = 0xFF46; ///< The address of the DMA register
@@ -32,13 +34,14 @@ namespace gameboy
     class Memory
     {
     public:
-        uint8_t m_memory[0x10000]{}; ///< The memory of the Gameboy
+        std::array<uint8_t, 0x10000> m_memory{}; ///< The memory of the Game Boy
 
         /**
          * @brief A tile is a 8x8 pixel image. Each tile is 16 bytes long.
          */
-        struct Tile {
-            uint8_t  pixels[8][8] = {{0}};
+        struct Tile
+        {
+            uint8_t pixels[8][8] = {{0}};
         } tiles[384];
 
         /**
@@ -47,21 +50,25 @@ namespace gameboy
          *          Since each pixel uses 2 bits, the corresponding shade will be selected from here.
          */
         Colour palette_BGP[4] = {
-            { 255, 255, 255, 255},
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
+                {255, 255, 255, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
         };
 
-        struct Sprite {
+        struct Sprite
+        {
             Colour *colourPalette;
-            struct {
-                union {
-                    struct {
+            struct
+            {
+                union
+                {
+                    struct
+                    {
                         uint8_t gbcPaletteNumber1 : 1;
                         uint8_t gbcPaletteNumber2 : 1;
                         uint8_t gbcPaletteNumber3 : 1;
-                        uint8_t gbcVRAMBank: 1;
+                        uint8_t gbcVRAMBank : 1;
                         uint8_t paletteNumber : 1;
                         uint8_t xFlip : 1;
                         uint8_t yFlip : 1;
@@ -151,10 +158,10 @@ namespace gameboy
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
         const Colour palette_colours[4] = {
-            { 255, 255, 255, 255},
-            { 192,192,192,255},
-            { 96,96,96, 255 },
-            { 0, 0, 0, 255 },
+                {255, 255, 255, 255},
+                {192, 192, 192, 255},
+                {96, 96, 96, 255},
+                {0, 0, 0, 255},
         }; ///< The 4 colours of the palette
 
         /**
@@ -162,10 +169,10 @@ namespace gameboy
          * @details This selects the colour palette for sprite palette 0.
          */
         Colour palette_OBP0[4] = {
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
         };
 
         /**
@@ -173,10 +180,10 @@ namespace gameboy
          * @details This selects the colour palette for sprite palette 1.
          */
         Colour palette_OBP1[4] = {
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
-            { 0, 0, 0, 255 },
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
         };
 
         /**
@@ -203,4 +210,4 @@ namespace gameboy
          */
         void UpdatePalette(Colour *palette, uint8_t value);
     };
-}
+} // namespace gameboy
