@@ -24,6 +24,8 @@ namespace gameboy
             timer.cycle(cycles);
             ppu.cycle(cycles);
         } while (!updatePlatform(lastCycleTime, ppu, input));
+
+        saveRAMData();
     }
 
     bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)
@@ -42,5 +44,10 @@ namespace gameboy
         }
 
         return false;
+    }
+
+    void GB::saveRAMData()
+    {
+        m_memory.getCartridge().saveRAMData();
     }
 } // namespace gameboy

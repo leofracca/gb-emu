@@ -5,7 +5,7 @@
 
 #include "cartridge.h" // Cartridge
 
-#include <fstream> // ifstream
+#include <fstream> // std::ifstream
 #include <iostream> // std::cout, std::endl
 #include <iterator> // std::istreambuf_iterator
 #include <utility> // std::pair
@@ -19,18 +19,26 @@ namespace gameboy
 
     void Cartridge::loadROM(const std::string &filename)
     {
-        m_ROMFilename = filename;
+        // Save the filename without the extension
+        m_ROMFilename = filename.substr(0, filename.find_last_of('.'));
 
         // Open the file
-        std::ifstream romFile(m_ROMFilename, std::ios::binary);
+        std::ifstream romFile(filename, std::ios::binary);
         if (!romFile.is_open())
             throw std::runtime_error("Could not open the file");
 
-        // Initialize ROM and RAM
+        // Initialize ROM
         m_rom = std::vector<uint8_t>(std::istreambuf_iterator<char>(romFile), {});
-        m_ram = std::vector<uint8_t>(getRAMSize().first, 0x00);
-
         romFile.close();
+
+        // Check if there is a save file to initialize the RAM
+        // If there is no save file, the RAM will be initialized to 0
+        std::ifstream ramFile(m_ROMFilename + ".sav", std::ios::binary);
+        if (!ramFile.is_open())
+            m_ram = std::vector<uint8_t>(getRAMSize().first, 0x00);
+        else
+            m_ram = std::vector<uint8_t>(std::istreambuf_iterator<char>(ramFile), {});
+        ramFile.close();
 
         checkCartridge();
         printCartridgeInfo();
@@ -93,6 +101,11 @@ namespace gameboy
         m_MBC->write(address, value);
     }
 
+    void Cartridge::saveRAMData()
+    {
+        m_MBC->saveRAMData(m_ROMFilename + ".sav");
+    }
+
     void Cartridge::printCartridgeInfo()
     {
         std::cout << "--------------- Cartridge info ----------------" << std::endl;
@@ -101,7 +114,7 @@ namespace gameboy
         std::cout << "Licensee: " << getLicensee() << std::endl;
         std::cout << "ROM size: " << getROMSize() << std::endl;
         std::cout << "RAM size: " << getRAMSize().second << std::endl;
-        std::cout << "------------------------------------------------" << std::endl;
+        std::cout << "-----------------------------------------------" << std::endl;
     }
 
     std::string Cartridge::getTitle() const

@@ -141,8 +141,16 @@ namespace gameboy
          */
         void setJoypadState(uint8_t state);
 
+        /**
+         * @brief Get the cartridge
+         *
+         * @return The cartridge
+         */
+        [[nodiscard]] Cartridge &getCartridge();
+
     private:
         Cartridge m_cartridge; ///< The cartridge
+
         /**
          * @brief The current state of the joypad
          * @details The state is inverted (0 = pressed, 1 = not pressed),

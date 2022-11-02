@@ -12,6 +12,7 @@
 #pragma once
 
 #include <cstdint> // uint8_t, uint16_t
+#include <string> // std::string
 #include <vector> // std::vector
 
 namespace gameboy
@@ -50,6 +51,14 @@ namespace gameboy
          * @param value The value to write
          */
         virtual void write(uint16_t address, uint8_t value) = 0;
+
+        /**
+         * @brief Save the current content of the RAM to a file
+         * @details If the game uses the RAM, save the current content of the RAM to a file.
+         *          If the game doesn't use the RAM, do nothing
+         * @param filename The name of the file to save the RAM to (i.e. the name of the ROM file with the extension .sav)
+         */
+        void saveRAMData(const std::string &filename);
 
     protected:
         std::vector<uint8_t> m_rom; ///< The ROM of the cartridge

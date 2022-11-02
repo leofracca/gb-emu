@@ -136,6 +136,11 @@ namespace gameboy
         m_joypadState = state;
     }
 
+    Cartridge& Memory::getCartridge()
+    {
+        return m_cartridge;
+    }
+
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/memory.cpp
     void Memory::UpdateTile(uint16_t laddress)
     {

@@ -5,6 +5,8 @@
 
 #include "mbc.h" // MBC
 
+#include <fstream> // std::ofstream
+#include <iterator> // std::ostreambuf_iterator
 #include <stdexcept> // std::runtime_error
 
 namespace gameboy
@@ -13,6 +15,20 @@ namespace gameboy
     {
         m_rom = rom;
         m_ram = ram;
+    }
+
+    void MBC::saveRAMData(const std::string &filename)
+    {
+        // If the game has no RAM, we don't need to save it
+        if (m_ram.empty())
+            return;
+
+        std::ofstream ramFile(filename);
+        if (!ramFile.is_open())
+            throw std::runtime_error("Could not open the RAM save file");
+
+        std::copy(m_ram.begin(), m_ram.end(), std::ostreambuf_iterator<char>(ramFile));
+        ramFile.close();
     }
 
     ROMOnly::ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)

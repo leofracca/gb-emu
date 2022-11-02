@@ -58,6 +58,13 @@ namespace gameboy
          */
         void write(uint16_t address, uint8_t value);
 
+        /**
+         * @brief Save the current content of the RAM to a file
+         *
+         * @see MBC::saveRAMData
+         */
+        void saveRAMData();
+
     private:
         std::string m_ROMFilename; ///< The filename of the ROM
         MBC *m_MBC; ///< The MBC of the cartridge
