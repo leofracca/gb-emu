@@ -116,7 +116,7 @@ make doc
 ## Images
 | Homescreen | Gameplay |
 |:-------------------:|:-------------------:|
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_play.png' width='30%'/> |
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_play.png' width='30%'/> |
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_play.png' width='30%'/> |
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_play.png' width='30%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_play.png' width='70%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_play.png' width='70%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_play.png' width='70%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_play.png' width='70%'/> |
