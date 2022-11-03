@@ -2,13 +2,6 @@
 
 An open source GameBoy emulator written in C++.
 
-## Images
-
-<p align='center'>
-  <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='30%'/>
-  <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_battle.png' width='30%'/>
-</p>
-
 ## Dependency
 
 At the moment, the emulator has been tested only on Fedora. The required software can be installed with:
@@ -53,6 +46,16 @@ or
 ```
 
 if you want a bigger window (in this case the window will be 4 times bigger than the normal).
+
+## Buttons
+
+| Game Boy | Keyboard |
+|:--------:|:--------:|
+| A        | A        |
+| B        | S        |
+| Arrows   | Arrows   |
+| Start    | Space    |
+| Select   | Enter    |
 
 ## Testing
 
@@ -109,3 +112,11 @@ make doc
 - [GameBoy CPU opcodes](https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html)
 
 - [codeslinger.co.uk](http://www.codeslinger.co.uk/pages/projects/gameboy.html)
+
+## Images
+| Homescreen | Gameplay |
+|:-------------------:|:-------------------:|
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_play.png' width='30%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_play.png' width='30%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_play.png' width='30%'/> |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_homescreen.png' width='30%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_play.png' width='30%'/> |
