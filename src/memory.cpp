@@ -5,6 +5,8 @@
 
 #include "memory.h" // Memory
 
+#include <stdexcept> // std::runtime_error
+
 namespace gameboy
 {
     Memory::Memory(const std::string &romPath)
@@ -56,6 +58,14 @@ namespace gameboy
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             return m_cartridge.read(address);
 
+        // Echo RAM (unusable memory)
+        if (address >= 0xE000 && address < 0xFE00)
+            throw std::runtime_error("Reading from echo RAM is not allowed");
+
+        // Unusable memory
+        if (address >= 0xFEA0 && address < 0xFF00)
+            throw std::runtime_error("Reading from unusable memory");
+
         // Joypad
         if (address == JOYPAD_ADDRESS)
         {
@@ -82,9 +92,20 @@ namespace gameboy
         if (address >= 0x8000 && address < 0x9800)
             UpdateTile(address);
 
+        // Echo RAM (unusable memory)
+        else if (address >= 0xE000 && address < 0xFE00)
+            throw std::runtime_error("Writing to Echo RAM is not allowed");
+
         // OAM
         else if (address >= 0xFE00 && address < 0xFEA0)
             UpdateSprite(address, value);
+
+        // Unusable memory
+        else if (address >= 0xFEA0 && address < 0xFF00)
+            // Writing to this area is prohibited, but TETRIS does it anyway
+            // So instead of throwing an exception, just ignore the write
+            return;
+            // throw std::runtime_error("Writing to unusable memory");
 
         // Check if the LCD has been disabled (bit 7 of LCDC register)
         else if (address == 0xFF40)
