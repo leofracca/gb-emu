@@ -91,7 +91,7 @@ namespace gameboy
         }
     }
 
-    uint8_t Cartridge::read(uint16_t address)
+    uint8_t Cartridge::read(uint16_t address) const
     {
         return m_MBC->read(address);
     }

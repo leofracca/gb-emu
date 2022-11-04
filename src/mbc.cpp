@@ -34,7 +34,7 @@ namespace gameboy
     ROMOnly::ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC(rom, ram) {}
 
-    uint8_t ROMOnly::read(uint16_t address)
+    uint8_t ROMOnly::read(uint16_t address) const
     {
         // Check if the address is in the ROM
         if (address < 0x8000)
@@ -53,7 +53,7 @@ namespace gameboy
     MBC1::MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC(rom, ram) {}
 
-    uint8_t MBC1::read(uint16_t address)
+    uint8_t MBC1::read(uint16_t address) const
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC1.html#00003fff--rom-bank-x0-read-only
         {
@@ -108,14 +108,14 @@ namespace gameboy
         }
     }
 
-    uint8_t MBC1::readROMBank(uint16_t address)
+    uint8_t MBC1::readROMBank(uint16_t address) const
     {
         auto relativeAddress = address - 0x4000;
         auto bankAddress = m_romBank * 0x4000;
         return m_rom[bankAddress + relativeAddress];
     }
 
-    uint8_t MBC1::readRAMBank(uint16_t address)
+    uint8_t MBC1::readRAMBank(uint16_t address) const
     {
         auto relativeAddress = address - 0xA000;
         auto bankAddress = m_ramBank * 0x2000;
@@ -132,7 +132,7 @@ namespace gameboy
     MBC2::MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
 
-    uint8_t MBC2::read(uint16_t address)
+    uint8_t MBC2::read(uint16_t address) const
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC2.html#00003fff--rom-bank-0-read-only
         {
@@ -194,7 +194,7 @@ namespace gameboy
     MBC3::MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
 
-    uint8_t MBC3::read(uint16_t address)
+    uint8_t MBC3::read(uint16_t address) const
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC3.html#0000-3fff---rom-bank-00-read-only
         {
@@ -251,7 +251,7 @@ namespace gameboy
     MBC5::MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
 
-    uint8_t MBC5::read(uint16_t address)
+    uint8_t MBC5::read(uint16_t address) const
     {
         if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC5.html#0000-3fff---rom-bank-00-read-only
         {

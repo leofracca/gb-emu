@@ -52,7 +52,7 @@ namespace gameboy
         m_memory[0xFFFF] = 0x00; // IE
     }
 
-    uint8_t Memory::read(uint16_t address)
+    uint8_t Memory::read(uint16_t address) const
     {
         // The areas from 0000-7FFF and A000-BFFF address external hardware on the cartridge
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
@@ -131,7 +131,7 @@ namespace gameboy
             UpdatePalette(palette_OBP1, value); // Object palette 1
     }
 
-    uint16_t Memory::readWord(uint16_t address)
+    uint16_t Memory::readWord(uint16_t address) const
     {
         uint8_t lo = read(address);
         uint8_t hi = read(address + 1);

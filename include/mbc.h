@@ -41,7 +41,7 @@ namespace gameboy
          * @param address The address to read from
          * @return uint8_t The byte read
          */
-        virtual uint8_t read(uint16_t address) = 0;
+        [[nodiscard]] virtual uint8_t read(uint16_t address) const = 0;
 
         /**
          * @brief Write a byte to the cartridge
@@ -70,7 +70,7 @@ namespace gameboy
     public:
         explicit ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        uint8_t read(uint16_t address) override;
+        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 
@@ -79,7 +79,7 @@ namespace gameboy
     public:
         MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        uint8_t read(uint16_t address) override;
+        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
 
     protected:
@@ -87,8 +87,8 @@ namespace gameboy
         uint8_t m_romBank = 1;
         uint8_t m_ramBank = 0;
 
-        uint8_t readROMBank(uint16_t address);
-        uint8_t readRAMBank(uint16_t address);
+        [[nodiscard]] uint8_t readROMBank(uint16_t address) const;
+        [[nodiscard]] uint8_t readRAMBank(uint16_t address)const;
         void writeRAMBank(uint16_t address, uint8_t value);
 
     private:
@@ -100,7 +100,7 @@ namespace gameboy
     public:
         MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        uint8_t read(uint16_t address) override;
+        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 
@@ -109,7 +109,7 @@ namespace gameboy
     public:
         MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        uint8_t read(uint16_t address) override;
+        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 
@@ -118,7 +118,7 @@ namespace gameboy
     public:
         MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        uint8_t read(uint16_t address) override;
+        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 } // namespace gameboy

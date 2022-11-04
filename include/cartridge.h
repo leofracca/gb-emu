@@ -47,7 +47,7 @@ namespace gameboy
          * @param address The address of the byte to read
          * @return The byte read
          */
-        uint8_t read(uint16_t address);
+        [[nodiscard]] uint8_t read(uint16_t address) const;
 
         /**
          * @brief Write a byte to the cartridge
