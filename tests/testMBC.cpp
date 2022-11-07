@@ -9,90 +9,141 @@ namespace gameboyTest
     std::vector<uint8_t> rom(65536, 0x00);
     std::vector<uint8_t> ram(0, 0x00);
 
-    TEST_CASE("No MBC", "[mbc]")
+    TEST_CASE("MBCs", "[mbc]")
     {
-        ROMOnly romOnly(rom, ram);
+        for (int i = 0; i < 0x10000; i++)
+            rom[i] = i;
 
-        for (int i = 0; i < 0x8000; i++)
+        SECTION("No MBC, ROM only")
         {
-            romOnly.write(i, i);
-            REQUIRE(romOnly.read(i) == 0x00);
-        }
-    }
+            ROMOnly romOnly(rom, ram);
 
-    TEST_CASE("MBC1", "[mbc]")
-    {
-        MBC1 mbc1(rom, ram);
+            for (int i = 0; i < 0x8000; i++)
+                REQUIRE(romOnly.read(i) == rom[i]);
 
-        for (int i = 0; i < 0x8000; i++)
-        {
-            mbc1.write(i, i);
-        }
-        for (int i = 0xA000; i < 0xC000; i++)
-        {
-            mbc1.write(i, i);
-        }
+            for (int i = 0x8000; i < 0x10000; i++)
+                REQUIRE(romOnly.read(i) == 0x00);
 
-        for (int i = 0; i < 0x4000; i++)
-        {
-            REQUIRE(mbc1.read(i) == 0x00);
-        }
-    }
+            for (int i = 0; i < 0x8000; i++)
+            {
+                romOnly.write(i, 0x00);
+                REQUIRE(romOnly.read(i) == rom[i]);
+            }
 
-    TEST_CASE("MBC2", "[mbc]")
-    {
-        MBC2 mbc2(rom, ram);
-
-        for (int i = 0; i < 0x8000; i++)
-        {
-            mbc2.write(i, i);
-        }
-        for (int i = 0xA000; i < 0xC000; i++)
-        {
-            mbc2.write(i, i);
+            for (int i = 0x8000; i < 0x10000; i++)
+                REQUIRE_THROWS_AS(romOnly.write(i, 0x00), std::runtime_error);
         }
 
-        for (int i = 0; i < 0x4000; i++)
+        SECTION("MBC1")
         {
-            REQUIRE(mbc2.read(i) == 0x00);
-        }
-    }
+            MBC1 mbc1(rom, ram);
 
-    TEST_CASE("MBC3", "[mbc]")
-    {
-        MBC3 mbc3(rom, ram);
+            for (int i = 0; i < 0x4000; i++)
+                REQUIRE(mbc1.read(i) == rom[i]);
 
-        for (int i = 0; i < 0x8000; i++)
-        {
-            mbc3.write(i, i);
-        }
-        for (int i = 0xA000; i < 0xC000; i++)
-        {
-            mbc3.write(i, i);
-        }
+            int romBank;
+            SECTION("ROM bank 1")
+            {
+                romBank = 1;
+            }
+            SECTION("ROM bank 2")
+            {
+                romBank = 2;
+                mbc1.write(0x2000, 0x02);
+            }
 
-        for (int i = 0; i < 0x4000; i++)
-        {
-            REQUIRE(mbc3.read(i) == 0x00);
-        }
-    }
+            for (int i = 0x4000; i < 0x8000; i++)
+                REQUIRE(mbc1.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
 
-    TEST_CASE("MBC5", "[mbc]")
-    {
-        MBC5 mbc5(rom, ram);
-
-        for (int i = 0; i < 0x8000; i++)
-        {
-            mbc5.write(i, i);
-        }
-        for (int i = 0xA000; i < 0xC000; i++)
-        {
-            mbc5.write(i, i);
+            for (int i = 0; i < 0x8000; i++)
+            {
+                mbc1.write(i, 0x00);
+                REQUIRE(mbc1.read(i) == rom[i]);
+            }
         }
 
-        for (int i = 0; i < 0x4000; i++)
+        SECTION("MBC2")
         {
-            REQUIRE(mbc5.read(i) == 0x00);
+            MBC2 mbc2(rom, ram);
+
+            for (int i = 0; i < 0x4000; i++)
+                REQUIRE(mbc2.read(i) == rom[i]);
+
+            int romBank;
+            SECTION("ROM bank 1")
+            {
+                romBank = 1;
+            }
+            SECTION("ROM bank 2")
+            {
+                romBank = 2;
+                mbc2.write(0x2000, 0x02);
+            }
+
+            for (int i = 0x4000; i < 0x8000; i++)
+                REQUIRE(mbc2.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
+
+            for (int i = 0; i < 0x8000; i++)
+            {
+                mbc2.write(i, 0x00);
+                REQUIRE(mbc2.read(i) == rom[i]);
+            }
+        }
+
+        SECTION("MBC3")
+        {
+            MBC3 mbc3(rom, ram);
+
+            for (int i = 0; i < 0x4000; i++)
+                REQUIRE(mbc3.read(i) == rom[i]);
+
+            int romBank;
+            SECTION("ROM bank 1")
+            {
+                romBank = 1;
+            }
+            SECTION("ROM bank 2")
+            {
+                romBank = 2;
+                mbc3.write(0x2000, 0x02);
+            }
+
+            for (int i = 0x4000; i < 0x8000; i++)
+                REQUIRE(mbc3.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
+
+            for (int i = 0; i < 0x8000; i++)
+            {
+                mbc3.write(i, 0x00);
+                REQUIRE(mbc3.read(i) == rom[i]);
+            }
+        }
+
+        SECTION("MBC5")
+        {
+            MBC5 mbc5(rom, ram);
+
+            for (int i = 0; i < 0x4000; i++)
+                REQUIRE(mbc5.read(i) == rom[i]);
+
+            int romBank;
+            SECTION("ROM bank 1")
+            {
+                romBank = 1;
+            }
+            SECTION("ROM bank 2")
+            {
+                romBank = 2;
+                mbc5.write(0x2000, 0x02);
+            }
+
+            for (int i = 0x4000; i < 0x8000; i++)
+                REQUIRE(mbc5.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
+
+            for (int i = 0; i < 0x8000; i++)
+            {
+                mbc5.write(i, 0x00);
+                REQUIRE(mbc5.read(i) == rom[i]);
+            }
         }
     }
 } // namespace gameboyTest

@@ -79,7 +79,7 @@ namespace gameboy
     public:
         MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        [[nodiscard]] uint8_t read(uint16_t address) const override;
+        [[nodiscard]] uint8_t read(uint16_t address) const final;
         void write(uint16_t address, uint8_t value) override;
 
     protected:
@@ -100,7 +100,6 @@ namespace gameboy
     public:
         MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 
@@ -109,7 +108,6 @@ namespace gameboy
     public:
         MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 
@@ -118,7 +116,6 @@ namespace gameboy
     public:
         MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
 
-        [[nodiscard]] uint8_t read(uint16_t address) const override;
         void write(uint16_t address, uint8_t value) override;
     };
 } // namespace gameboy

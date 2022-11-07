@@ -132,42 +132,17 @@ namespace gameboy
     MBC2::MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
 
-    uint8_t MBC2::read(uint16_t address) const
-    {
-        if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC2.html#00003fff--rom-bank-0-read-only
-        {
-            return m_rom[address];
-        }
-        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC2.html#40007fff--rom-bank-01-0f-read-only
-        {
-            return readROMBank(address);
-        }
-        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC2.html#a000a1ff--built-in-ram and https://gbdev.io/pandocs/MBC2.html#a200bfff--15-echoes-of-a000a1ff
-        {
-            if (m_ramEnabled)
-            {
-                return readRAMBank(address);
-            }
-            return 0;
-        }
-        else
-            return 0;
-    }
-
     void MBC2::write(uint16_t address, uint8_t value)
     {
         // See https://gbdev.io/pandocs/MBC2.html#mbc2
         // See pages 14-15 of the documentation (PanDocs/GB.pdf)
-        if (address <= 0x1FFF)
+        if (address <= 0x3FFF)
         {
             // Enable RAM if bit 8 of the address is clear and the value is 0x0A
             if ((address & 0x0100) == 0)
                 m_ramEnabled = (value & 0x0F) == 0x0A;
-        }
-        else if (address <= 0x3FFF)
-        {
-            // If bit 8 of the address is set, set the lower 4 bits of the ROM bank
-            if ((address & 0x0100) != 0)
+            // Set the lower 4 bits of the ROM bank if the bit 8 of the address is set
+            else
             {
                 value &= 0x0F;
                 if (value == 0)
@@ -193,31 +168,6 @@ namespace gameboy
 
     MBC3::MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
-
-    uint8_t MBC3::read(uint16_t address) const
-    {
-        if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC3.html#0000-3fff---rom-bank-00-read-only
-        {
-            return m_rom[address];
-        }
-        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC3.html#4000-7fff---rom-bank-01-7f-read-only
-        {
-            return readROMBank(address);
-        }
-        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC3.html#a000-bfff---ram-bank-00-03-if-any-readwrite
-        {
-            if (m_ramEnabled)
-            {
-                if (m_ramBank <= 0x03)
-                {
-                    return readRAMBank(address);
-                }
-            }
-            return 0;
-        }
-        else
-            return 0;
-    }
 
     void MBC3::write(uint16_t address, uint8_t value)
     {
@@ -250,28 +200,6 @@ namespace gameboy
 
     MBC5::MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
         : MBC1(rom, ram) {}
-
-    uint8_t MBC5::read(uint16_t address) const
-    {
-        if (address <= 0x3FFF) // https://gbdev.io/pandocs/MBC5.html#0000-3fff---rom-bank-00-read-only
-        {
-            return m_rom[address];
-        }
-        else if (address <= 0x7FFF) // https://gbdev.io/pandocs/MBC5.html#4000-7fff---rom-bank-00-1ff-read-only
-        {
-            return readROMBank(address);
-        }
-        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC5.html#a000-bfff---ram-bank-00-0f-if-any-readwrite
-        {
-            if (m_ramEnabled)
-            {
-                return readRAMBank(address);
-            }
-            return 0;
-        }
-        else
-            return 0;
-    }
 
     void MBC5::write(uint16_t address, uint8_t value)
     {
