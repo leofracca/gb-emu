@@ -29,7 +29,7 @@ namespace gameboy
         uint8_t instruction = m_memory->read(m_registers.pc++);
 
         // Decode and execute opcode
-        return execute_opcode(instruction);
+        return executeOpcode(instruction);
     }
 
     int CPU::handleInterrupts()
@@ -70,7 +70,7 @@ namespace gameboy
         return false;
     }
 
-    int CPU::execute_opcode(uint8_t opcode)
+    int CPU::executeOpcode(uint8_t opcode)
     {
         int cycles = OPCODE_CYCLES[opcode];
 
@@ -692,7 +692,7 @@ namespace gameboy
                 jp(m_registers.getFlag(ZERO_FLAG));
                 break;
             case 0xCB: // CB prefix
-                cycles += execute_CB_opcode(m_memory->read(m_registers.pc++));
+                cycles += executeOpcodeCB(m_memory->read(m_registers.pc++));
                 break;
             case 0xCC: // CALL Z, nn
                 call(m_registers.getFlag(ZERO_FLAG));
@@ -830,7 +830,7 @@ namespace gameboy
         return cycles;
     }
 
-    int CPU::execute_CB_opcode(uint8_t opcode)
+    int CPU::executeOpcodeCB(uint8_t opcode)
     {
         int cycles = OPCODE_CB_CYCLES[opcode];
 

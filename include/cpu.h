@@ -145,7 +145,7 @@ namespace gameboy
          * @param opcode The opcode of the instruction.
          * @return The number of cycles used by the instruction.
          */
-        int execute_opcode(uint8_t opcode);
+        int executeOpcode(uint8_t opcode);
 
         /**
          * @brief Executes the next instruction.
@@ -154,7 +154,7 @@ namespace gameboy
          * @param opcode The cb opcode of the instruction.
          * @return The number of cycles used by the instruction.
          */
-        int execute_CB_opcode(uint8_t opcode);
+        int executeOpcodeCB(uint8_t opcode);
 
         // Push and pop
         /**
