@@ -90,6 +90,7 @@ namespace gameboy
         }
         else if (address <= 0x5FFF) // https://gbdev.io/pandocs/MBC1.html#40005fff--ram-bank-number--or--upper-bits-of-rom-bank-number-write-only
         {
+            // TODO: Check the mode and modify the RAM bank (instead of the ROM bank) if m_mode is set to true
             // Reset bits 5-6 of the ROM bank
             m_romBank &= 0x9F;
             // Set bits 5-6 of the ROM bank according to the value (bits 0-1)

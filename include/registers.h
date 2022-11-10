@@ -19,10 +19,10 @@ namespace gameboy
     /*
      * The following are the flags of the flag register F
      */
-    constexpr uint8_t ZERO_FLAG = 0x80; // Z
-    constexpr uint8_t SUBTRACT_FLAG = 0x40; // N
-    constexpr uint8_t HALF_CARRY_FLAG = 0x20; // H
-    constexpr uint8_t CARRY_FLAG = 0x10; // C
+    constexpr uint8_t ZERO_FLAG = 0x80; ///< The zero flag (Z)
+    constexpr uint8_t SUBTRACT_FLAG = 0x40; ///< The subtract flag (N)
+    constexpr uint8_t HALF_CARRY_FLAG = 0x20; ///< The half carry flag (H)
+    constexpr uint8_t CARRY_FLAG = 0x10; ///< The carry flag (C)
 
     /**
      * @brief Registers class used to manipulate the registers of the Gameboy
@@ -39,14 +39,14 @@ namespace gameboy
          *          pairing them up in the following manner: AF,BC,DE, &
          *          HL.
          */
-        uint8_t a;
-        uint8_t f;
-        uint8_t b;
-        uint8_t c;
-        uint8_t d;
-        uint8_t e;
-        uint8_t h;
-        uint8_t l;
+        uint8_t a; ///< A register
+        uint8_t f; ///< F register
+        uint8_t b; ///< B register
+        uint8_t c; ///< C register
+        uint8_t d; ///< D register
+        uint8_t e; ///< E register
+        uint8_t h; ///< H register
+        uint8_t l; ///< L register
 
         uint16_t sp; ///< Stack Pointer
         uint16_t pc; ///< Program Counter

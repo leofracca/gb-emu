@@ -32,6 +32,9 @@ namespace gameboy
 
     constexpr uint8_t JOYPAD_INTERRUPT_FLAG_VALUE = 0x10; ///< The bitmask of the joypad interrupt flag
 
+    /**
+     * @brief The Input class emulates the behavior of a Gameboy controller/joypad.
+     */
     class Input
     {
     public:

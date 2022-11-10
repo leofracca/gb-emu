@@ -26,11 +26,24 @@ namespace gameboy
     constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
     constexpr uint16_t INTERRUPT_ENABLE_ADDRESS = 0xFFFF; ///< The address of the Interrupt Enable Register
 
+    /**
+     * @brief Contains the values of the RGB colors (and the transparency)
+     */
     struct Colour
     {
-        uint8_t colours[4];
+        uint8_t colours[4]; ///< 0 - R, 1 - G, 2 - B, 3 - Transparency
     };
 
+    constexpr Colour palette_colours[4] = {
+            {255, 255, 255, 255},
+            {192, 192, 192, 255},
+            {96, 96, 96, 255},
+            {0, 0, 0, 255},
+    }; ///< The 4 colours of the palette (white, light grey, dark grey, black)
+
+    /**
+     * @brief Memory class used to store the memory of the Gameboy
+     */
     class Memory
     {
     public:
@@ -41,8 +54,8 @@ namespace gameboy
          */
         struct Tile
         {
-            uint8_t pixels[8][8] = {{0}};
-        } tiles[384];
+            uint8_t pixels[8][8] = {{0}}; ///< The pixels of the tile (8x8)
+        } tiles[384]; ///< There are 384 tiles
 
         /**
          * @brief BG & Window Palette Data
@@ -56,9 +69,12 @@ namespace gameboy
                 {0, 0, 0, 255},
         };
 
+        /**
+         * @brief All the information about the sprites
+         */
         struct Sprite
         {
-            Colour *colourPalette;
+            Colour *colourPalette; ///< The colour palette to use for the sprite
             struct
             {
                 union
@@ -76,11 +92,11 @@ namespace gameboy
                     } bits;
                     uint8_t value;
                 } flags;
-            } options;
-            int y;
-            int x;
-            uint8_t tile;
-            bool ready;
+            } options; ///< The options of the sprite
+            int y; ///< The y position of the sprite
+            int x; ///< The x position of the sprite
+            uint8_t tile; ///< The tile number of the sprite
+            bool ready; ///< True if the sprite is ready to be rendered
         } sprites[40] = {}; ///< The sprites
 
         /**
@@ -165,13 +181,6 @@ namespace gameboy
          */
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
 
-        const Colour palette_colours[4] = {
-                {255, 255, 255, 255},
-                {192, 192, 192, 255},
-                {96, 96, 96, 255},
-                {0, 0, 0, 255},
-        }; ///< The 4 colours of the palette
-
         /**
          * @brief Object Palette 0 Data
          * @details This selects the colour palette for sprite palette 0.
@@ -216,6 +225,6 @@ namespace gameboy
          * @param address The address of the palette (BGP, OBP0 or OBP1)
          * @param value The new value of the palette (2 bits per colour)
          */
-        void UpdatePalette(Colour *palette, uint8_t value);
+        static void UpdatePalette(Colour *palette, uint8_t value);
     };
 } // namespace gameboy

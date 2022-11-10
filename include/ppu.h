@@ -76,7 +76,7 @@ namespace gameboy
         Colour *getFrameBuffer();
 
         /**
-         * @biref Return whether the rendering is enabled
+         * @brief Return whether the rendering is enabled
          *
          * @return true if the rendering is enabled
          */
