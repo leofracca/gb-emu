@@ -7,12 +7,15 @@ namespace gameboyTest
 
     const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
     std::vector<uint8_t> rom(65536, 0x00);
-    std::vector<uint8_t> ram(0, 0x00);
+    std::vector<uint8_t> ram(65536, 0x00);
 
     TEST_CASE("MBCs", "[mbc]")
     {
         for (int i = 0; i < 0x10000; i++)
+        {
             rom[i] = i;
+            ram[i] = i;
+        }
 
         SECTION("No MBC, ROM only")
         {
@@ -60,6 +63,18 @@ namespace gameboyTest
                 mbc1.write(i, 0x00);
                 REQUIRE(mbc1.read(i) == rom[i]);
             }
+
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc1.read(i) == 0x00);
+            mbc1.write(0x1FFF, 0x0A);
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc1.read(i) == ram[i - 0xA000]);
+
+            for (int i = 0xA000; i < 0xC000; i++)
+            {
+                mbc1.write(i, 0x00);
+                REQUIRE(mbc1.read(i) == 0x00);
+            }
         }
 
         SECTION("MBC2")
@@ -87,6 +102,18 @@ namespace gameboyTest
             {
                 mbc2.write(i, 0x00);
                 REQUIRE(mbc2.read(i) == rom[i]);
+            }
+
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc2.read(i) == 0x00);
+            mbc2.write(0x0000, 0x0A);
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc2.read(i) == ram[i - 0xA000]);
+
+            for (int i = 0xA000; i < 0xC000; i++)
+            {
+                mbc2.write(i, 0x00);
+                REQUIRE(mbc2.read(i) == 0x00);
             }
         }
 
@@ -116,6 +143,18 @@ namespace gameboyTest
                 mbc3.write(i, 0x00);
                 REQUIRE(mbc3.read(i) == rom[i]);
             }
+
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc3.read(i) == 0x00);
+            mbc3.write(0x1FFF, 0x0A);
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc3.read(i) == ram[i - 0xA000]);
+
+            for (int i = 0xA000; i < 0xC000; i++)
+            {
+                mbc3.write(i, 0x00);
+                REQUIRE(mbc3.read(i) == 0x00);
+            }
         }
 
         SECTION("MBC5")
@@ -143,6 +182,18 @@ namespace gameboyTest
             {
                 mbc5.write(i, 0x00);
                 REQUIRE(mbc5.read(i) == rom[i]);
+            }
+
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc5.read(i) == 0x00);
+            mbc5.write(0x1FFF, 0x0A);
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc5.read(i) == ram[i - 0xA000]);
+
+            for (int i = 0xA000; i < 0xC000; i++)
+            {
+                mbc5.write(i, 0x00);
+                REQUIRE(mbc5.read(i) == 0x00);
             }
         }
     }

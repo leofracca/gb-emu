@@ -86,49 +86,51 @@ namespace gameboy
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             m_cartridge.write(address, value);
         else
+        {
+            // Echo RAM (unusable memory)
+            if (address >= 0xE000 && address < 0xFE00)
+                throw std::runtime_error("Writing to Echo RAM is not allowed");
+
+            // Unusable memory
+            if (address >= 0xFEA0 && address < 0xFF00)
+                // Writing to this area is prohibited, but TETRIS does it anyway
+                // So instead of throwing an exception, just ignore the write
+                return;
+
+            // Valid address, write the value to the memory
             m_memory[address] = value;
 
-        // VRAM
-        if (address >= 0x8000 && address < 0x9800)
-            UpdateTile(address);
+            // VRAM
+            if (address >= 0x8000 && address < 0x9800)
+                UpdateTile(address);
 
-        // Echo RAM (unusable memory)
-        else if (address >= 0xE000 && address < 0xFE00)
-            throw std::runtime_error("Writing to Echo RAM is not allowed");
+            // OAM
+            else if (address >= 0xFE00 && address < 0xFEA0)
+                UpdateSprite(address, value);
 
-        // OAM
-        else if (address >= 0xFE00 && address < 0xFEA0)
-            UpdateSprite(address, value);
-
-        // Unusable memory
-        else if (address >= 0xFEA0 && address < 0xFF00)
-            // Writing to this area is prohibited, but TETRIS does it anyway
-            // So instead of throwing an exception, just ignore the write
-            return;
-            // throw std::runtime_error("Writing to unusable memory");
-
-        // Check if the LCD has been disabled (bit 7 of LCDC register)
-        else if (address == 0xFF40)
-        {
-            if (!(value & (1 << 7)))
+            // Check if the LCD has been disabled (bit 7 of LCDC register)
+            else if (address == 0xFF40)
             {
-                m_memory[0xFF41] &= 0x7C; // Reset STAT register
-                m_memory[0xFF44] = 0x00; // Reset LY register
+                if (!(value & (1 << 7)))
+                {
+                    m_memory[0xFF41] &= 0x7C; // Reset STAT register
+                    m_memory[0xFF44] = 0x00; // Reset LY register
+                }
             }
+
+            // DMA Transfer
+            else if (address == DMA_REG_ADDRESS)
+                for (uint16_t i = 0; i < 160; i++)
+                    write(0xFE00 + i, read((value << 8) + i));
+
+            // Update colour palette
+            else if (address == BGP_REG_ADDRESS)
+                UpdatePalette(palette_BGP, value); // BG and Window palette
+            else if (address == OBP0_REG_ADDRESS)
+                UpdatePalette(palette_OBP0, value); // Object palette 0
+            else if (address == OBP1_REG_ADDRESS)
+                UpdatePalette(palette_OBP1, value); // Object palette 1
         }
-
-        // DMA Transfer
-        else if (address == DMA_REG_ADDRESS)
-            for (uint16_t i = 0; i < 160; i++)
-                write(0xFE00 + i, read((value << 8) + i));
-
-        // Update colour palette
-        else if (address == BGP_REG_ADDRESS)
-            UpdatePalette(palette_BGP, value); // BG and Window palette
-        else if (address == OBP0_REG_ADDRESS)
-            UpdatePalette(palette_OBP0, value); // Object palette 0
-        else if (address == OBP1_REG_ADDRESS)
-            UpdatePalette(palette_OBP1, value); // Object palette 1
     }
 
     uint16_t Memory::readWord(uint16_t address) const
@@ -157,7 +159,7 @@ namespace gameboy
         m_joypadState = state;
     }
 
-    Cartridge& Memory::getCartridge()
+    Cartridge &Memory::getCartridge()
     {
         return m_cartridge;
     }

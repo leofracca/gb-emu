@@ -72,5 +72,32 @@ namespace gameboyTest
 
         memory.setJoypadState(0xF0);
         REQUIRE(memory.getJoypadState() == 0xF0);
+
+        memory.m_memory[JOYPAD_ADDRESS] = 0x10;
+        memory.setJoypadState(0x0E);
+        REQUIRE(memory.read(JOYPAD_ADDRESS) == 0x1E);
+
+        memory.m_memory[JOYPAD_ADDRESS] = 0x20;
+        memory.setJoypadState(0xEF);
+        REQUIRE(memory.read(JOYPAD_ADDRESS) == 0x2E);
+    }
+
+    TEST_CASE("Unusable memory", "[memory]")
+    {
+        Memory memory(TEST_ROM);
+
+        for (int i = 0xE000; i < 0xFE00; i++)
+        {
+            REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
+            REQUIRE_THROWS_AS(memory.write(i, 0x00), std::runtime_error);
+        }
+
+        for (int i = 0xFEA0; i < 0xFF00; i++)
+        {
+            REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
+            memory.m_memory[i] = 0x00;
+            memory.write(i, 0x01);
+            REQUIRE(memory.m_memory[i] == 0x00);
+        }
     }
 } // namespace gameboyTest

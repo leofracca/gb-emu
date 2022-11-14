@@ -142,7 +142,6 @@ target_link_libraries(GBEmu_test
 )
 target_compile_options(GBEmu_test
     PRIVATE ${COMPILER_FLAGS}
-    PRIVATE $<$<BOOL:${COVERAGE}>:--coverage>
 )
 target_link_options(GBEmu_test
     PRIVATE ${LINKER_FLAGS}
