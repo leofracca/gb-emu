@@ -30,7 +30,7 @@ namespace gameboy
          * @param rom The ROM of the cartridge
          * @param ram The RAM of the cartridge
          */
-        MBC(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        MBC(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         virtual ~MBC() = default;
 
@@ -79,7 +79,7 @@ namespace gameboy
          * @param ram The RAM of the cartridge (empty)
          * @see MBC::MBC
          */
-        explicit ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        explicit ROMOnly(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         /**
          * @brief Read a byte from the cartridge
@@ -116,7 +116,7 @@ namespace gameboy
          * @param ram The RAM of the cartridge
          * @see MBC::MBC
          */
-        MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        MBC1(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         /**
          * @brief Read a byte from the cartridge
@@ -193,7 +193,7 @@ namespace gameboy
          * @param ram The RAM of the cartridge
          * @see MBC::MBC1
          */
-        MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        MBC2(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         /**
          * @brief Write a byte to the cartridge
@@ -221,7 +221,7 @@ namespace gameboy
          * @param ram The RAM of the cartridge
          * @see MBC::MBC1
          */
-        MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        MBC3(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         /**
          * @brief Write a byte to the cartridge
@@ -249,7 +249,7 @@ namespace gameboy
          * @param ram The RAM of the cartridge
          * @see MBC::MBC1
          */
-        MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram);
+        MBC5(std::vector<uint8_t> rom, std::vector<uint8_t> ram);
 
         /**
          * @brief Write a byte to the cartridge

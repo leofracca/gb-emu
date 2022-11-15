@@ -74,7 +74,12 @@ namespace gameboy
     private:
         std::string m_ROMFilename; ///< The filename of the ROM
         MBC *m_MBC; ///< The MBC of the cartridge
+
+        std::string m_title; ///< The title of the cartridge (used for printing)
         std::string m_MBCAsString; ///< The MBC as a string (used for printing)
+        std::string m_licenseeCode; ///< The licensee code of the cartridge (used for printing)
+        std::string m_ROMSizeAsString; ///< The ROM size as a string (used for printing)
+        std::string m_RAMSizeAsString; ///< The RAM size as a string (used for printing)
 
         std::vector<uint8_t> m_rom; ///< The ROM of the cartridge
         std::vector<uint8_t> m_ram; ///< The RAM of the cartridge

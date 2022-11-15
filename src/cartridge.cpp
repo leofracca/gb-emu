@@ -39,13 +39,19 @@ namespace gameboy
         else
             m_ram = std::vector<uint8_t>(std::istreambuf_iterator<char>(ramFile), {});
         ramFile.close();
-
+        
         checkCartridge();
         printCartridgeInfo();
     }
 
     void Cartridge::checkCartridge()
     {
+        // Get the information from the header
+        m_title = getTitle();
+        m_licenseeCode = getLicensee();
+        m_ROMSizeAsString = getROMSize();
+        m_RAMSizeAsString = getRAMSize().second;
+
         // Get the cartridge type
         uint8_t cartridgeType = m_rom[CARTRIDGE_TYPE_ADDRESS];
 
@@ -55,27 +61,27 @@ namespace gameboy
             case 0x00:
             case 0x08:
             case 0x09:
-                m_MBC = new ROMOnly(m_rom, m_ram);
                 m_MBCAsString = "No MBC (ROM Only)";
+                m_MBC = new ROMOnly(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x01:
             case 0x02:
             case 0x03:
-                m_MBC = new MBC1(m_rom, m_ram);
                 m_MBCAsString = "MBC1";
+                m_MBC = new MBC1(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x05:
             case 0x06:
-                m_MBC = new MBC2(m_rom, m_ram);
                 m_MBCAsString = "MBC2";
+                m_MBC = new MBC2(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x0F:
             case 0x10:
             case 0x11:
             case 0x12:
             case 0x13:
-                m_MBC = new MBC3(m_rom, m_ram);
                 m_MBCAsString = "MBC3";
+                m_MBC = new MBC3(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x19:
             case 0x1A:
@@ -83,8 +89,8 @@ namespace gameboy
             case 0x1C:
             case 0x1D:
             case 0x1E:
-                m_MBC = new MBC5(m_rom, m_ram);
                 m_MBCAsString = "MBC5";
+                m_MBC = new MBC5(std::move(m_rom), std::move(m_ram));
                 break;
             default:
                 throw std::runtime_error("Invalid cartridge type");
@@ -109,11 +115,11 @@ namespace gameboy
     void Cartridge::printCartridgeInfo()
     {
         std::cout << "--------------- Cartridge info ----------------" << std::endl;
-        std::cout << "Title: " << getTitle() << std::endl;
+        std::cout << "Title: " << m_title << std::endl;
         std::cout << "Cartridge type: " << m_MBCAsString << std::endl;
-        std::cout << "Licensee: " << getLicensee() << std::endl;
-        std::cout << "ROM size: " << getROMSize() << std::endl;
-        std::cout << "RAM size: " << getRAMSize().second << std::endl;
+        std::cout << "Licensee: " << m_licenseeCode << std::endl;
+        std::cout << "ROM size: " << m_ROMSizeAsString << std::endl;
+        std::cout << "RAM size: " << m_RAMSizeAsString << std::endl;
         std::cout << "-----------------------------------------------" << std::endl;
     }
 

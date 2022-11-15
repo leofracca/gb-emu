@@ -8,13 +8,13 @@
 #include <fstream> // std::ofstream
 #include <iterator> // std::ostreambuf_iterator
 #include <stdexcept> // std::runtime_error
+#include <utility>
 
 namespace gameboy
 {
-    MBC::MBC(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
+    MBC::MBC(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+            : m_rom(std::move(rom)), m_ram(std::move(ram))
     {
-        m_rom = rom;
-        m_ram = ram;
     }
 
     void MBC::saveRAMData(const std::string &filename)
@@ -31,8 +31,8 @@ namespace gameboy
         ramFile.close();
     }
 
-    ROMOnly::ROMOnly(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
-        : MBC(rom, ram) {}
+    ROMOnly::ROMOnly(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+        : MBC(std::move(rom), std::move(ram)) {}
 
     uint8_t ROMOnly::read(uint16_t address) const
     {
@@ -50,8 +50,8 @@ namespace gameboy
         throw std::runtime_error("Cannot write value " + std::to_string(value) + " to address " + std::to_string(address));
     }
 
-    MBC1::MBC1(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
-        : MBC(rom, ram) {}
+    MBC1::MBC1(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+        : MBC(std::move(rom), std::move(ram)) {}
 
     uint8_t MBC1::read(uint16_t address) const
     {
@@ -130,8 +130,8 @@ namespace gameboy
         m_ram[bankAddress + relativeAddress] = value;
     }
 
-    MBC2::MBC2(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
-        : MBC1(rom, ram) {}
+    MBC2::MBC2(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+        : MBC1(std::move(rom), std::move(ram)) {}
 
     void MBC2::write(uint16_t address, uint8_t value)
     {
@@ -167,8 +167,8 @@ namespace gameboy
         }
     }
 
-    MBC3::MBC3(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
-        : MBC1(rom, ram) {}
+    MBC3::MBC3(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+        : MBC1(std::move(rom), std::move(ram)) {}
 
     void MBC3::write(uint16_t address, uint8_t value)
     {
@@ -199,8 +199,8 @@ namespace gameboy
         }
     }
 
-    MBC5::MBC5(const std::vector<uint8_t> &rom, const std::vector<uint8_t> &ram)
-        : MBC1(rom, ram) {}
+    MBC5::MBC5(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
+        : MBC1(std::move(rom), std::move(ram)) {}
 
     void MBC5::write(uint16_t address, uint8_t value)
     {
