@@ -172,9 +172,10 @@ namespace gameboy
     private:
         /**
          * @brief Select the memory mode to use
-         * @details If the value is 0, the memory mode is ROM mode
-         *          If the value is 1, the memory mode is RAM mode
+         * @details If the value is false, the memory mode is ROM mode
+         *          If the value is true, the memory mode is RAM mode
          *          It is modified by writing to range 0x6000-0x7FFF
+         *          It is used to select bits 5-6 of ROM bank or the RAM bank in the range 0x4000-0x5FFF
          */
         bool m_mode = false;
     };
