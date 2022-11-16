@@ -39,7 +39,7 @@ namespace gameboy
         else
             m_ram = std::vector<uint8_t>(std::istreambuf_iterator<char>(ramFile), {});
         ramFile.close();
-        
+
         checkCartridge();
         printCartridgeInfo();
     }
@@ -73,6 +73,11 @@ namespace gameboy
             case 0x05:
             case 0x06:
                 m_MBCAsString = "MBC2";
+
+                // MBC2 has a built-in RAM of 512x4 bits (it doesn't use external RAM)
+                if (m_ram.empty())
+                    m_ram = std::vector<uint8_t>(512, 0x00);
+
                 m_MBC = new MBC2(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x0F:
