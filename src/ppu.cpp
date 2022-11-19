@@ -222,8 +222,8 @@ namespace gameboy
             {
                 if (pixel >= 160) break;
 
-                int colour = m_memory->tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory->palette_BGP[colour];
+                int colour = m_memory->m_tiles[tile].pixels[y][x];
+                m_frameBuffer[pixelOffset++] = m_memory->m_paletteBGP[colour];
                 if (colour > 0)
                     rowPixels[pixel] = true;
                 pixel++;
@@ -260,8 +260,8 @@ namespace gameboy
             for (; x < 8; x++)
             {
                 if (pixelOffset > sizeof(m_frameBuffer)) continue;
-                int colour = m_memory->tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory->palette_BGP[colour];
+                int colour = m_memory->m_tiles[tile].pixels[y][x];
+                m_frameBuffer[pixelOffset++] = m_memory->m_paletteBGP[colour];
             }
             x = 0;
         }
@@ -276,7 +276,7 @@ namespace gameboy
 
         for (int i = 39; i >= 0; i--)
         {
-            auto sprite = m_memory->sprites[i];
+            auto sprite = m_memory->m_sprites[i];
 
             if (!sprite.ready)
             {
@@ -298,7 +298,7 @@ namespace gameboy
             if (!visible_sprites[i])
                 continue;
 
-            auto sprite = m_memory->sprites[i];
+            auto sprite = m_memory->m_sprites[i];
 
             if ((sprite.x < -7) || (sprite.x >= 160))
                 continue;
@@ -322,9 +322,9 @@ namespace gameboy
                 uint8_t pixel_x = sprite.options.flags.bits.xFlip ? 7 - x : x;
 
                 if ((*lcdc & 0x04) && (pixel_y >= 8))
-                    colour = m_memory->tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
+                    colour = m_memory->m_tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
                 else
-                    colour = m_memory->tiles[tile_num].pixels[pixel_y][pixel_x];
+                    colour = m_memory->m_tiles[tile_num].pixels[pixel_y][pixel_x];
 
                 // Black is transparent
                 if (!colour)

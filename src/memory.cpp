@@ -94,7 +94,7 @@ namespace gameboy
             // Unusable memory
             if (address >= 0xFEA0 && address < 0xFF00)
                 // Writing to this area is prohibited, but TETRIS does it anyway
-                // So instead of throwing an exception, just ignore the write
+                // So instead of throwing an exception, just ignore the write operation
                 return;
 
             // Valid address, write the value to the memory
@@ -125,11 +125,11 @@ namespace gameboy
 
             // Update colour palette
             else if (address == BGP_REG_ADDRESS)
-                UpdatePalette(palette_BGP, value); // BG and Window palette
+                UpdatePalette(m_paletteBGP, value); // BG and Window palette
             else if (address == OBP0_REG_ADDRESS)
-                UpdatePalette(palette_OBP0, value); // Object palette 0
+                UpdatePalette(m_paletteOBP0, value); // Object palette 0
             else if (address == OBP1_REG_ADDRESS)
-                UpdatePalette(palette_OBP1, value); // Object palette 1
+                UpdatePalette(m_paletteOBP1, value); // Object palette 1
         }
     }
 
@@ -177,14 +177,14 @@ namespace gameboy
         {
             bitIndex = 1 << (7 - x);
 
-            tiles[tile].pixels[y][x] = ((m_memory[address] & bitIndex) ? 1 : 0) + ((m_memory[address + 1] & bitIndex) ? 2 : 0);
+            m_tiles[tile].pixels[y][x] = ((m_memory[address] & bitIndex) ? 1 : 0) + ((m_memory[address + 1] & bitIndex) ? 2 : 0);
         }
     }
 
     void Memory::UpdateSprite(uint16_t address, uint8_t value)
     {
         uint16_t relativeAddress = address - 0xFE00;
-        Sprite *sprite = &sprites[relativeAddress >> 2];
+        Sprite *sprite = &m_sprites[relativeAddress >> 2];
         sprite->ready = false;
         switch (relativeAddress & 3)
         {
@@ -199,7 +199,7 @@ namespace gameboy
                 break;
             case 3:
                 sprite->options.flags.value = value;
-                sprite->colourPalette = (sprite->options.flags.bits.paletteNumber) ? palette_OBP1 : palette_OBP0;
+                sprite->colourPalette = (sprite->options.flags.bits.paletteNumber) ? m_paletteOBP1 : m_paletteOBP0;
                 sprite->ready = true;
                 break;
         }
@@ -207,9 +207,9 @@ namespace gameboy
 
     void Memory::UpdatePalette(Colour *palette, uint8_t value)
     {
-        palette[0] = palette_colours[value & 0x3];
-        palette[1] = palette_colours[(value >> 2) & 0x3];
-        palette[2] = palette_colours[(value >> 4) & 0x3];
-        palette[3] = palette_colours[(value >> 6) & 0x3];
+        palette[0] = paletteColours[value & 0x3];
+        palette[1] = paletteColours[(value >> 2) & 0x3];
+        palette[2] = paletteColours[(value >> 4) & 0x3];
+        palette[3] = paletteColours[(value >> 6) & 0x3];
     }
 } // namespace gameboy

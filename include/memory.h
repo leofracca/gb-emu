@@ -34,7 +34,7 @@ namespace gameboy
         uint8_t colours[4]; ///< 0 - R, 1 - G, 2 - B, 3 - Transparency
     };
 
-    constexpr Colour palette_colours[4] = {
+    constexpr Colour paletteColours[4] = {
             {255, 255, 255, 255},
             {192, 192, 192, 255},
             {96, 96, 96, 255},
@@ -55,14 +55,14 @@ namespace gameboy
         struct Tile
         {
             uint8_t pixels[8][8] = {{0}}; ///< The pixels of the tile (8x8)
-        } tiles[384]; ///< There are 384 tiles
+        } m_tiles[384]; ///< There are 384 tiles
 
         /**
          * @brief BG & Window Palette Data
          * @details This selects the shade of grays to use for the background (BG) & window pixels.
          *          Since each pixel uses 2 bits, the corresponding shade will be selected from here.
          */
-        Colour palette_BGP[4] = {
+        Colour m_paletteBGP[4] = {
                 {255, 255, 255, 255},
                 {0, 0, 0, 255},
                 {0, 0, 0, 255},
@@ -97,7 +97,7 @@ namespace gameboy
             int x; ///< The x position of the sprite
             uint8_t tile; ///< The tile number of the sprite
             bool ready; ///< True if the sprite is ready to be rendered
-        } sprites[40] = {}; ///< The sprites
+        } m_sprites[40] = {}; ///< The sprites
 
         /**
          * @brief Construct a new Memory object
@@ -112,7 +112,7 @@ namespace gameboy
          * @details Read a byte from the memory at the specified address and return it
          *
          * @param address The address to read from
-         * @return uint8_t The byte read
+         * @return The byte read
          */
         [[nodiscard]] uint8_t read(uint16_t address) const;
 
@@ -130,7 +130,7 @@ namespace gameboy
          * @details Read a word from the memory at the specified address and return it
          *
          * @param address The address to read from
-         * @return uint16_t The word read
+         * @return The word read
          */
         [[nodiscard]] uint16_t readWord(uint16_t address) const;
 
@@ -185,7 +185,7 @@ namespace gameboy
          * @brief Object Palette 0 Data
          * @details This selects the colour palette for sprite palette 0.
          */
-        Colour palette_OBP0[4] = {
+        Colour m_paletteOBP0[4] = {
                 {0, 0, 0, 255},
                 {0, 0, 0, 255},
                 {0, 0, 0, 255},
@@ -196,7 +196,7 @@ namespace gameboy
          * @brief Object Palette 1 Data
          * @details This selects the colour palette for sprite palette 1.
          */
-        Colour palette_OBP1[4] = {
+        Colour m_paletteOBP1[4] = {
                 {0, 0, 0, 255},
                 {0, 0, 0, 255},
                 {0, 0, 0, 255},

@@ -69,10 +69,10 @@ namespace gameboy
             {
                 return readRAMBank(address);
             }
-            return 0;
+            return 0xFF;
         }
         else
-            return 0;
+            return 0xFF;
     }
 
     void MBC1::write(uint16_t address, uint8_t value)
@@ -148,7 +148,7 @@ namespace gameboy
         // See pages 14-15 of the documentation (PanDocs/GB.pdf)
         if (address <= 0x3FFF)
         {
-            // Enable RAM if bit 8 of the address is clear and the value is 0x0A
+            // Enable RAM if bit 8 of the address is clear and the value contained in the bits 0-3 is 0x0A
             if ((address & 0x0100) == 0)
                 m_ramEnabled = (value & 0x0F) == 0x0A;
             // Set the lower 4 bits of the ROM bank if the bit 8 of the address is set

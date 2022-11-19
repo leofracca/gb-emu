@@ -65,7 +65,7 @@ namespace gameboyTest
             }
 
             for (int i = 0xA000; i < 0xC000; i++)
-                REQUIRE(mbc1.read(i) == 0x00);
+                REQUIRE(mbc1.read(i) == 0xFF);
             mbc1.write(0x1FFF, 0x0A);
             for (int i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc1.read(i) == ram[i - 0xA000]);
@@ -105,7 +105,7 @@ namespace gameboyTest
             }
 
             for (int i = 0xA000; i < 0xC000; i++)
-                REQUIRE(mbc2.read(i) == 0x00);
+                REQUIRE(mbc2.read(i) == 0xFF);
             mbc2.write(0x0000, 0x0A);
             for (int i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc2.read(i) == ram[i - 0xA000]);
@@ -145,7 +145,7 @@ namespace gameboyTest
             }
 
             for (int i = 0xA000; i < 0xC000; i++)
-                REQUIRE(mbc3.read(i) == 0x00);
+                REQUIRE(mbc3.read(i) == 0xFF);
             mbc3.write(0x1FFF, 0x0A);
             for (int i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc3.read(i) == ram[i - 0xA000]);
@@ -185,7 +185,7 @@ namespace gameboyTest
             }
 
             for (int i = 0xA000; i < 0xC000; i++)
-                REQUIRE(mbc5.read(i) == 0x00);
+                REQUIRE(mbc5.read(i) == 0xFF);
             mbc5.write(0x1FFF, 0x0A);
             for (int i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc5.read(i) == ram[i - 0xA000]);
