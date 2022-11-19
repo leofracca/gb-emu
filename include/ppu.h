@@ -99,11 +99,11 @@ namespace gameboy
         Mode m_mode = Mode::HBLANK; ///< The current mode of the PPU
 
         // Registers
-        uint8_t *lcdc; ///< The LCD Control Register
-        uint8_t *stat; ///< The LCD Status Register
-        uint8_t *scy; ///< The Scroll Y Register (Background Y Position)
-        uint8_t *scx; ///< The Scroll X Register (Background X Position)
-        uint8_t *ly; ///< The LY Register
+        uint8_t *m_lcdc; ///< The LCD Control Register
+        uint8_t *m_stat; ///< The LCD Status Register
+        uint8_t *m_scy; ///< The Scroll Y Register (Background Y Position)
+        uint8_t *m_scx; ///< The Scroll X Register (Background X Position)
+        uint8_t *m_ly; ///< The LY Register
 
         /**
          * @brief Check if LY and LYC are equal

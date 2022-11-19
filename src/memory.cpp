@@ -111,7 +111,7 @@ namespace gameboy
             // Check if the LCD has been disabled (bit 7 of LCDC register)
             else if (address == 0xFF40)
             {
-                if (!(value & (1 << 7)))
+                if (!(value & 0x80))
                 {
                     m_memory[0xFF41] &= 0x7C; // Reset STAT register
                     m_memory[0xFF44] = 0x00; // Reset LY register
