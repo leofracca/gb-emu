@@ -225,6 +225,6 @@ namespace gameboy
          * @param address The address of the palette (BGP, OBP0 or OBP1)
          * @param value The new value of the palette (2 bits per colour)
          */
-        static void UpdatePalette(Colour *palette, uint8_t value);
+        static void UpdatePalette(Colour (&palette)[4], uint8_t value);
     };
 } // namespace gameboy

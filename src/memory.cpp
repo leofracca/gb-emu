@@ -205,7 +205,7 @@ namespace gameboy
         }
     }
 
-    void Memory::UpdatePalette(Colour *palette, uint8_t value)
+    void Memory::UpdatePalette(Colour (&palette)[4], uint8_t value)
     {
         palette[0] = paletteColours[value & 0x3];
         palette[1] = paletteColours[(value >> 2) & 0x3];
