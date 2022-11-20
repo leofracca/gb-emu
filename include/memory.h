@@ -164,6 +164,11 @@ namespace gameboy
 
         /**
          * @brief Array subscript operator
+         * @details Access the field m_memory at the specified index
+         *
+         * @param address The address to access
+         * @return A reference to the value at the specified address
+         * @see m_memory
          */
         [[nodiscard]] uint8_t &operator[](uint16_t address);
 
