@@ -7,13 +7,6 @@ namespace gameboyTest
 
     const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
 
-    TEST_CASE("Input init", "[input]")
-    {
-        Memory memory(TEST_ROM);
-        Input input(&memory);
-        REQUIRE(memory.getJoypadState() == 0xFF);
-    }
-
     TEST_CASE("Input setButton", "[input]")
     {
         Memory memory(TEST_ROM);

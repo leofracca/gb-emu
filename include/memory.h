@@ -47,8 +47,6 @@ namespace gameboy
     class Memory
     {
     public:
-        std::array<uint8_t, 0x10000> m_memory{}; ///< The memory of the Game Boy
-
         /**
          * @brief A tile is a 8x8 pixel image. Each tile is 16 bytes long.
          */
@@ -164,7 +162,13 @@ namespace gameboy
          */
         [[nodiscard]] Cartridge &getCartridge();
 
+        /**
+         * @brief Array subscript operator
+         */
+        [[nodiscard]] uint8_t &operator[](uint16_t address);
+
     private:
+        std::array<uint8_t, 0x10000> m_memory{}; ///< The memory of the Game Boy
         Cartridge m_cartridge; ///< The cartridge
 
         /**

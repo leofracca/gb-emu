@@ -164,6 +164,11 @@ namespace gameboy
         return m_cartridge;
     }
 
+    uint8_t &Memory::operator[](uint16_t address)
+    {
+        return m_memory[address];
+    }
+
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/memory.cpp
     void Memory::UpdateTile(uint16_t laddress)
     {

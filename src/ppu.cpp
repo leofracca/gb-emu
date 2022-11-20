@@ -12,11 +12,11 @@ namespace gameboy
     PPU::PPU(Memory *memory)
         : m_memory(memory)
     {
-        m_lcdc = &m_memory->m_memory[LCDC_REG_ADDRESS];
-        m_stat = &m_memory->m_memory[STAT_REG_ADDRESS];
-        m_scy = &m_memory->m_memory[SCY_REG_ADDRESS];
-        m_scx = &m_memory->m_memory[SCX_REG_ADDRESS];
-        m_ly = &m_memory->m_memory[LY_REG_ADDRESS];
+        m_lcdc = &(*m_memory)[LCDC_REG_ADDRESS];
+        m_stat = &(*m_memory)[STAT_REG_ADDRESS];
+        m_scy = &(*m_memory)[SCY_REG_ADDRESS];
+        m_scx = &(*m_memory)[SCX_REG_ADDRESS];
+        m_ly = &(*m_memory)[LY_REG_ADDRESS];
     }
 
     void PPU::cycle(int cycles)
