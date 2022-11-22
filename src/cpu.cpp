@@ -72,8 +72,6 @@ namespace gameboy
 
     int CPU::executeOpcode(uint8_t opcode)
     {
-        int cycles = OPCODE_CYCLES[opcode];
-
         uint8_t value = 0; // Temp variable used for some opcodes
 
         switch (opcode)
@@ -692,8 +690,7 @@ namespace gameboy
                 jp(m_registers.getFlag(ZERO_FLAG));
                 break;
             case 0xCB: // CB prefix
-                cycles += executeOpcodeCB(m_memory->read(m_registers.pc++));
-                break;
+                return executeOpcodeCB(m_memory->read(m_registers.pc++));
             case 0xCC: // CALL Z, nn
                 call(m_registers.getFlag(ZERO_FLAG));
                 break;
@@ -784,7 +781,8 @@ namespace gameboy
                 break;
             case 0xF1: // POP AF
                 m_registers.setAF(pop());
-                m_registers.f &= 0xf0;
+                // Clear the lower 4 bits of the F register
+                m_registers.f &= 0xF0;
                 break;
             case 0xF2: // LD A, (C)
                 m_registers.a = m_memory->read(LD_START_ADDRESS + m_registers.c);
@@ -824,16 +822,11 @@ namespace gameboy
                 throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
         }
 
-        if (branched)
-            cycles = OPCODE_CYCLES_BRANCHED[opcode];
-
-        return cycles;
+        return branched ? OPCODE_CYCLES_BRANCHED[opcode] : OPCODE_CYCLES[opcode];
     }
 
     int CPU::executeOpcodeCB(uint8_t opcode)
     {
-        int cycles = OPCODE_CB_CYCLES[opcode];
-
         uint8_t value = 0; // Temp variable used for some opcodes
 
         switch (opcode)
@@ -1666,7 +1659,7 @@ namespace gameboy
                 throw std::runtime_error("Unexpected CB opcode: " + std::to_string(opcode));
         }
 
-        return cycles;
+        return OPCODE_CB_CYCLES[opcode];
     }
 
     void CPU::push(uint16_t value)
