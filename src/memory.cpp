@@ -9,9 +9,9 @@
 
 namespace gameboy
 {
-    Memory::Memory(const std::string &romPath)
+    Memory::Memory(const std::string &filename)
     {
-        m_cartridge.loadROM(romPath);
+        m_cartridge.loadROM(filename);
 
         // Initialize memory registers
         m_memory[0xFF00] = 0xCF; // P1

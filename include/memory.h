@@ -101,9 +101,9 @@ namespace gameboy
          * @brief Construct a new Memory object
          * @details Initialize the cartridge
          *
-         * @param romPath The path to the ROM file
+         * @param filename The path to the ROM file
          */
-        explicit Memory(const std::string &romPath);
+        explicit Memory(const std::string &filename);
 
         /**
          * @brief Read a byte from the memory

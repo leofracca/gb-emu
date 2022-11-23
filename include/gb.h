@@ -27,10 +27,10 @@ namespace gameboy
         /**
          * @brief Create and initialize the emulator
          *
-         * @param rom The path to the rom file
+         * @param filename The path to the rom file
          * @param scale The scale of the window
          */
-        GB(const std::string &rom, int scale);
+        GB(const std::string &filename, int scale);
 
         /**
          * @brief Run the emulator

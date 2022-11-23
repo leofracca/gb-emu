@@ -4,9 +4,9 @@
 
 namespace gameboy
 {
-    GB::GB(const std::string &rom, const int scale)
+    GB::GB(const std::string &filename, const int scale)
         : m_platform(scale),
-          m_memory(rom)
+          m_memory(filename)
     {}
 
     void GB::run()
