@@ -4,10 +4,24 @@ An open source GameBoy emulator written in C++.
 
 ## Dependency
 
-At the moment, the emulator has been tested only on Fedora. The required software can be installed with:
+- [git](https://git-scm.com/)
+
+- [CMake](https://cmake.org/)
+
+- [g++](https://gcc.gnu.org/)
+
+- [SDL2](https://www.libsdl.org/)
+
+At the moment, the emulator has been tested on Ubuntu and Fedora. On Ubuntu the required software can be installed with:
 
 ```shell
-sudo dnf install make cmake g++ git SDL2 SDL2-devel
+sudo apt install git cmake g++ libsdl2-dev
+```
+
+On Fedora the required software can be installed with:
+
+```shell
+sudo dnf install git make cmake g++ SDL2 SDL2-devel
 ```
 
 ## Building
@@ -21,7 +35,7 @@ cmake ..
 make
 ```
 
-Then the executable will be created in the `build` folder.
+Then the executable `GBEmu` will be created inside the `build` folder.
 
 ## Playing
 
@@ -65,7 +79,7 @@ To run the tests:
 make test
 ```
 
-In addition to check the correctness of the code, the tests also check if there are memory leaks (using valgrind).
+In addition to check the correctness of the code, the tests also check if there are memory leaks (using `valgrind`).
 
 Some tests are handwritten, but there is also a test that opens a window that runs a test ROM. Use
 
@@ -79,7 +93,7 @@ Thanks to [Blargg's tests roms](https://github.com/retrio/gb-test-roms) for the 
 
 ## Coverage
 
-To generate the code coverage you need to pass the flag `-DCOVERAGE=ON` when building the project with cmake. Then the target `coverage` will be available.
+To generate the code coverage you need to pass the flag `-DCOVERAGE=ON` when building the project with CMake. Then the target `coverage` will be available.
 
 The command
 
@@ -87,7 +101,7 @@ The command
 make coverage
 ```
 
-will generate the coverage.html file with all the statistics about the coverage.
+will generate the `coverage.html` file with all the statistics about the coverage (remember to run `make test` and `make blargg` first).
 
 ## Documentation
 
@@ -96,6 +110,10 @@ To create the documentation:
 ```shell
 make doc
 ```
+
+The `doc` folder will be created in root folder of the project.
+
+To use this command `Doxygen` is required. OPTIONAL: you will also need the `texlive-font-utils` package to have a LaTeX documentation
 
 ## TODO
 
@@ -114,9 +132,10 @@ make doc
 - [codeslinger.co.uk](http://www.codeslinger.co.uk/pages/projects/gameboy.html)
 
 ## Images
-| Homescreen | Gameplay |
-|:-------------------:|:-------------------:|
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_play.png' width='70%'/> |
-| <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_play.png' width='70%'/> |
+
+| Homescreen                                                                                          | Gameplay                                                                                      |
+|:---------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_homescreen.png' width='70%'/>   | <img src='https://github.com/leofracca/gb-emu/blob/main/images/poke_play.png' width='70%'/>   |
+| <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_homescreen.png' width='70%'/>  | <img src='https://github.com/leofracca/gb-emu/blob/main/images/zelda_play.png' width='70%'/>  |
 | <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/tetris_play.png' width='70%'/> |
 | <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_homescreen.png' width='70%'/> | <img src='https://github.com/leofracca/gb-emu/blob/main/images/pacman_play.png' width='70%'/> |
