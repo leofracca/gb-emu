@@ -89,11 +89,11 @@ make blarrg
 
 to run it.
 
-Thanks to [Blargg's tests roms](https://github.com/retrio/gb-test-roms) for the roms.
+Thanks to [Blargg's tests roms](https://github.com/retrio/gb-test-roms).
 
 ## Coverage
 
-To generate the code coverage you need to pass the flag `-DCOVERAGE=ON` when building the project with CMake. Then the target `coverage` will be available.
+To generate the code coverage you need to pass the flag `-DCOVERAGE=ON` when building the project with CMake. Then the target `coverage` will be available. [gcovr](https://gcovr.com/en/stable/) is required.
 
 The command
 
@@ -113,7 +113,7 @@ make doc
 
 The `doc` folder will be created in root folder of the project.
 
-To use this command `Doxygen` is required. OPTIONAL: you will also need the `texlive-font-utils` package to have a LaTeX documentation
+To use this command `Doxygen` is required. OPTIONAL: you will also need the `texlive-font-utils` package to have a LaTeX documentation.
 
 ## TODO
 
