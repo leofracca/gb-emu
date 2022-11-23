@@ -370,7 +370,7 @@ namespace gameboy
         void ldhl(int8_t n);
 
         /**
-         * @brief Swap upper & lower nibles of n.
+         * @brief Swap upper & lower nibbles of n.
          * @details Use with:
          *            n = A, B, C, D, E, H, L, (HL)
          *

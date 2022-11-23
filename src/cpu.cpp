@@ -1695,7 +1695,7 @@ namespace gameboy
     void CPU::adc(uint8_t n)
     {
         uint8_t carry = m_registers.getFlag(CARRY_FLAG) ? 1 : 0;
-        unsigned int resultFull = m_registers.a + n + carry; // Save the result in a temporary variable to check for carry from bit 7
+        uint16_t resultFull = m_registers.a + n + carry; // Save the result in a temporary variable to check for carry from bit 7
 
         auto result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
 
@@ -1730,7 +1730,7 @@ namespace gameboy
     void CPU::sbc(uint8_t n)
     {
         uint8_t carry = m_registers.getFlag(CARRY_FLAG) ? 1 : 0;
-        int resultFull = m_registers.a - n - carry; // Save the result in a temporary variable to check for borrow from bit 7
+        auto resultFull = m_registers.a - n - carry; // Save the result in a temporary variable to check for borrow from bit 7
 
         auto result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
 
@@ -1749,47 +1749,47 @@ namespace gameboy
 
     void CPU::and_(uint8_t n)
     {
+        // And the value of the register A with n
+        m_registers.a &= n;
+
         // Set the zero flag if the result is 0
-        m_registers.setFlag(ZERO_FLAG, (m_registers.a & n) == 0);
+        m_registers.setFlag(ZERO_FLAG, m_registers.a == 0);
         // Set the subtract flag to 0
         m_registers.setFlag(SUBTRACT_FLAG, false);
         // Set the half-carry flag to 1
         m_registers.setFlag(HALF_CARRY_FLAG, true);
         // Set the carry flag to 0
         m_registers.setFlag(CARRY_FLAG, false);
-
-        // And the value of the register A with n
-        m_registers.a &= n;
     }
 
     void CPU::or_(uint8_t n)
     {
+        // Or the value of the register A with n
+        m_registers.a |= n;
+
         // Set the zero flag if the result is 0
-        m_registers.setFlag(ZERO_FLAG, (m_registers.a | n) == 0);
+        m_registers.setFlag(ZERO_FLAG, m_registers.a == 0);
         // Set the subtract flag to 0
         m_registers.setFlag(SUBTRACT_FLAG, false);
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to 0
         m_registers.setFlag(CARRY_FLAG, false);
-
-        // Or the value of the register A with n
-        m_registers.a |= n;
     }
 
     void CPU::xor_(uint8_t n)
     {
+        // Xor the value of the register A with n
+        m_registers.a ^= n;
+
         // Set the zero flag if the result is 0
-        m_registers.setFlag(ZERO_FLAG, (m_registers.a ^ n) == 0);
+        m_registers.setFlag(ZERO_FLAG, m_registers.a == 0);
         // Set the subtract flag to 0
         m_registers.setFlag(SUBTRACT_FLAG, false);
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to 0
         m_registers.setFlag(CARRY_FLAG, false);
-
-        // Xor the value of the register A with n
-        m_registers.a ^= n;
     }
 
     void CPU::cp(uint8_t n)
@@ -1834,7 +1834,7 @@ namespace gameboy
 
     void CPU::add_hl(uint16_t nn)
     {
-        unsigned int resultFull = m_registers.getHL() + nn; // Save the result in a temporary variable to check for carry from bit 15
+        uint32_t resultFull = m_registers.getHL() + nn; // Save the result in a temporary variable to check for carry from bit 15
 
         // Zero flag not affected
         // Set the subtract flag to 0
@@ -1850,7 +1850,7 @@ namespace gameboy
 
     void CPU::add_sp(int8_t n)
     {
-        unsigned int resultFull = m_registers.sp + n;
+        uint32_t resultFull = m_registers.sp + n;
 
         // Set the zero flag to 0
         m_registers.setFlag(ZERO_FLAG, false);
@@ -1867,7 +1867,7 @@ namespace gameboy
 
     void CPU::ldhl(int8_t n)
     {
-        unsigned int resultFull = m_registers.sp + n;
+        uint32_t resultFull = m_registers.sp + n;
 
         // Set the zero flag to 0
         m_registers.setFlag(ZERO_FLAG, false);
@@ -1900,6 +1900,7 @@ namespace gameboy
     void CPU::daa()
     {
         // See https://en.wikipedia.org/wiki/Binary-coded_decimal
+        // See https://ehaskins.com/2018-01-30%20Z80%20DAA/
 
         uint8_t a = m_registers.a;
         uint8_t adjust = m_registers.getFlag(CARRY_FLAG) ? 0x60 : 0x00;
@@ -2022,7 +2023,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 7 of n
-        m_registers.setFlag(CARRY_FLAG, carry == 1);
+        m_registers.setFlag(CARRY_FLAG, carry);
 
         n = result;
     }
@@ -2040,7 +2041,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 7 of n
-        m_registers.setFlag(CARRY_FLAG, (n & 0x80) != 0);
+        m_registers.setFlag(CARRY_FLAG, (n & 0x80));
 
         n = result;
     }
@@ -2058,7 +2059,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 0 of n
-        m_registers.setFlag(CARRY_FLAG, carry == 1);
+        m_registers.setFlag(CARRY_FLAG, carry);
 
         n = result;
     }
@@ -2076,7 +2077,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 0 of n
-        m_registers.setFlag(CARRY_FLAG, (n & 0x01) != 0);
+        m_registers.setFlag(CARRY_FLAG, (n & 0x01));
 
         n = result;
     }
@@ -2094,7 +2095,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 7 of n
-        m_registers.setFlag(CARRY_FLAG, carry == 1);
+        m_registers.setFlag(CARRY_FLAG, carry);
 
         n = result;
     }
@@ -2112,7 +2113,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 0 of n
-        m_registers.setFlag(CARRY_FLAG, carry == 1);
+        m_registers.setFlag(CARRY_FLAG, carry);
 
         n = result;
     }
@@ -2130,7 +2131,7 @@ namespace gameboy
         // Set the half-carry flag to 0
         m_registers.setFlag(HALF_CARRY_FLAG, false);
         // Set the carry flag to the value of old bit 0 of n
-        m_registers.setFlag(CARRY_FLAG, carry == 1);
+        m_registers.setFlag(CARRY_FLAG, carry);
 
         n = result;
     }
