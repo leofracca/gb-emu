@@ -46,7 +46,7 @@ namespace gameboy
         return false;
     }
 
-    void GB::saveRAMData()
+    void GB::saveRAMData() const
     {
         m_memory.getCartridge().saveRAMData();
     }

@@ -69,7 +69,7 @@ namespace gameboy
          *
          * @see MBC::saveRAMData
          */
-        void saveRAMData();
+        void saveRAMData() const;
 
     private:
         std::string m_ROMFilename; ///< The filename of the ROM

@@ -159,7 +159,7 @@ namespace gameboy
         m_joypadState = state;
     }
 
-    Cartridge &Memory::getCartridge()
+    const Cartridge &Memory::getCartridge() const
     {
         return m_cartridge;
     }

@@ -58,7 +58,7 @@ namespace gameboy
          *          If the game doesn't use the RAM, do nothing
          * @param filename The name of the file to save the RAM to (i.e. the name of the ROM file with the extension .sav)
          */
-        void saveRAMData(const std::string &filename);
+        void saveRAMData(const std::string &filename) const;
 
     protected:
         std::vector<uint8_t> m_rom; ///< The ROM of the cartridge

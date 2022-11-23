@@ -160,7 +160,7 @@ namespace gameboy
          *
          * @return The cartridge
          */
-        [[nodiscard]] Cartridge &getCartridge();
+        [[nodiscard]] const Cartridge &getCartridge() const;
 
         /**
          * @brief Array subscript operator

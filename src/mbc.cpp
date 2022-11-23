@@ -17,7 +17,7 @@ namespace gameboy
     {
     }
 
-    void MBC::saveRAMData(const std::string &filename)
+    void MBC::saveRAMData(const std::string &filename) const
     {
         // If the game has no RAM, we don't need to save it
         if (m_ram.empty())

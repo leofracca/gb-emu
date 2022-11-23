@@ -112,7 +112,7 @@ namespace gameboy
         m_MBC->write(address, value);
     }
 
-    void Cartridge::saveRAMData()
+    void Cartridge::saveRAMData() const
     {
         m_MBC->saveRAMData(m_ROMFilename + ".sav");
     }

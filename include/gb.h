@@ -56,6 +56,6 @@ namespace gameboy
          *
          * @see Cartridge::saveRAMData, MBC::saveRAMData
          */
-        void saveRAMData();
+        void saveRAMData() const;
     };
 } // namespace gameboy
