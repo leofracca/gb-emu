@@ -75,6 +75,11 @@ namespace gameboyTest
                 mbc1.write(i, 0x00);
                 REQUIRE(mbc1.read(i) == 0x00);
             }
+
+            mbc1.write(0x7FFF, 0x01);
+            mbc1.write(0x5FFF, 0x01);
+            for (int i = 0xA000; i < 0xC000; i++)
+                REQUIRE(mbc1.read(i) == ram[0x01 * 0x2000 + i - 0xA000]);
         }
 
         SECTION("MBC2")
