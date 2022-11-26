@@ -120,8 +120,12 @@ namespace gameboy
 
             // DMA Transfer
             else if (address == DMA_REG_ADDRESS)
-                for (uint16_t i = 0; i < 160; i++)
-                    write(0xFE00 + i, read((value << 8) + i));
+                for (uint16_t i = 0; i < 0xA0; i++)
+                {
+                    // The written value specifies the transfer source address divided by $100
+                    uint16_t sourceAddress = (value << 8);
+                    write(0xFE00 + i, read(sourceAddress + i));
+                }
 
             // Update colour palette
             else if (address == BGP_REG_ADDRESS)
