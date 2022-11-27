@@ -34,17 +34,29 @@ namespace gameboy
 
     int CPU::handleInterrupts()
     {
+        /*
+         * The CPU is supposed to unhalt if an interrupt flag is set,
+         * even if the interrupt doesn't occur because they have been disabled through the IME flag.
+         *
+         * The HALT instruction waits for (IF & IE) to be non-zero (IME does not matter).
+         *
+         * This behaviour is tested by the Blargg's cpu_instrs.gb test rom (test 02, case 05).
+         *
+         * See https://www.reddit.com/r/EmuDev/comments/kcjz7m/blargs_interrupt_test_never_seems_to_reenable/
+         * See https://www.reddit.com/r/EmuDev/comments/hmcf6q/gameboy_blargg_test_02_interrupts_fails_at_ei/
+         */
+        // Get the requested interrupt (if any)
+        uint8_t interrupt = m_memory->read(INTERRUPT_FLAG_ADDRESS) & m_memory->read(INTERRUPT_ENABLE_ADDRESS);
+        if (interrupt == 0)
+            return 0;
+        else
+            m_halted = false;
+
         // Interrupts are disabled
         if (!m_ime)
             return 0;
 
         // If here, interrupts are enabled
-        // Get the requested interrupt
-        uint8_t interrupt = m_memory->read(INTERRUPT_FLAG_ADDRESS) & m_memory->read(INTERRUPT_ENABLE_ADDRESS);
-        if (interrupt == 0)
-            return 0;
-
-        m_halted = false;
         push(m_registers.pc);
 
         // Handle the interrupt

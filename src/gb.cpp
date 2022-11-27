@@ -20,7 +20,7 @@ namespace gameboy
 
         do
         {
-            int cycles = cpu.cycle();
+            int cycles = cpu.cycle() * 4;
             timer.cycle(cycles);
             ppu.cycle(cycles);
         } while (!updatePlatform(lastCycleTime, ppu, input));
