@@ -92,11 +92,12 @@ install(
 # Code Coverage #
 #################
 if (COVERAGE)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/coverage)
     add_custom_target(coverage
         COMMAND gcovr --root ${PROJECT_SOURCE_DIR}
                       --html
                       --html-details
-                      --output coverage.html
+                      --output coverage/coverage.html
         COMMENT "Generating code coverage"
     )
 endif()
