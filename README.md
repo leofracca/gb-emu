@@ -101,7 +101,7 @@ The command
 make coverage
 ```
 
-will generate the `coverage.html` file with all the statistics about the coverage (remember to run `make test` and `make blargg` first).
+will generate the `coverage/coverage.html` file with all the statistics about the coverage (remember to run `make test` and `make blargg` first).
 
 ## Undefined behaviours
 
@@ -115,7 +115,7 @@ To create the documentation:
 make doc
 ```
 
-The `doc` folder will be created in root folder of the project.
+The `doc` folder will be created inside the root folder of the project.
 
 To use this command `Doxygen` is required. OPTIONAL: you will also need the `texlive-font-utils` package to have a LaTeX documentation.
 
