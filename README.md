@@ -103,6 +103,10 @@ make coverage
 
 will generate the `coverage.html` file with all the statistics about the coverage (remember to run `make test` and `make blargg` first).
 
+## Undefined behaviours
+
+To check undefined behaviours you need to pass the `-DUSAN=ON` when building the project with CMake.
+
 ## Documentation
 
 To create the documentation:
