@@ -91,12 +91,9 @@ install(
 #################
 # Code Coverage #
 #################
-# TODO: Check if there are cleaner ways to exclude tests and catch from coverage
 if (COVERAGE)
     add_custom_target(coverage
         COMMAND gcovr --root ${PROJECT_SOURCE_DIR}
-                      --exclude ${PROJECT_SOURCE_DIR}/tests
-                      --exclude ${PROJECT_SOURCE_DIR}/third_party/catch2
                       --html
                       --html-details
                       --output coverage.html
