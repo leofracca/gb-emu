@@ -316,7 +316,7 @@ namespace gameboy
                 if (x_temp < 0 || x_temp >= 160)
                     continue;
 
-                int pixelOffset = *this->m_ly * 160 + x_temp;
+                int pixelOffset = *m_ly * 160 + x_temp;
 
                 // Flip horizontally
                 uint8_t pixel_x = sprite.options.flags.bits.xFlip ? 7 - x : x;

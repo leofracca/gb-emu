@@ -18,7 +18,7 @@ namespace gameboy
     /**
      * @brief The different buttons of the joypad
      */
-    enum class JoypadButton :uint8_t
+    enum class JoypadButton : uint8_t
     {
         BUTTON_A = 0x01, ///< The A button
         BUTTON_B = 0x02, ///< The B button
