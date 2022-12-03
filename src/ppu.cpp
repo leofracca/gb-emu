@@ -9,19 +9,19 @@
 
 namespace gameboy
 {
-    PPU::PPU(Memory *memory)
+    PPU::PPU(Memory &memory)
         : m_memory(memory)
     {
-        m_lcdc = &(*m_memory)[LCDC_REG_ADDRESS];
-        m_stat = &(*m_memory)[STAT_REG_ADDRESS];
-        m_scy = &(*m_memory)[SCY_REG_ADDRESS];
-        m_scx = &(*m_memory)[SCX_REG_ADDRESS];
-        m_ly = &(*m_memory)[LY_REG_ADDRESS];
+        m_lcdc = &m_memory[LCDC_REG_ADDRESS];
+        m_stat = &m_memory[STAT_REG_ADDRESS];
+        m_scy = &m_memory[SCY_REG_ADDRESS];
+        m_scx = &m_memory[SCX_REG_ADDRESS];
+        m_ly = &m_memory[LY_REG_ADDRESS];
     }
 
     void PPU::cycle(int cycles)
     {
-        uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
+        uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
 
         m_cycles += cycles;
 
@@ -55,14 +55,14 @@ namespace gameboy
 
                         // Set the interrupt flag for VBLANK
                         interruptFlag |= VBLANK_INTERRUPT_FLAG_VALUE;
-                        m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                        m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
 
                         // If the bit of the VBLANK of the stat register is set (bit 4), set the interrupt flag
                         if (*m_stat & 0x10)
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                     // If LY < 144, set mode to OAM to render the next scanline
@@ -73,7 +73,7 @@ namespace gameboy
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                         m_mode = Mode::OAM;
                     }
@@ -106,7 +106,7 @@ namespace gameboy
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                 }
@@ -137,7 +137,7 @@ namespace gameboy
                     {
                         // Set the interrupt flag for LCD Status
                         interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                        m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                        m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                     }
                 }
                 break;
@@ -161,7 +161,7 @@ namespace gameboy
 
     void PPU::setCoincidenceFlag()
     {
-        uint8_t lyc = m_memory->read(LYC_REG_ADDRESS);
+        uint8_t lyc = m_memory.read(LYC_REG_ADDRESS);
 
         if (*m_ly == lyc)
             // Set the coincidence flag (bit 2 of the STAT register)
@@ -173,9 +173,9 @@ namespace gameboy
         if (*m_ly == lyc && (*m_stat & 0x40))
         {
             // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
-            uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
+            uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-            m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
         }
     }
 
@@ -214,7 +214,7 @@ namespace gameboy
             if (tile_address >= end_row_address)
                 tile_address = (start_row_address + tile_address % end_row_address);
 
-            int tile = m_memory->read(tile_address);
+            int tile = m_memory.read(tile_address);
             if (!(*m_lcdc & 0x10) && tile < 128)
                 tile += 256;
 
@@ -222,8 +222,8 @@ namespace gameboy
             {
                 if (pixel >= 160) break;
 
-                int colour = m_memory->m_tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory->m_paletteBGP[colour];
+                int colour = m_memory.m_tiles[tile].pixels[y][x];
+                m_frameBuffer[pixelOffset++] = m_memory.m_paletteBGP[colour];
                 if (colour > 0)
                     rowPixels[pixel] = true;
                 pixel++;
@@ -237,22 +237,22 @@ namespace gameboy
         if (!(*m_lcdc & 0x20))
             return;
 
-        if (m_memory->read(WY_REG_ADDRESS) > *m_ly)
+        if (m_memory.read(WY_REG_ADDRESS) > *m_ly)
             return;
 
         uint16_t address = 0x9800;
         if (*m_lcdc & 0x40)
             address += 0x400;
 
-        address += ((*m_ly - m_memory->read(WY_REG_ADDRESS)) / 8) * 32;
-        int y = (*m_ly - m_memory->read(WY_REG_ADDRESS)) & 7;
+        address += ((*m_ly - m_memory.read(WY_REG_ADDRESS)) / 8) * 32;
+        int y = (*m_ly - m_memory.read(WY_REG_ADDRESS)) & 7;
         int x = 0;
 
         unsigned pixelOffset = *m_ly * 160;
-        pixelOffset += m_memory->read(WX_REG_ADDRESS) - 7;
+        pixelOffset += m_memory.read(WX_REG_ADDRESS) - 7;
         for (uint16_t tile_address = address; tile_address < address + 20; tile_address++)
         {
-            int tile = m_memory->read(tile_address);
+            int tile = m_memory.read(tile_address);
 
             if (!(*m_lcdc & 0x10) && tile < 128)
                 tile += 256;
@@ -260,8 +260,8 @@ namespace gameboy
             for (; x < 8; x++)
             {
                 if (pixelOffset > sizeof(m_frameBuffer)) continue;
-                int colour = m_memory->m_tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory->m_paletteBGP[colour];
+                int colour = m_memory.m_tiles[tile].pixels[y][x];
+                m_frameBuffer[pixelOffset++] = m_memory.m_paletteBGP[colour];
             }
             x = 0;
         }
@@ -276,7 +276,7 @@ namespace gameboy
 
         for (int i = 39; i >= 0; i--)
         {
-            auto sprite = m_memory->m_sprites[i];
+            auto sprite = m_memory.m_sprites[i];
 
             if (!sprite.ready)
             {
@@ -298,7 +298,7 @@ namespace gameboy
             if (!visible_sprites[i])
                 continue;
 
-            auto sprite = m_memory->m_sprites[i];
+            auto sprite = m_memory.m_sprites[i];
 
             if ((sprite.x < -7) || (sprite.x >= 160))
                 continue;
@@ -322,9 +322,9 @@ namespace gameboy
                 uint8_t pixel_x = sprite.options.flags.bits.xFlip ? 7 - x : x;
 
                 if ((*m_lcdc & 0x04) && (pixel_y >= 8))
-                    colour = m_memory->m_tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
+                    colour = m_memory.m_tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
                 else
-                    colour = m_memory->m_tiles[tile_num].pixels[pixel_y][pixel_x];
+                    colour = m_memory.m_tiles[tile_num].pixels[pixel_y][pixel_x];
 
                 // Black is transparent
                 if (!colour)

@@ -7,25 +7,26 @@
 
 namespace gameboy
 {
-    Timer::Timer(Memory *memory) : m_memory(memory)
+    Timer::Timer(Memory &memory)
+        : m_memory(memory)
     {
         getRegisters();
     }
 
     void Timer::getRegisters()
     {
-        m_div = m_memory->read(DIV_REG_ADDRESS);
-        m_tima = m_memory->read(TIMA_REG_ADDRESS);
-        m_tma = m_memory->read(TMA_REG_ADDRESS);
-        m_tac = m_memory->read(TAC_REG_ADDRESS);
+        m_div = m_memory.read(DIV_REG_ADDRESS);
+        m_tima = m_memory.read(TIMA_REG_ADDRESS);
+        m_tma = m_memory.read(TMA_REG_ADDRESS);
+        m_tac = m_memory.read(TAC_REG_ADDRESS);
     }
 
     void Timer::setRegisters()
     {
-        m_memory->write(DIV_REG_ADDRESS, m_div);
-        m_memory->write(TIMA_REG_ADDRESS, m_tima);
-        m_memory->write(TMA_REG_ADDRESS, m_tma);
-        m_memory->write(TAC_REG_ADDRESS, m_tac);
+        m_memory.write(DIV_REG_ADDRESS, m_div);
+        m_memory.write(TIMA_REG_ADDRESS, m_tima);
+        m_memory.write(TMA_REG_ADDRESS, m_tma);
+        m_memory.write(TAC_REG_ADDRESS, m_tac);
     }
 
     void Timer::cycle(int cycles)
@@ -76,9 +77,9 @@ namespace gameboy
                     m_tima = m_tma;
 
                     // Set the interrupt flag
-                    uint8_t interruptFlag = m_memory->read(INTERRUPT_FLAG_ADDRESS);
+                    uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
                     interruptFlag |= TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE;
-                    m_memory->write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                    m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
                 }
                 else
                     m_tima++;

@@ -58,7 +58,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        explicit PPU(Memory *memory);
+        explicit PPU(Memory &memory);
 
         /**
          * @brief Update the PPU
@@ -90,7 +90,7 @@ namespace gameboy
         void setRenderingEnabled(bool enabled);
 
     private:
-        Memory *m_memory; ///< The memory
+        Memory &m_memory; ///< The memory
 
         std::array<Colour, SCREEN_WIDTH *(SCREEN_HEIGHT + 9)> m_frameBuffer{}; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen

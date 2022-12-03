@@ -43,7 +43,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        explicit Input(Memory *memory);
+        explicit Input(Memory &memory);
 
         /**
          * @brief Set/Reset the bit of the joypad state
@@ -61,6 +61,6 @@ namespace gameboy
         void sendInterrupt();
 
     private:
-        Memory *m_memory; ///< The memory
+        Memory &m_memory; ///< The memory
     };
 } // namespace gameboy

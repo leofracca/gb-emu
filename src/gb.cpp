@@ -11,10 +11,10 @@ namespace gameboy
 
     void GB::run()
     {
-        CPU cpu(&m_memory);
-        PPU ppu(&m_memory);
-        Timer timer(&m_memory);
-        Input input(&m_memory);
+        CPU cpu(m_memory);
+        PPU ppu(m_memory);
+        Timer timer(m_memory);
+        Input input(m_memory);
 
         auto lastCycleTime = SDL_GetTicks64();
 

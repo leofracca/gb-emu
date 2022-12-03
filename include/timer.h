@@ -36,7 +36,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        explicit Timer(Memory *memory);
+        explicit Timer(Memory &memory);
 
         /**
          * @brief Increment and manipulate the timer registers
@@ -48,7 +48,7 @@ namespace gameboy
         void cycle(int cycles);
 
     private:
-        Memory *m_memory; ///< The memory
+        Memory &m_memory; ///< The memory
 
         /**
          * @brief This register is incremented 16384 times a second.

@@ -101,7 +101,7 @@ namespace gameboy
          *
          * @param memory The memory
          */
-        explicit CPU(Memory *memory);
+        explicit CPU(Memory &memory);
 
         /**
          * @brief Get the opcode of the next instruction, increment the program counter and execute the instruction.
@@ -111,7 +111,7 @@ namespace gameboy
         int cycle();
 
     private:
-        Memory *m_memory; ///< The memory
+        Memory &m_memory; ///< The memory
         Registers m_registers; ///< The registers
 
         bool m_halted = false; ///< True if the cpu is halted

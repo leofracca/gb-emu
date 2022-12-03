@@ -10,7 +10,7 @@ namespace gameboyTest
     TEST_CASE("Input setButton", "[input]")
     {
         Memory memory(TEST_ROM);
-        Input input(&memory);
+        Input input(memory);
         input.setButton(JoypadButton::BUTTON_A, true);
         REQUIRE(memory.getJoypadState() == 0xFE);
         input.setButton(JoypadButton::BUTTON_A, false);
@@ -48,7 +48,7 @@ namespace gameboyTest
     TEST_CASE("Input sendInterrupt", "[input]")
     {
         Memory memory(TEST_ROM);
-        Input input(&memory);
+        Input input(memory);
         input.sendInterrupt();
         REQUIRE(memory.read(INTERRUPT_FLAG_ADDRESS) == (0xE1 | 0x10));
     }
