@@ -13,9 +13,8 @@
 namespace gameboy
 {
     MBC::MBC(std::vector<uint8_t> rom, std::vector<uint8_t> ram)
-            : m_rom(std::move(rom)), m_ram(std::move(ram))
-    {
-    }
+        : m_rom(std::move(rom)), m_ram(std::move(ram))
+    {}
 
     void MBC::saveRAMData(const std::string &filename) const
     {

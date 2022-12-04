@@ -56,6 +56,7 @@ namespace gameboy
          * @brief Save the current content of the RAM to a file
          * @details If the game uses the RAM, save the current content of the RAM to a file.
          *          If the game doesn't use the RAM, do nothing
+         *
          * @param filename The name of the file to save the RAM to (i.e. the name of the ROM file with the extension .sav)
          */
         void saveRAMData(const std::string &filename) const;
@@ -159,7 +160,7 @@ namespace gameboy
          * @param address The address to read from
          * @return The byte read
          */
-        [[nodiscard]] uint8_t readRAMBank(uint16_t address)const;
+        [[nodiscard]] uint8_t readRAMBank(uint16_t address) const;
 
         /**
          * @brief Write the address of the RAM bank specified by m_ramBank
@@ -205,7 +206,7 @@ namespace gameboy
          * @param value The value to write
          * @see MBC1::writeRAMBank
          */
-        void write(uint16_t address, uint8_t value) override;
+        void write(uint16_t address, uint8_t value) final;
     };
 
     /**
@@ -233,7 +234,7 @@ namespace gameboy
          * @param value The value to write
          * @see MBC1::writeRAMBank
          */
-        void write(uint16_t address, uint8_t value) override;
+        void write(uint16_t address, uint8_t value) final;
     };
 
     /**
@@ -261,6 +262,6 @@ namespace gameboy
          * @param value The value to write
          * @see MBC1::writeRAMBank
          */
-        void write(uint16_t address, uint8_t value) override;
+        void write(uint16_t address, uint8_t value) final;
     };
 } // namespace gameboy
