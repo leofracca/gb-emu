@@ -25,6 +25,10 @@ namespace gameboy
          */
         explicit Platform(int scale);
 
+        /**
+         * @brief Destroy the window
+         * @details Call the SDL functions to destroy the window, renderer and texture
+         */
         ~Platform();
 
         /**
