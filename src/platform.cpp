@@ -11,6 +11,14 @@ namespace gameboy
         texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, screen_size::SCREEN_WIDTH, screen_size::SCREEN_HEIGHT);
     }
 
+    Platform::~Platform()
+    {
+        SDL_DestroyTexture(texture);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+    }
+
     void Platform::update(const void *buffer)
     {
         SDL_RenderClear(renderer);

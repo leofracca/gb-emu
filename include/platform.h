@@ -25,6 +25,8 @@ namespace gameboy
          */
         explicit Platform(int scale);
 
+        ~Platform();
+
         /**
          * @brief Update the window with the new frame buffer
          *
