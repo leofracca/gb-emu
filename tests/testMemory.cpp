@@ -73,13 +73,13 @@ namespace gameboyTest
         memory.setJoypadState(0xF0);
         REQUIRE(memory.getJoypadState() == 0xF0);
 
-        memory[JOYPAD_ADDRESS] = 0x10;
+        memory[0xFF00] = 0x10;
         memory.setJoypadState(0x0E);
-        REQUIRE(memory.read(JOYPAD_ADDRESS) == 0x1E);
+        REQUIRE(memory.read(0xFF00) == 0x1E);
 
-        memory[JOYPAD_ADDRESS] = 0x20;
+        memory[0xFF00] = 0x20;
         memory.setJoypadState(0xEF);
-        REQUIRE(memory.read(JOYPAD_ADDRESS) == 0x2E);
+        REQUIRE(memory.read(0xFF00) == 0x2E);
     }
 
     TEST_CASE("Unusable memory", "[memory]")

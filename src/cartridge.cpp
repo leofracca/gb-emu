@@ -53,7 +53,7 @@ namespace gameboy
         m_RAMSizeAsString = getRAMSize().second;
 
         // Get the cartridge type
-        uint8_t cartridgeType = m_rom[CARTRIDGE_TYPE_ADDRESS];
+        uint8_t cartridgeType = m_rom[cartridge_info::CARTRIDGE_TYPE_ADDRESS];
 
         // Check the cartridge type and set the MBC accordingly
         switch (cartridgeType)
@@ -131,7 +131,7 @@ namespace gameboy
     std::string Cartridge::getTitle() const
     {
         std::string title;
-        for (int i = CARTRIDGE_TITLE_START_ADDRESS; i < CARTRIDGE_TITLE_END_ADDRESS + 1; i++)
+        for (int i = cartridge_info::CARTRIDGE_TITLE_START_ADDRESS; i < cartridge_info::CARTRIDGE_TITLE_END_ADDRESS + 1; i++)
             title += static_cast<char>(m_rom[i]);
         return title;
     }
@@ -139,7 +139,7 @@ namespace gameboy
     std::string Cartridge::getLicensee() const
     {
         // Old licensee code (0x014B)
-        switch (m_rom[CARTRIDGE_OLD_LICENSEE_CODE_ADDRESS])
+        switch (m_rom[cartridge_info::CARTRIDGE_OLD_LICENSEE_CODE_ADDRESS])
         {
             case 0x00: return "None";
             case 0x01: return "Nintendo";
@@ -296,8 +296,8 @@ namespace gameboy
     {
         // Read addresses 0x0144 and 0x0145 as ascii
         std::string newLicenseeCode;
-        newLicenseeCode += static_cast<char>(m_rom[CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS]);
-        newLicenseeCode += static_cast<char>(m_rom[CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS + 1]);
+        newLicenseeCode += static_cast<char>(m_rom[cartridge_info::CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS]);
+        newLicenseeCode += static_cast<char>(m_rom[cartridge_info::CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS + 1]);
 
         switch (std::stoi(newLicenseeCode))
         {
@@ -368,7 +368,7 @@ namespace gameboy
 
     std::string Cartridge::getROMSize() const
     {
-        switch (m_rom[CARTRIDGE_ROM_SIZE_ADDRESS])
+        switch (m_rom[cartridge_info::CARTRIDGE_ROM_SIZE_ADDRESS])
         {
             case 0x00: return "32KByte (2 banks, no ROM banking)";
             case 0x01: return "64KByte (4 banks)";
@@ -385,7 +385,7 @@ namespace gameboy
 
     std::pair<int, std::string> Cartridge::getRAMSize() const
     {
-        switch (m_rom[CARTRIDGE_RAM_SIZE_ADDRESS])
+        switch (m_rom[cartridge_info::CARTRIDGE_RAM_SIZE_ADDRESS])
         {
             case 0x00: return std::make_pair(0, "No RAM");
             case 0x02: return std::make_pair(8192, "8 KByte (1 bank)");

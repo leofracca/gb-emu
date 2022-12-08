@@ -16,13 +16,16 @@
 
 namespace gameboy
 {
-    /*
-     * The following are the flags of the flag register F
-     */
-    constexpr uint8_t ZERO_FLAG = 0x80; ///< The zero flag (Z)
-    constexpr uint8_t SUBTRACT_FLAG = 0x40; ///< The subtract flag (N)
-    constexpr uint8_t HALF_CARRY_FLAG = 0x20; ///< The half carry flag (H)
-    constexpr uint8_t CARRY_FLAG = 0x10; ///< The carry flag (C)
+    namespace flags
+    {
+        /*
+         * The following are the flags of the flag register F
+         */
+        constexpr uint8_t ZERO_FLAG = 0x80; ///< The zero flag (Z)
+        constexpr uint8_t SUBTRACT_FLAG = 0x40; ///< The subtract flag (N)
+        constexpr uint8_t HALF_CARRY_FLAG = 0x20; ///< The half carry flag (H)
+        constexpr uint8_t CARRY_FLAG = 0x10; ///< The carry flag (C)
+    } // namespace flags
 
     /**
      * @brief Registers class used to manipulate the registers of the Gameboy

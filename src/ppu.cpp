@@ -12,16 +12,16 @@ namespace gameboy
     PPU::PPU(Memory &memory)
         : m_memory(memory)
     {
-        m_lcdc = &m_memory[LCDC_REG_ADDRESS];
-        m_stat = &m_memory[STAT_REG_ADDRESS];
-        m_scy = &m_memory[SCY_REG_ADDRESS];
-        m_scx = &m_memory[SCX_REG_ADDRESS];
-        m_ly = &m_memory[LY_REG_ADDRESS];
+        m_lcdc = &m_memory[ppu_registers::LCDC_REG_ADDRESS];
+        m_stat = &m_memory[ppu_registers::STAT_REG_ADDRESS];
+        m_scy = &m_memory[ppu_registers::SCY_REG_ADDRESS];
+        m_scx = &m_memory[ppu_registers::SCX_REG_ADDRESS];
+        m_ly = &m_memory[ppu_registers::LY_REG_ADDRESS];
     }
 
     void PPU::cycle(int cycles)
     {
-        uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
+        uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
 
         m_cycles += cycles;
 
@@ -48,21 +48,21 @@ namespace gameboy
                     setCoincidenceFlag();
 
                     // If LY >= 144, set mode to VBLANK to refresh the screen
-                    if (*m_ly == SCREEN_HEIGHT)
+                    if (*m_ly == screen_size::SCREEN_HEIGHT)
                     {
                         m_mode = Mode::VBLANK;
                         m_renderingEnabled = true;
 
                         // Set the interrupt flag for VBLANK
                         interruptFlag |= VBLANK_INTERRUPT_FLAG_VALUE;
-                        m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                        m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
 
                         // If the bit of the VBLANK of the stat register is set (bit 4), set the interrupt flag
                         if (*m_stat & 0x10)
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                     // If LY < 144, set mode to OAM to render the next scanline
@@ -73,7 +73,7 @@ namespace gameboy
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                         m_mode = Mode::OAM;
                     }
@@ -106,7 +106,7 @@ namespace gameboy
                         {
                             // Set the interrupt flag for LCD Status
                             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                            m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
                         }
                     }
                 }
@@ -137,7 +137,7 @@ namespace gameboy
                     {
                         // Set the interrupt flag for LCD Status
                         interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-                        m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                        m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
                     }
                 }
                 break;
@@ -161,7 +161,7 @@ namespace gameboy
 
     void PPU::setCoincidenceFlag()
     {
-        uint8_t lyc = m_memory.read(LYC_REG_ADDRESS);
+        uint8_t lyc = m_memory.read(ppu_registers::LYC_REG_ADDRESS);
 
         if (*m_ly == lyc)
             // Set the coincidence flag (bit 2 of the STAT register)
@@ -173,9 +173,9 @@ namespace gameboy
         if (*m_ly == lyc && (*m_stat & 0x40))
         {
             // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
-            uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
+            uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
             interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-            m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+            m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
         }
     }
 
@@ -237,19 +237,19 @@ namespace gameboy
         if (!(*m_lcdc & 0x20))
             return;
 
-        if (m_memory.read(WY_REG_ADDRESS) > *m_ly)
+        if (m_memory.read(ppu_registers::WY_REG_ADDRESS) > *m_ly)
             return;
 
         uint16_t address = 0x9800;
         if (*m_lcdc & 0x40)
             address += 0x400;
 
-        address += ((*m_ly - m_memory.read(WY_REG_ADDRESS)) / 8) * 32;
-        int y = (*m_ly - m_memory.read(WY_REG_ADDRESS)) & 7;
+        address += ((*m_ly - m_memory.read(ppu_registers::WY_REG_ADDRESS)) / 8) * 32;
+        int y = (*m_ly - m_memory.read(ppu_registers::WY_REG_ADDRESS)) & 7;
         int x = 0;
 
         unsigned pixelOffset = *m_ly * 160;
-        pixelOffset += m_memory.read(WX_REG_ADDRESS) - 7;
+        pixelOffset += m_memory.read(ppu_registers::WX_REG_ADDRESS) - 7;
         for (uint16_t tile_address = address; tile_address < address + 20; tile_address++)
         {
             int tile = m_memory.read(tile_address);

@@ -119,7 +119,7 @@ namespace gameboy
             }
 
             // DMA Transfer
-            else if (address == DMA_REG_ADDRESS)
+            else if (address == 0xFF46)
                 for (uint16_t i = 0; i < 0xA0; i++)
                 {
                     // The written value specifies the transfer source address divided by $100
@@ -128,11 +128,11 @@ namespace gameboy
                 }
 
             // Update colour palette
-            else if (address == BGP_REG_ADDRESS)
+            else if (address == 0xFF47)
                 UpdatePalette(m_paletteBGP, value); // BG and Window palette
-            else if (address == OBP0_REG_ADDRESS)
+            else if (address == 0xFF48)
                 UpdatePalette(m_paletteOBP0, value); // Object palette 0
-            else if (address == OBP1_REG_ADDRESS)
+            else if (address == 0xFF49)
                 UpdatePalette(m_paletteOBP1, value); // Object palette 1
         }
     }

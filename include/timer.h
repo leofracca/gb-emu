@@ -17,12 +17,13 @@
 
 namespace gameboy
 {
-    constexpr uint16_t DIV_REG_ADDRESS = 0xFF04; ///< The address of the Divider Register
-    constexpr uint16_t TIMA_REG_ADDRESS = 0xFF05; ///< The address of the Timer Counter Register
-    constexpr uint16_t TMA_REG_ADDRESS = 0xFF06; ///< The address of the Timer Modulo Register
-    constexpr uint16_t TAC_REG_ADDRESS = 0xFF07; ///< The address of the Timer Control Register
-
-    constexpr uint8_t TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE = 0x04; ///< The bitmask of the Timer Interrupt Flag
+    namespace timer_registers
+    {
+        constexpr uint16_t DIV_REG_ADDRESS = 0xFF04; ///< The address of the Divider Register
+        constexpr uint16_t TIMA_REG_ADDRESS = 0xFF05; ///< The address of the Timer Counter Register
+        constexpr uint16_t TMA_REG_ADDRESS = 0xFF06; ///< The address of the Timer Modulo Register
+        constexpr uint16_t TAC_REG_ADDRESS = 0xFF07; ///< The address of the Timer Control Register
+    } // namespace timer_registers
 
     /**
      * @brief The Timer class emulates the behavior of the system timer of a Gameboy.
@@ -86,6 +87,8 @@ namespace gameboy
 
         int m_divCycles = 0; ///< Divider register cycles
         int m_timaCycles = 0; ///< Timer counter cycles
+
+        static constexpr uint8_t TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE = 0x04; ///< The bitmask of the Timer Interrupt Flag
 
         /**
          * @brief Get the current value of the timer registers

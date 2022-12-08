@@ -28,8 +28,8 @@ namespace gameboy
     void Input::sendInterrupt()
     {
         // Set the interrupt
-        uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
+        uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
         interruptFlag |= JOYPAD_INTERRUPT_FLAG_VALUE;
-        m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+        m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
     }
 } // namespace gameboy

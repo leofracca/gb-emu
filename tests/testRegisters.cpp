@@ -19,34 +19,34 @@ namespace gameboyTest
         REQUIRE(registers.sp == 0xFFFE);
         REQUIRE(registers.pc == 0x0100);
 
-        REQUIRE(registers.getFlag(ZERO_FLAG) == true);
-        REQUIRE(registers.getFlag(SUBTRACT_FLAG) == false);
-        REQUIRE(registers.getFlag(HALF_CARRY_FLAG) == true);
-        REQUIRE(registers.getFlag(CARRY_FLAG) == true);
+        REQUIRE(registers.getFlag(flags::ZERO_FLAG) == true);
+        REQUIRE(registers.getFlag(flags::SUBTRACT_FLAG) == false);
+        REQUIRE(registers.getFlag(flags::HALF_CARRY_FLAG) == true);
+        REQUIRE(registers.getFlag(flags::CARRY_FLAG) == true);
     }
 
     TEST_CASE("Registers get/set", "[registers]")
     {
         Registers registers;
-        registers.setFlag(ZERO_FLAG, false);
-        REQUIRE(registers.getFlag(ZERO_FLAG) == false);
-        registers.setFlag(ZERO_FLAG, true);
-        REQUIRE(registers.getFlag(ZERO_FLAG) == true);
+        registers.setFlag(flags::ZERO_FLAG, false);
+        REQUIRE(registers.getFlag(flags::ZERO_FLAG) == false);
+        registers.setFlag(flags::ZERO_FLAG, true);
+        REQUIRE(registers.getFlag(flags::ZERO_FLAG) == true);
 
-        registers.setFlag(SUBTRACT_FLAG, false);
-        REQUIRE(registers.getFlag(SUBTRACT_FLAG) == false);
-        registers.setFlag(SUBTRACT_FLAG, true);
-        REQUIRE(registers.getFlag(SUBTRACT_FLAG) == true);
+        registers.setFlag(flags::SUBTRACT_FLAG, false);
+        REQUIRE(registers.getFlag(flags::SUBTRACT_FLAG) == false);
+        registers.setFlag(flags::SUBTRACT_FLAG, true);
+        REQUIRE(registers.getFlag(flags::SUBTRACT_FLAG) == true);
 
-        registers.setFlag(HALF_CARRY_FLAG, false);
-        REQUIRE(registers.getFlag(HALF_CARRY_FLAG) == false);
-        registers.setFlag(HALF_CARRY_FLAG, true);
-        REQUIRE(registers.getFlag(HALF_CARRY_FLAG) == true);
+        registers.setFlag(flags::HALF_CARRY_FLAG, false);
+        REQUIRE(registers.getFlag(flags::HALF_CARRY_FLAG) == false);
+        registers.setFlag(flags::HALF_CARRY_FLAG, true);
+        REQUIRE(registers.getFlag(flags::HALF_CARRY_FLAG) == true);
 
-        registers.setFlag(CARRY_FLAG, false);
-        REQUIRE(registers.getFlag(CARRY_FLAG) == false);
-        registers.setFlag(CARRY_FLAG, true);
-        REQUIRE(registers.getFlag(CARRY_FLAG) == true);
+        registers.setFlag(flags::CARRY_FLAG, false);
+        REQUIRE(registers.getFlag(flags::CARRY_FLAG) == false);
+        registers.setFlag(flags::CARRY_FLAG, true);
+        REQUIRE(registers.getFlag(flags::CARRY_FLAG) == true);
     }
 
     TEST_CASE("Registers get/set pairs", "[registers]")

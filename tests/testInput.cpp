@@ -50,6 +50,6 @@ namespace gameboyTest
         Memory memory(TEST_ROM);
         Input input(memory);
         input.sendInterrupt();
-        REQUIRE(memory.read(INTERRUPT_FLAG_ADDRESS) == (0xE1 | 0x10));
+        REQUIRE(memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS) == (0xE1 | 0x10));
     }
 } // namespace gameboyTest

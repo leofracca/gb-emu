@@ -17,14 +17,11 @@
 
 namespace gameboy
 {
-    constexpr uint16_t DMA_REG_ADDRESS = 0xFF46; ///< The address of the DMA register
-    constexpr uint16_t BGP_REG_ADDRESS = 0xFF47; ///< The address of the BG Palette Register
-    constexpr uint16_t OBP0_REG_ADDRESS = 0xFF48; ///< The address of the Object Palette 0 Register
-    constexpr uint16_t OBP1_REG_ADDRESS = 0xFF49; ///< The address of the Object Palette 1 Register
-
-    constexpr uint16_t JOYPAD_ADDRESS = 0xFF00; ///< The address of the register containing info about the joypad
-    constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
-    constexpr uint16_t INTERRUPT_ENABLE_ADDRESS = 0xFFFF; ///< The address of the Interrupt Enable Register
+    namespace interrupt_registers
+    {
+        constexpr uint16_t INTERRUPT_FLAG_ADDRESS = 0xFF0F; ///< The address of the Interrupt Flag Register
+        constexpr uint16_t INTERRUPT_ENABLE_ADDRESS = 0xFFFF; ///< The address of the Interrupt Enable Register
+    } // namespace interrupt_registers
 
     /**
      * @brief Contains the values of the RGB colors (and the transparency)
@@ -189,6 +186,7 @@ namespace gameboy
          * @see read
          */
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
+        static constexpr uint16_t JOYPAD_ADDRESS = 0xFF00; ///< The address of the register containing info about the joypad
 
         /**
          * @brief Object Palette 0 Data

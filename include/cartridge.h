@@ -18,13 +18,16 @@
 
 namespace gameboy
 {
-    constexpr uint16_t CARTRIDGE_TITLE_START_ADDRESS = 0x134; ///< The address of the first byte of the cartridge title in the header
-    constexpr uint16_t CARTRIDGE_TITLE_END_ADDRESS = 0x142; ///< The address of the last byte of the cartridge title in the header
-    constexpr uint16_t CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS = 0x144; ///< The address of the first byte of the new licensee code in the header
-    constexpr uint16_t CARTRIDGE_TYPE_ADDRESS = 0x0147; ///< The address of the cartridge type in the header
-    constexpr uint16_t CARTRIDGE_ROM_SIZE_ADDRESS = 0x0148; ///< The address of the ROM size in the header
-    constexpr uint16_t CARTRIDGE_RAM_SIZE_ADDRESS = 0x0149; ///< The address of the RAM size in the header
-    constexpr uint16_t CARTRIDGE_OLD_LICENSEE_CODE_ADDRESS = 0x014B; ///< The address of the old licensee code in the header
+    namespace cartridge_info
+    {
+        constexpr uint16_t CARTRIDGE_TITLE_START_ADDRESS = 0x134; ///< The address of the first byte of the cartridge title in the header
+        constexpr uint16_t CARTRIDGE_TITLE_END_ADDRESS = 0x142; ///< The address of the last byte of the cartridge title in the header
+        constexpr uint16_t CARTRIDGE_NEW_LICENSEE_CODE_ADDRESS = 0x144; ///< The address of the first byte of the new licensee code in the header
+        constexpr uint16_t CARTRIDGE_TYPE_ADDRESS = 0x0147; ///< The address of the cartridge type in the header
+        constexpr uint16_t CARTRIDGE_ROM_SIZE_ADDRESS = 0x0148; ///< The address of the ROM size in the header
+        constexpr uint16_t CARTRIDGE_RAM_SIZE_ADDRESS = 0x0149; ///< The address of the RAM size in the header
+        constexpr uint16_t CARTRIDGE_OLD_LICENSEE_CODE_ADDRESS = 0x014B; ///< The address of the old licensee code in the header
+    } // namespace cartridge_info
 
     /**
      * @brief Cartridge class used to store the cartridge informations

@@ -6,15 +6,15 @@ namespace gameboy
     Platform::Platform(int scale)
     {
         SDL_Init(SDL_INIT_VIDEO);
-        window = SDL_CreateWindow("GBEmu", 0, 0, SCREEN_WIDTH * scale, SCREEN_HEIGHT * scale, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("GBEmu", 0, 0, screen_size::SCREEN_WIDTH * scale, screen_size::SCREEN_HEIGHT * scale, SDL_WINDOW_SHOWN);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
+        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, screen_size::SCREEN_WIDTH, screen_size::SCREEN_HEIGHT);
     }
 
     void Platform::update(const void *buffer)
     {
         SDL_RenderClear(renderer);
-        SDL_UpdateTexture(texture, nullptr, buffer, SCREEN_WIDTH * 4);
+        SDL_UpdateTexture(texture, nullptr, buffer, screen_size::SCREEN_WIDTH * 4);
         SDL_RenderCopy(renderer, texture, nullptr, nullptr);
         SDL_RenderPresent(renderer);
     }

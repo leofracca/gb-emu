@@ -21,10 +21,10 @@ namespace gameboy
         sp = 0xFFFE;
         pc = 0x0100;
 
-        setFlag(ZERO_FLAG, true);
-        setFlag(SUBTRACT_FLAG, false);
-        setFlag(HALF_CARRY_FLAG, true);
-        setFlag(CARRY_FLAG, true);
+        setFlag(flags::ZERO_FLAG, true);
+        setFlag(flags::SUBTRACT_FLAG, false);
+        setFlag(flags::HALF_CARRY_FLAG, true);
+        setFlag(flags::CARRY_FLAG, true);
     }
 
     void Registers::setFlag(uint8_t flag, bool value)

@@ -5,6 +5,8 @@
 
 #include "timer.h" // Timer
 
+using namespace gameboy::timer_registers;
+
 namespace gameboy
 {
     Timer::Timer(Memory &memory)
@@ -77,9 +79,9 @@ namespace gameboy
                     m_tima = m_tma;
 
                     // Set the interrupt flag
-                    uint8_t interruptFlag = m_memory.read(INTERRUPT_FLAG_ADDRESS);
+                    uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
                     interruptFlag |= TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE;
-                    m_memory.write(INTERRUPT_FLAG_ADDRESS, interruptFlag);
+                    m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
                 }
                 else
                     m_tima++;
