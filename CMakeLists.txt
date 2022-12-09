@@ -39,52 +39,52 @@ file(GLOB_RECURSE TESTS   CONFIGURE_DEPENDS tests/*.cpp)
 # Create executable #
 #####################
 find_package(SDL2 REQUIRED)
-add_library(GBEmu_lib)
-add_executable(GBEmu
+add_library(gbemu_lib)
+add_executable(gbemu
     ${PROJECT_SOURCE_DIR}/src/main.cpp
 )
 
-target_sources(GBEmu_lib
+target_sources(gbemu_lib
     PUBLIC  ${HEADERS}
     PRIVATE ${SOURCES}
 )
 
-target_include_directories(GBEmu_lib
+target_include_directories(gbemu_lib
     PUBLIC  ${PROJECT_SOURCE_DIR}/include
     PRIVATE ${PROJECT_SOURCE_DIR}/src
 )
-target_include_directories(GBEmu
+target_include_directories(gbemu
     PUBLIC  ${PROJECT_SOURCE_DIR}/include
     PRIVATE ${PROJECT_SOURCE_DIR}/src
 )
 
-target_compile_options(GBEmu_lib
+target_compile_options(gbemu_lib
     PRIVATE ${COMPILER_FLAGS}
     PRIVATE $<$<BOOL:${COVERAGE}>:--coverage>
 )
-target_compile_options(GBEmu
+target_compile_options(gbemu
     PRIVATE ${COMPILER_FLAGS}
     PRIVATE $<$<BOOL:${COVERAGE}>:--coverage>
 )
 
-target_link_options(GBEmu_lib
+target_link_options(gbemu_lib
     PRIVATE ${LINKER_FLAGS}
 )
-target_link_options(GBEmu
+target_link_options(gbemu
     PRIVATE ${LINKER_FLAGS}
 )
 
-target_link_libraries(GBEmu_lib
+target_link_libraries(gbemu_lib
     PRIVATE SDL2::SDL2
 )
-target_link_libraries(GBEmu
-    PRIVATE GBEmu_lib
+target_link_libraries(gbemu
+    PRIVATE gbemu_lib
 )
 
 # Install
 file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 install(
-    FILES ${CMAKE_BINARY_DIR}/GBEmu
+    FILES ${CMAKE_BINARY_DIR}/gbemu
     DESTINATION ${PROJECT_SOURCE_DIR}/bin
 )
 
@@ -122,30 +122,30 @@ endif (DOXYGEN_FOUND)
 #############
 # Test code #
 #############
-add_executable(GBEmu_test)
+add_executable(gbemu_test)
 
-target_sources(GBEmu_test
+target_sources(gbemu_test
     PUBLIC ${HEADERS}
     PRIVATE ${TESTS}
     PRIVATE ${PROJECT_SOURCE_DIR}/third_party/catch2/catch.hpp
 )
-target_include_directories(GBEmu_test
+target_include_directories(gbemu_test
     PUBLIC  ${PROJECT_SOURCE_DIR}/include
 )
-target_include_directories(GBEmu_test SYSTEM
+target_include_directories(gbemu_test SYSTEM
     PUBLIC ${PROJECT_SOURCE_DIR}/third_party/catch2
 )
-target_link_libraries(GBEmu_test
-    PUBLIC GBEmu_lib
+target_link_libraries(gbemu_test
+    PUBLIC gbemu_lib
 )
-target_compile_options(GBEmu_test
+target_compile_options(gbemu_test
     PRIVATE ${COMPILER_FLAGS}
 )
-target_link_options(GBEmu_test
+target_link_options(gbemu_test
     PRIVATE ${LINKER_FLAGS}
 )
 
-add_custom_command(TARGET GBEmu_test POST_BUILD
+add_custom_command(TARGET gbemu_test POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_SOURCE_DIR}/data/roms
         ${CMAKE_CURRENT_BINARY_DIR}/test_roms
@@ -153,7 +153,7 @@ add_custom_command(TARGET GBEmu_test POST_BUILD
 
 # Install
 install(
-    FILES ${CMAKE_BINARY_DIR}/GBEmu_test
+    FILES ${CMAKE_BINARY_DIR}/gbemu_test
     DESTINATION ${PROJECT_SOURCE_DIR}/bin
 )
 
@@ -164,7 +164,7 @@ enable_testing()
 
 add_test(
     NAME BasicTests
-    COMMAND ${CMAKE_BINARY_DIR}/GBEmu_test
+    COMMAND ${CMAKE_BINARY_DIR}/gbemu_test
 )
 add_test(
     NAME valgrindTests
@@ -174,10 +174,10 @@ add_test(
         --track-fds=yes
         --track-origins=yes
         --error-exitcode=1
-        ${CMAKE_BINARY_DIR}/GBEmu_test
+        ${CMAKE_BINARY_DIR}/gbemu_test
 )
 # Blargg tests
 add_custom_target(blargg
-    COMMAND ${CMAKE_BINARY_DIR}/GBEmu ${PROJECT_SOURCE_DIR}/data/roms/cpu_instrs.gb 2
+    COMMAND ${CMAKE_BINARY_DIR}/gbemu ${PROJECT_SOURCE_DIR}/data/roms/cpu_instrs.gb 2
     COMMENT "Running Blargg tests"
 )
