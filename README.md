@@ -35,14 +35,14 @@ cmake ..
 make
 ```
 
-Then the executable `GBEmu` will be created inside the `build` folder.
+Then the executable `gbemu` will be created inside the `build` folder.
 
 ## Playing
 
 To run the emulator:
 
 ```shell
-./GBEmu path/to/rom [scale]
+./gbemu path/to/rom [scale]
 ```
 
 where `scale` represents the scale of the window.
@@ -50,13 +50,13 @@ where `scale` represents the scale of the window.
 For example, supposing that there is a ROM called rom.gb inside the `build` folder, the command would be:
 
 ```shell
-./GBEmu rom.gb
+./gbemu rom.gb
 ```
 
 or
 
 ```shell
-./GBEmu rom.gb 4
+./gbemu rom.gb 4
 ```
 
 if you want a bigger window (in this case the window will be 4 times bigger than the normal).
