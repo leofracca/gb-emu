@@ -46,7 +46,7 @@ namespace gameboy
          *
          * @param cycles The number of cycles to increment the timer by
          */
-        void cycle(int cycles);
+        void cycle(uint8_t cycles);
 
     private:
         Memory &m_memory; ///< The memory
@@ -85,8 +85,8 @@ namespace gameboy
          */
         uint8_t m_tac = 0; ///< Timer control register (0xFF07)
 
-        int m_divCycles = 0; ///< Divider register cycles
-        int m_timaCycles = 0; ///< Timer counter cycles
+        uint16_t m_divCycles = 0; ///< Divider register cycles
+        uint16_t m_timaCycles = 0; ///< Timer counter cycles
 
         static constexpr uint8_t TIMER_OVERFLOW_INTERRUPT_FLAG_VALUE = 0x04; ///< The bitmask of the Timer Interrupt Flag
 

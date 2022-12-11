@@ -50,7 +50,7 @@ namespace gameboyTest
 
         // Check that the ROM title is correct
         std::string title;
-        for (int i = 0x0134; i < 0x0143; i++)
+        for (uint16_t i = 0x0134; i < 0x0143; i++)
         {
             if (memory.read(i) == 0x00)
                 break;
@@ -86,13 +86,13 @@ namespace gameboyTest
     {
         Memory memory(TEST_ROM);
 
-        for (int i = 0xE000; i < 0xFE00; i++)
+        for (uint16_t i = 0xE000; i < 0xFE00; i++)
         {
             REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
             REQUIRE_THROWS_AS(memory.write(i, 0x00), std::runtime_error);
         }
 
-        for (int i = 0xFEA0; i < 0xFF00; i++)
+        for (uint16_t i = 0xFEA0; i < 0xFF00; i++)
         {
             REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
             memory[i] = 0x00;

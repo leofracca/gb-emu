@@ -19,7 +19,7 @@ namespace gameboy
         m_ly = &m_memory[ppu_registers::LY_REG_ADDRESS];
     }
 
-    void PPU::cycle(int cycles)
+    void PPU::cycle(uint8_t cycles)
     {
         uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
 

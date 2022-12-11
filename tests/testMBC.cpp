@@ -11,7 +11,7 @@ namespace gameboyTest
 
     TEST_CASE("MBCs", "[mbc]")
     {
-        for (int i = 0; i < 0x10000; i++)
+        for (uint16_t i = 0; i < 0xFFFF; i++)
         {
             rom[i] = i;
             ram[i] = i;
@@ -21,19 +21,19 @@ namespace gameboyTest
         {
             ROMOnly romOnly(rom, ram);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
                 REQUIRE(romOnly.read(i) == rom[i]);
 
-            for (int i = 0x8000; i < 0x10000; i++)
+            for (uint16_t i = 0x8000; i < 0xFFFF; i++)
                 REQUIRE(romOnly.read(i) == 0x00);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
             {
                 romOnly.write(i, 0x00);
                 REQUIRE(romOnly.read(i) == rom[i]);
             }
 
-            for (int i = 0x8000; i < 0x10000; i++)
+            for (uint16_t i = 0x8000; i < 0xFFFF; i++)
                 REQUIRE_THROWS_AS(romOnly.write(i, 0x00), std::runtime_error);
         }
 
@@ -41,10 +41,10 @@ namespace gameboyTest
         {
             MBC1 mbc1(rom, ram);
 
-            for (int i = 0; i < 0x4000; i++)
+            for (uint16_t i = 0; i < 0x4000; i++)
                 REQUIRE(mbc1.read(i) == rom[i]);
 
-            int romBank;
+            uint8_t romBank;
             SECTION("ROM bank 1")
             {
                 romBank = 1;
@@ -55,22 +55,22 @@ namespace gameboyTest
                 mbc1.write(0x2000, 0x02);
             }
 
-            for (int i = 0x4000; i < 0x8000; i++)
+            for (uint16_t i = 0x4000; i < 0x8000; i++)
                 REQUIRE(mbc1.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
             {
                 mbc1.write(i, 0x00);
                 REQUIRE(mbc1.read(i) == rom[i]);
             }
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc1.read(i) == 0xFF);
             mbc1.write(0x1FFF, 0x0A);
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc1.read(i) == ram[i - 0xA000]);
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
             {
                 mbc1.write(i, 0x00);
                 REQUIRE(mbc1.read(i) == 0x00);
@@ -78,7 +78,7 @@ namespace gameboyTest
 
             mbc1.write(0x7FFF, 0x01);
             mbc1.write(0x5FFF, 0x01);
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc1.read(i) == ram[0x01 * 0x2000 + i - 0xA000]);
         }
 
@@ -86,10 +86,10 @@ namespace gameboyTest
         {
             MBC2 mbc2(rom, ram);
 
-            for (int i = 0; i < 0x4000; i++)
+            for (uint16_t i = 0; i < 0x4000; i++)
                 REQUIRE(mbc2.read(i) == rom[i]);
 
-            int romBank;
+            uint8_t romBank;
             SECTION("ROM bank 1")
             {
                 romBank = 1;
@@ -100,22 +100,22 @@ namespace gameboyTest
                 mbc2.write(0x2000, 0x02);
             }
 
-            for (int i = 0x4000; i < 0x8000; i++)
+            for (uint16_t i = 0x4000; i < 0x8000; i++)
                 REQUIRE(mbc2.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
             {
                 mbc2.write(i, 0x00);
                 REQUIRE(mbc2.read(i) == rom[i]);
             }
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc2.read(i) == 0xFF);
             mbc2.write(0x0000, 0x0A);
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc2.read(i) == ram[i - 0xA000]);
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
             {
                 mbc2.write(i, 0x00);
                 REQUIRE(mbc2.read(i) == 0x00);
@@ -126,10 +126,10 @@ namespace gameboyTest
         {
             MBC3 mbc3(rom, ram);
 
-            for (int i = 0; i < 0x4000; i++)
+            for (uint16_t i = 0; i < 0x4000; i++)
                 REQUIRE(mbc3.read(i) == rom[i]);
 
-            int romBank;
+            uint8_t romBank;
             SECTION("ROM bank 1")
             {
                 romBank = 1;
@@ -140,22 +140,22 @@ namespace gameboyTest
                 mbc3.write(0x2000, 0x02);
             }
 
-            for (int i = 0x4000; i < 0x8000; i++)
+            for (uint16_t i = 0x4000; i < 0x8000; i++)
                 REQUIRE(mbc3.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
             {
                 mbc3.write(i, 0x00);
                 REQUIRE(mbc3.read(i) == rom[i]);
             }
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc3.read(i) == 0xFF);
             mbc3.write(0x1FFF, 0x0A);
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc3.read(i) == ram[i - 0xA000]);
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
             {
                 mbc3.write(i, 0x00);
                 REQUIRE(mbc3.read(i) == 0x00);
@@ -166,10 +166,10 @@ namespace gameboyTest
         {
             MBC5 mbc5(rom, ram);
 
-            for (int i = 0; i < 0x4000; i++)
+            for (uint16_t i = 0; i < 0x4000; i++)
                 REQUIRE(mbc5.read(i) == rom[i]);
 
-            int romBank;
+            uint8_t romBank;
             SECTION("ROM bank 1")
             {
                 romBank = 1;
@@ -180,22 +180,22 @@ namespace gameboyTest
                 mbc5.write(0x2000, 0x02);
             }
 
-            for (int i = 0x4000; i < 0x8000; i++)
+            for (uint16_t i = 0x4000; i < 0x8000; i++)
                 REQUIRE(mbc5.read(i) == rom[romBank * 0x4000 + i - 0x4000]);
 
-            for (int i = 0; i < 0x8000; i++)
+            for (uint16_t i = 0; i < 0x8000; i++)
             {
                 mbc5.write(i, 0x00);
                 REQUIRE(mbc5.read(i) == rom[i]);
             }
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc5.read(i) == 0xFF);
             mbc5.write(0x1FFF, 0x0A);
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
                 REQUIRE(mbc5.read(i) == ram[i - 0xA000]);
 
-            for (int i = 0xA000; i < 0xC000; i++)
+            for (uint16_t i = 0xA000; i < 0xC000; i++)
             {
                 mbc5.write(i, 0x00);
                 REQUIRE(mbc5.read(i) == 0x00);

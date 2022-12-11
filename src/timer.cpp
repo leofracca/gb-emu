@@ -31,7 +31,7 @@ namespace gameboy
         m_memory.write(TAC_REG_ADDRESS, m_tac);
     }
 
-    void Timer::cycle(int cycles)
+    void Timer::cycle(uint8_t cycles)
     {
         getRegisters();
 
@@ -52,8 +52,8 @@ namespace gameboy
              * When the value overflows (exceeds $FF) it is reset to the value specified in TMA (FF06)
              * and an interrupt is requested.
              */
-            int clockFrequencyThreshold = 0;
-            // The frequency is represented by the bit 0-1 of the TAC register
+            uint16_t clockFrequencyThreshold = 0;
+            // The frequency is represented by the bits 0-1 of the TAC register
             switch (m_tac & 0x03)
             {
                 case 0:

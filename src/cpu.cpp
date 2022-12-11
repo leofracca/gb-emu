@@ -14,10 +14,10 @@ namespace gameboy
         : m_memory(memory)
     {}
 
-    int CPU::cycle()
+    uint8_t CPU::cycle()
     {
         // Check interrupts
-        int cycles = handleInterrupts();
+        uint8_t cycles = handleInterrupts();
         if (cycles > 0)
             return cycles;
 
@@ -32,7 +32,7 @@ namespace gameboy
         return executeOpcode(instruction);
     }
 
-    int CPU::handleInterrupts()
+    uint8_t CPU::handleInterrupts()
     {
         /*
          * The CPU is supposed to unhalt if an interrupt flag is set,
@@ -82,7 +82,7 @@ namespace gameboy
         return false;
     }
 
-    int CPU::executeOpcode(uint8_t opcode)
+    uint8_t CPU::executeOpcode(uint8_t opcode)
     {
         uint8_t value = 0; // Temp variable used for some opcodes
 
@@ -837,7 +837,7 @@ namespace gameboy
         return branched ? cpu_cycles::OPCODE_CYCLES_BRANCHED[opcode] : cpu_cycles::OPCODE_CYCLES[opcode];
     }
 
-    int CPU::executeOpcodeCB(uint8_t opcode)
+    uint8_t CPU::executeOpcodeCB(uint8_t opcode)
     {
         uint8_t value = 0; // Temp variable used for some opcodes
 

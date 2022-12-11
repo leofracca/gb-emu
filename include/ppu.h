@@ -22,8 +22,8 @@ namespace gameboy
 {
     namespace screen_size
     {
-        constexpr int SCREEN_WIDTH = 160; ///< The width of the screen in pixels
-        constexpr int SCREEN_HEIGHT = 144; ///< The height of the screen in pixels
+        constexpr uint8_t SCREEN_WIDTH = 160; ///< The width of the screen in pixels
+        constexpr uint8_t SCREEN_HEIGHT = 144; ///< The height of the screen in pixels
     } // namespace screen_size
 
     namespace ppu_registers
@@ -69,7 +69,7 @@ namespace gameboy
          *
          * @param cycles The number of cycles to increment the PPU by
          */
-        void cycle(int cycles);
+        void cycle(uint8_t cycles);
 
         /**
          * @brief Get the frame buffer
@@ -98,7 +98,7 @@ namespace gameboy
         std::array<Colour, screen_size::SCREEN_WIDTH *(screen_size::SCREEN_HEIGHT + 9)> m_frameBuffer{}; ///< The frame buffer
         bool m_renderingEnabled = false; ///< Whether the PPU can render the screen
 
-        int m_cycles = 0; ///< The number of cycles since the last frame
+        uint16_t m_cycles = 0; ///< The number of cycles since the last frame
         Mode m_mode = Mode::HBLANK; ///< The current mode of the PPU
 
         // Registers

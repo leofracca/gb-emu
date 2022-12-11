@@ -15,7 +15,7 @@ namespace gameboyTest
 
         // Check that the ROM title is correct
         std::string title;
-        for (int i = 0x0134; i < 0x0143; i++)
+        for (uint16_t i = 0x0134; i < 0x0143; i++)
         {
             if (cartridge.read(i) == 0x00)
                 break;
