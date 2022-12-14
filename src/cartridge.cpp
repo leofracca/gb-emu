@@ -119,13 +119,13 @@ namespace gameboy
 
     void Cartridge::printCartridgeInfo()
     {
-        std::cout << "--------------- Cartridge info ----------------" << std::endl;
-        std::cout << "Title: " << m_title << std::endl;
-        std::cout << "Cartridge type: " << m_MBCAsString << std::endl;
-        std::cout << "Licensee: " << m_licenseeCode << std::endl;
-        std::cout << "ROM size: " << m_ROMSizeAsString << std::endl;
-        std::cout << "RAM size: " << m_RAMSizeAsString << std::endl;
-        std::cout << "-----------------------------------------------" << std::endl;
+        std::cout << "--------------- Cartridge info ----------------\n";
+        std::cout << "Title: " << m_title << "\n";
+        std::cout << "Cartridge type: " << m_MBCAsString << "\n";
+        std::cout << "Licensee: " << m_licenseeCode << "\n";
+        std::cout << "ROM size: " << m_ROMSizeAsString << "\n";
+        std::cout << "RAM size: " << m_RAMSizeAsString << "\n";
+        std::cout << "-----------------------------------------------\n";
     }
 
     std::string Cartridge::getTitle() const
