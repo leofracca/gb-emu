@@ -23,27 +23,25 @@ namespace gameboy
             uint8_t cycles = cpu.cycle() * 4;
             timer.cycle(cycles);
             ppu.cycle(cycles);
-        } while (!updatePlatform(lastCycleTime, ppu, input));
+        } while (updatePlatform(lastCycleTime, ppu, input));
 
         saveRAMData();
     }
 
     bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)
     {
-        if (ppu.isRenderingEnabled())
-        {
-            if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
-                SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
+        if (!ppu.isRenderingEnabled())
+            return true;
 
-            m_platform.update(ppu.getFrameBuffer());
-            ppu.setRenderingEnabled(false);
+        if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
+            SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
 
-            lastCycleTime = SDL_GetTicks64();
+        m_platform.update(ppu.getFrameBuffer());
+        ppu.setRenderingEnabled(false);
 
-            return Platform::processInput(input);
-        }
+        lastCycleTime = SDL_GetTicks64();
 
-        return false;
+        return Platform::processInput(input);
     }
 
     void GB::saveRAMData() const

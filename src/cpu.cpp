@@ -6,7 +6,6 @@
 
 #include "cpu.h" // CPU
 
-#include <iostream>
 #include <stdexcept> // std::runtime_error
 
 namespace gameboy

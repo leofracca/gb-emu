@@ -3,7 +3,7 @@
 
 namespace gameboy
 {
-    Platform::Platform(int scale)
+    Platform::Platform(const int scale)
     {
         SDL_Init(SDL_INIT_VIDEO);
         window = SDL_CreateWindow("GBEmu", 0, 0, screen_size::SCREEN_WIDTH * scale, screen_size::SCREEN_HEIGHT * scale, SDL_WINDOW_SHOWN);
@@ -60,10 +60,10 @@ namespace gameboy
                 }
                 break;
             case SDL_QUIT:
-                return true;
+                return false;
         }
 
         input.sendInterrupt();
-        return false;
+        return true;
     }
 } // namespace gameboy
