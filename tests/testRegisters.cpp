@@ -25,7 +25,7 @@ namespace gameboyTest
         REQUIRE(registers.getFlag(flags::CARRY_FLAG) == true);
     }
 
-    TEST_CASE("Registers get/set", "[registers]")
+    TEST_CASE("Registers get/set flags", "[registers]")
     {
         Registers registers;
         registers.setFlag(flags::ZERO_FLAG, false);
@@ -52,24 +52,49 @@ namespace gameboyTest
     TEST_CASE("Registers get/set pairs", "[registers]")
     {
         Registers registers;
-        registers.setAF(0x01B0);
+
         REQUIRE(registers.getAF() == 0x01B0);
         REQUIRE(registers.a == 0x01);
         REQUIRE(registers.f == 0xB0);
+        for (auto i = 0; i < 0x10000; i++)
+        {
+            registers.setAF(i);
+            REQUIRE(registers.getAF() == i);
+            REQUIRE(registers.a == (i >> 8));
+            REQUIRE(registers.f == (i & 0xFF));
+        }
 
-        registers.setBC(0x0013);
         REQUIRE(registers.getBC() == 0x0013);
         REQUIRE(registers.b == 0x00);
         REQUIRE(registers.c == 0x13);
+        for (auto i = 0; i < 0x10000; i++)
+        {
+            registers.setBC(i);
+            REQUIRE(registers.getBC() == i);
+            REQUIRE(registers.b == (i >> 8));
+            REQUIRE(registers.c == (i & 0xFF));
+        }
 
-        registers.setDE(0x00D8);
         REQUIRE(registers.getDE() == 0x00D8);
         REQUIRE(registers.d == 0x00);
         REQUIRE(registers.e == 0xD8);
+        for (auto i = 0; i < 0x10000; i++)
+        {
+            registers.setDE(i);
+            REQUIRE(registers.getDE() == i);
+            REQUIRE(registers.d == (i >> 8));
+            REQUIRE(registers.e == (i & 0xFF));
+        }
 
-        registers.setHL(0x014D);
         REQUIRE(registers.getHL() == 0x014D);
         REQUIRE(registers.h == 0x01);
         REQUIRE(registers.l == 0x4D);
+        for (auto i = 0; i < 0x10000; i++)
+        {
+            registers.setHL(i);
+            REQUIRE(registers.getHL() == i);
+            REQUIRE(registers.h == (i >> 8));
+            REQUIRE(registers.l == (i & 0xFF));
+        }
     }
 } // namespace gameboyTest
