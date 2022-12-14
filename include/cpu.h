@@ -109,7 +109,7 @@ namespace gameboy
         bool m_halted = false; ///< True if the cpu is halted
         bool m_ime = true; ///< True if the cpu is in the interrupt master enable mode
 
-        bool branched = false; // Used to check if a branch was taken (for conditional opcodes (jump, call, return))
+        bool m_branched = false; // Used to check if a branch was taken (for conditional opcodes (jump, call, return))
 
         static constexpr uint16_t LD_START_ADDRESS = 0xFF00; ///< Start address of instructions with opcode 0xE0, 0xE2, 0xF0, 0xF2
 

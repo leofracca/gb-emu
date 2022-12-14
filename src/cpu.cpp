@@ -6,6 +6,7 @@
 
 #include "cpu.h" // CPU
 
+#include <iostream>
 #include <stdexcept> // std::runtime_error
 
 namespace gameboy
@@ -84,6 +85,7 @@ namespace gameboy
 
     uint8_t CPU::executeOpcode(uint8_t opcode)
     {
+        m_branched = false;
         uint8_t value = 0; // Temp variable used for some opcodes
 
         switch (opcode)
@@ -834,7 +836,7 @@ namespace gameboy
                 throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
         }
 
-        return branched ? cpu_cycles::OPCODE_CYCLES_BRANCHED[opcode] : cpu_cycles::OPCODE_CYCLES[opcode];
+        return m_branched ? cpu_cycles::OPCODE_CYCLES_BRANCHED[opcode] : cpu_cycles::OPCODE_CYCLES[opcode];
     }
 
     uint8_t CPU::executeOpcodeCB(uint8_t opcode)
@@ -2180,7 +2182,7 @@ namespace gameboy
         if (condition)
         {
             jp();
-            branched = true;
+            m_branched = true;
         }
         else
             m_registers.pc += 2;
@@ -2198,7 +2200,7 @@ namespace gameboy
         if (condition)
         {
             jr();
-            branched = true;
+            m_branched = true;
         }
         else
             m_registers.pc++;
@@ -2216,7 +2218,7 @@ namespace gameboy
         if (condition)
         {
             call();
-            branched = true;
+            m_branched = true;
         }
         else
             m_registers.pc += 2;
@@ -2238,7 +2240,7 @@ namespace gameboy
         if (condition)
         {
             ret();
-            branched = true;
+            m_branched = true;
         }
     }
 
