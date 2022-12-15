@@ -4,13 +4,18 @@
 
 namespace gameboy
 {
-    GB::GB(const std::string &filename, const int scale)
-        : m_platform(scale),
-          m_memory(filename)
+    GB::GB(const int scale)
+        : m_platform(scale)
     {}
 
-    int GB::run()
+    int GB::run(const std::string &filename)
     {
+        Cartridge cartridge{};
+        bool cartridgeLoaded = cartridge.loadROM(filename);
+        if (!cartridgeLoaded)
+            return 1;
+
+        Memory m_memory(cartridge);
         CPU cpu(m_memory);
         PPU ppu(m_memory);
         Timer timer(m_memory);
@@ -27,7 +32,7 @@ namespace gameboy
             ppu.cycle(cycles);
         } while (updatePlatform(lastCycleTime, ppu, input));
 
-        saveRAMData();
+        saveRAMData(cartridge);
         return 0;
     }
 
@@ -47,8 +52,8 @@ namespace gameboy
         return Platform::processInput(input);
     }
 
-    void GB::saveRAMData() const
+    void GB::saveRAMData(const Cartridge &cartridge)
     {
-        m_memory.getCartridge().saveRAMData();
+        cartridge.saveRAMData();
     }
 } // namespace gameboy

@@ -1,15 +1,16 @@
 #include "catch.hpp"
 #include "input.h"
+#include "memory.h"
+#include "cartridge.h"
 
 namespace gameboyTest
 {
     using namespace gameboy;
 
-    const std::string TEST_ROM = "test_roms/cpu_instrs.gb";
-
     TEST_CASE("Input setButton", "[input]")
     {
-        Memory memory(TEST_ROM);
+        Cartridge cartridge{};
+        Memory memory(cartridge);
         Input input(memory);
         input.setButton(JoypadButton::BUTTON_A, true);
         REQUIRE(memory.getJoypadState() == 0xFE);
@@ -47,7 +48,8 @@ namespace gameboyTest
 
     TEST_CASE("Input sendInterrupt", "[input]")
     {
-        Memory memory(TEST_ROM);
+        Cartridge cartridge{};
+        Memory memory(cartridge);
         Input input(memory);
         input.sendInterrupt();
         REQUIRE(memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS) == (0xE1 | 0x10));

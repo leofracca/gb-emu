@@ -42,12 +42,13 @@ namespace gameboy
 
         /**
          * @brief Load the ROM into the cartridge
-         * @details Save the filename, load the ROM into the cartridge and check the cartridge type
+         * @details Save the filename, save the ROM, save the RAM, check the cartridge type and print cartridge informations
          *
          * @param filename The name of the ROM file
-         * @see checkCartridge
+         * @return true if the ROM was loaded successfully, false otherwise
+         * @see checkCartridge, printCartridgeInfo
          */
-        void loadROM(const std::string &filename);
+        bool loadROM(const std::string &filename);
 
         /**
          * @brief Read a byte from the cartridge

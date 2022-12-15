@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "cartridge.h" // Cartridge
 #include "cpu.h" // CPU
 #include "input.h" // Input
 #include "memory.h" // Memory
@@ -24,22 +25,21 @@ namespace gameboy
         /**
          * @brief Create and initialize the emulator
          *
-         * @param filename The path to the rom file
          * @param scale The scale of the window
          */
-        GB(const std::string &filename, int scale);
+        explicit GB(int scale);
 
         /**
          * @brief Run the emulator
          * @details Do the steps of the CPU, PPU, Timer and Input
          *
-         * @return 1 if the CPU encountered an error (unexpected opcode), 0 otherwise
+         * @param filename The name of the ROM file
+         * @return 1 if there are no file with name filename or the CPU encountered an error (unexpected opcode), 0 otherwise
          */
-        int run();
+        int run(const std::string &filename);
 
     private:
-        Platform m_platform;
-        Memory m_memory;
+        Platform m_platform; ///< The platform
 
         static constexpr int FPS = 60; ///< The number of frames per second
         static constexpr int FRAMERATE = 1000 / FPS; ///< The number of milliseconds per frame
@@ -49,6 +49,8 @@ namespace gameboy
          * @details If the PPU is rendering, update the screen and handle the inputs
          *
          * @param lastCycleTime The last time the screen was updated
+         * @param ppu The PPU
+         * @param input The Input
          * @return True if the user wants to quit, false otherwise
          */
         bool updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input);
@@ -56,8 +58,9 @@ namespace gameboy
         /**
          * @brief Save the current content of the RAM to a file
          *
+         * @param cartridge The cartridge
          * @see Cartridge::saveRAMData, MBC::saveRAMData
          */
-        void saveRAMData() const;
+        static void saveRAMData(const Cartridge &cartridge);
     };
 } // namespace gameboy

@@ -17,7 +17,7 @@ namespace gameboy
         delete m_MBC;
     }
 
-    void Cartridge::loadROM(const std::string &filename)
+    bool Cartridge::loadROM(const std::string &filename)
     {
         // Save the filename without the extension
         m_ROMFilename = filename.substr(0, filename.find_last_of('.'));
@@ -25,7 +25,10 @@ namespace gameboy
         // Open the file
         std::ifstream romFile(filename, std::ios::binary);
         if (!romFile.is_open())
-            throw std::runtime_error("Could not open the file");
+        {
+            std::cout << "\x1B[31mError!\033[0m Could not open the ROM file " << filename << std::endl;
+            return false;
+        }
 
         // Initialize ROM
         m_rom = std::vector<uint8_t>(std::istreambuf_iterator<char>(romFile), {});
@@ -42,6 +45,7 @@ namespace gameboy
 
         checkCartridge();
         printCartridgeInfo();
+        return true;
     }
 
     void Cartridge::checkCartridge()

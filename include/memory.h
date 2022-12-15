@@ -98,9 +98,9 @@ namespace gameboy
          * @brief Construct a new Memory object
          * @details Initialize the cartridge
          *
-         * @param filename The path to the ROM file
+         * @param cartridge The cartridge to load
          */
-        explicit Memory(const std::string &filename);
+        explicit Memory(Cartridge &cartridge);
 
         /**
          * @brief Read a byte from the memory
@@ -153,13 +153,6 @@ namespace gameboy
         void setJoypadState(uint8_t state);
 
         /**
-         * @brief Get the cartridge
-         *
-         * @return The cartridge
-         */
-        [[nodiscard]] const Cartridge &getCartridge() const;
-
-        /**
          * @brief Array subscript operator
          * @details Access the field m_memory at the specified index
          *
@@ -171,7 +164,7 @@ namespace gameboy
 
     private:
         std::array<uint8_t, 0x10000> m_memory{}; ///< The memory of the Game Boy
-        Cartridge m_cartridge; ///< The cartridge
+        Cartridge &m_cartridge; ///< The cartridge
 
         /**
          * @brief The current state of the joypad

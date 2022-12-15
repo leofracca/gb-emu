@@ -9,10 +9,9 @@
 
 namespace gameboy
 {
-    Memory::Memory(const std::string &filename)
+    Memory::Memory(Cartridge &cartridge)
+        : m_cartridge(cartridge)
     {
-        m_cartridge.loadROM(filename);
-
         // Initialize memory registers
         m_memory[0xFF00] = 0xCF; // P1
         m_memory[0xFF01] = 0x00; // SB
@@ -162,11 +161,6 @@ namespace gameboy
     void Memory::setJoypadState(uint8_t state)
     {
         m_joypadState = state;
-    }
-
-    const Cartridge &Memory::getCartridge() const
-    {
-        return m_cartridge;
     }
 
     uint8_t &Memory::operator[](uint16_t address)

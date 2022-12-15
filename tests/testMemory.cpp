@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "memory.h"
+#include "cartridge.h"
 
 namespace gameboyTest
 {
@@ -9,7 +10,8 @@ namespace gameboyTest
     
     TEST_CASE("Memory init", "[memory]")
     {
-        Memory memory(TEST_ROM);
+        Cartridge cartridge{};
+        Memory memory(cartridge);
 
         REQUIRE(memory[0xFF00] == 0xCF);
         REQUIRE(memory[0xFF01] == 0x00);
@@ -48,24 +50,14 @@ namespace gameboyTest
         REQUIRE(memory[0xFF4B] == 0x00);
         REQUIRE(memory[0xFFFF] == 0x00);
 
-        // Check that the ROM title is correct
-        std::string title;
-        for (uint16_t i = 0x0134; i < 0x0143; i++)
-        {
-            if (memory.read(i) == 0x00)
-                break;
-            title += static_cast<char>(memory.read(i));
-        }
-
-        REQUIRE(title == "CPU_INSTRS");
-
         // Check the joypad
         REQUIRE(memory.getJoypadState() == 0xFF);
     }
 
     TEST_CASE("Joypad state", "[memory]")
     {
-        Memory memory(TEST_ROM);
+        Cartridge cartridge{};
+        Memory memory(cartridge);
 
         memory.setJoypadState(0x0F);
         REQUIRE(memory.getJoypadState() == 0x0F);
@@ -84,7 +76,8 @@ namespace gameboyTest
 
     TEST_CASE("Unusable memory", "[memory]")
     {
-        Memory memory(TEST_ROM);
+        Cartridge cartridge{};
+        Memory memory(cartridge);
 
         for (uint16_t i = 0xE000; i < 0xFE00; i++)
         {
