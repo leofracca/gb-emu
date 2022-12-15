@@ -98,7 +98,7 @@ namespace gameboy
         /**
          * @brief Get the opcode of the next instruction, increment the program counter and execute the instruction.
          *
-         * @return The number of cycles used by the instruction.
+         * @return The number of cycles used by the instruction, 0 if the instruction does not exist.
          */
         uint8_t cycle();
 
@@ -146,7 +146,7 @@ namespace gameboy
          * @details Call the appropriate function depending on the opcode and execute the next instruction.
          *
          * @param opcode The opcode of the instruction.
-         * @return The number of cycles used by the instruction.
+         * @return The number of cycles used by the instruction or 0 if the opcode does not exist.
          */
         uint8_t executeOpcode(uint8_t opcode);
 
@@ -155,7 +155,7 @@ namespace gameboy
          * @details Call the appropriate function depending on the cb opcode and execute the next instruction.
          *
          * @param opcode The cb opcode of the instruction.
-         * @return The number of cycles used by the instruction.
+         * @return The number of cycles used by the instruction or 0 if the opcode does not exist.
          */
         uint8_t executeOpcodeCB(uint8_t opcode);
 

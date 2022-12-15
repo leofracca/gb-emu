@@ -9,7 +9,7 @@ namespace gameboy
           m_memory(filename)
     {}
 
-    void GB::run()
+    int GB::run()
     {
         CPU cpu(m_memory);
         PPU ppu(m_memory);
@@ -21,11 +21,14 @@ namespace gameboy
         do
         {
             uint8_t cycles = cpu.cycle() * 4;
+            if (cycles == 0) // An unexpected opcode was encountered
+                return 1;
             timer.cycle(cycles);
             ppu.cycle(cycles);
         } while (updatePlatform(lastCycleTime, ppu, input));
 
         saveRAMData();
+        return 0;
     }
 
     bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)

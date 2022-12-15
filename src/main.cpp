@@ -7,7 +7,8 @@ int main(int argc, char *argv[])
     int scale = (argc == 3) ? std::stoi(argv[2]) : 1;
 
     gameboy::GB gameboy(romFilename, scale);
-    gameboy.run();
+    if (gameboy.run() == 1)
+        return 1;
 
     return 0;
 }

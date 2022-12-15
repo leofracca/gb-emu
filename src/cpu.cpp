@@ -834,6 +834,7 @@ namespace gameboy
                 break;
             default:
                 logUnexpectedOpcode(opcode);
+                return 0;
         }
 
         return m_branched ? cpu_cycles::OPCODE_CYCLES_BRANCHED[opcode] : cpu_cycles::OPCODE_CYCLES[opcode];
@@ -1671,6 +1672,7 @@ namespace gameboy
                 break;
             default:
                 logUnexpectedOpcode(opcode);
+                return 0;
         }
 
         return cpu_cycles::OPCODE_CB_CYCLES[opcode];

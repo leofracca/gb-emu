@@ -32,8 +32,10 @@ namespace gameboy
         /**
          * @brief Run the emulator
          * @details Do the steps of the CPU, PPU, Timer and Input
+         *
+         * @return 1 if the CPU encountered an error (unexpected opcode), 0 otherwise
          */
-        void run();
+        int run();
 
     private:
         Platform m_platform;
