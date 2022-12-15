@@ -233,5 +233,24 @@ namespace gameboy
          * @param value The new value of the palette (2 bits per colour)
          */
         static void UpdatePalette(Colour (&palette)[4], uint8_t value);
+
+        /**
+         * @brief Log an invalid write operation
+         * @details Used when the game tries to write to illegal memory sections (Unusable memory or Echo RAM)
+         *
+         * @param address The address of the write operation
+         * @param value The value the game tried to write
+         * @param memorySection The name of the memory section of the address
+         */
+        static void logInvalidWriteOperation(uint16_t address, uint8_t value, const std::string &memorySection);
+
+        /**
+         * @brief Log an invalid read operation
+         * @details Used when the game tries to read from illegal memory sections (Unusable memory or Echo RAM)
+         *
+         * @param address The address of the read operation
+         * @param memorySection The name of the memory section of the address
+         */
+        static void logInvalidReadOperation(uint16_t address, const std::string &memorySection);
     };
 } // namespace gameboy

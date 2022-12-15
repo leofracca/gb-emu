@@ -6,6 +6,7 @@
 #include "mbc.h" // MBC
 
 #include <fstream> // std::ofstream
+#include <iostream>
 #include <iterator> // std::ostreambuf_iterator
 #include <stdexcept> // std::runtime_error
 #include <utility>
@@ -44,9 +45,7 @@ namespace gameboy
     void ROMOnly::write(uint16_t address, uint8_t value)
     {
         /* Nothing to do here */
-        if (address < 0x8000)
-            return;
-        throw std::runtime_error("Cannot write value " + std::to_string(value) + " to address " + std::to_string(address));
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Cannot write value 0x" << +value << " to address 0x" << address << " (ROM Only)\n";
     }
 
     MBC1::MBC1(std::vector<uint8_t> rom, std::vector<uint8_t> ram)

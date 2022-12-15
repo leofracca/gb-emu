@@ -34,7 +34,10 @@ namespace gameboyTest
             }
 
             for (uint16_t i = 0x8000; i < 0xFFFF; i++)
-                REQUIRE_THROWS_AS(romOnly.write(i, 0x00), std::runtime_error);
+            {
+                romOnly.write(i, 0x00);
+                REQUIRE(romOnly.read(i) == 0x00);
+            }
         }
 
         SECTION("MBC1")

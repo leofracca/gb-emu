@@ -6,6 +6,7 @@
 
 #include "cpu.h" // CPU
 
+#include <iostream>
 #include <stdexcept> // std::runtime_error
 
 namespace gameboy
@@ -832,7 +833,7 @@ namespace gameboy
                 rst(0x38);
                 break;
             default:
-                throw std::runtime_error("Unexpected opcode: " + std::to_string(opcode));
+                logUnexpectedOpcode(opcode);
         }
 
         return m_branched ? cpu_cycles::OPCODE_CYCLES_BRANCHED[opcode] : cpu_cycles::OPCODE_CYCLES[opcode];
@@ -1669,10 +1670,15 @@ namespace gameboy
                 set(7, m_registers.a);
                 break;
             default:
-                throw std::runtime_error("Unexpected CB opcode: " + std::to_string(opcode));
+                logUnexpectedOpcode(opcode);
         }
 
         return cpu_cycles::OPCODE_CB_CYCLES[opcode];
+    }
+
+    void CPU::logUnexpectedOpcode(uint8_t opcode)
+    {
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Unexpected opcode: " << +opcode << "\n";
     }
 
     void CPU::push(uint16_t value)

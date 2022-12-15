@@ -159,6 +159,13 @@ namespace gameboy
          */
         uint8_t executeOpcodeCB(uint8_t opcode);
 
+        /**
+         * @brief Log an invalid opcode
+         *
+         * @param opcode The invalid opcode
+         */
+        static void logUnexpectedOpcode(uint8_t opcode);
+
         // Push and pop
         /**
          * @brief Push a value onto the stack.

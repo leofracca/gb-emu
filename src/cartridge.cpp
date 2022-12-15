@@ -98,7 +98,7 @@ namespace gameboy
                 m_MBC = new MBC5(std::move(m_rom), std::move(m_ram));
                 break;
             default:
-                throw std::runtime_error("Invalid cartridge type");
+                std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Unknown cartridge type: " << +cartridgeType << std::endl;
         }
     }
 

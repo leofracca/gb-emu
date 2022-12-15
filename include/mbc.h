@@ -94,8 +94,7 @@ namespace gameboy
 
         /**
          * @brief Do nothing
-         * @details If the address is < 0x8000, do nothing
-         *          If the address is >= 0x8000, throw an exception
+         * @details A game with no MBC can't write to the cartridge
          *
          * @param address The address to write to
          * @param value The value to write

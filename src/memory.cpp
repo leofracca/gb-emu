@@ -5,7 +5,7 @@
 
 #include "memory.h" // Memory
 
-#include <stdexcept> // std::runtime_error
+#include <iostream> // std::cout
 
 namespace gameboy
 {
@@ -58,16 +58,17 @@ namespace gameboy
         if (address < 0x8000 || (address >= 0xA000 && address < 0xC000))
             return m_cartridge.read(address);
 
-        // Echo RAM (unusable memory)
-        if (address >= 0xE000 && address < 0xFE00)
-            throw std::runtime_error("Reading from echo RAM is not allowed");
+        // Echo RAM
+        else if (address >= 0xE000 && address < 0xFE00)
+            // TODO: Forwards the read to the RAM (0xC000-0xDDFF)
+            logInvalidReadOperation(address, "Echo RAM");
 
         // Unusable memory
-        if (address >= 0xFEA0 && address < 0xFF00)
-            throw std::runtime_error("Reading from unusable memory");
+        else if (address >= 0xFEA0 && address < 0xFF00)
+            logInvalidReadOperation(address, "Unusable memory");
 
         // Joypad
-        if (address == JOYPAD_ADDRESS)
+        else if (address == JOYPAD_ADDRESS)
         {
             // Is the pressed button an action button or a direction button?
             uint8_t actionOrDirection = m_memory[JOYPAD_ADDRESS] & 0x30;
@@ -87,18 +88,18 @@ namespace gameboy
             m_cartridge.write(address, value);
         else
         {
-            // Echo RAM (unusable memory)
+            // Echo RAM
             if (address >= 0xE000 && address < 0xFE00)
-                throw std::runtime_error("Writing to Echo RAM is not allowed");
+                // TODO: Forwards writes to the RAM (0xC000-0xDDFF)
+                logInvalidWriteOperation(address, value, "Echo RAM");
 
             // Unusable memory
-            if (address >= 0xFEA0 && address < 0xFF00)
-                // Writing to this area is prohibited, but TETRIS does it anyway
-                // So instead of throwing an exception, just ignore the write operation
-                return;
+            else if (address >= 0xFEA0 && address < 0xFF00)
+                logInvalidWriteOperation(address, value, "Unusable memory");
 
             // Valid address, write the value to the memory
-            m_memory[address] = value;
+            else
+                m_memory[address] = value;
 
             // VRAM
             if (address >= 0x8000 && address < 0x9800)
@@ -220,5 +221,15 @@ namespace gameboy
         palette[1] = paletteColours[(value >> 2) & 0x3];
         palette[2] = paletteColours[(value >> 4) & 0x3];
         palette[3] = paletteColours[(value >> 6) & 0x3];
+    }
+
+    void Memory::logInvalidWriteOperation(uint16_t address, uint8_t value, const std::string &memorySection)
+    {
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Writing value 0x" << +value << " to address 0x" << address << " (" << memorySection << ")\n";
+    }
+
+    void Memory::logInvalidReadOperation(uint16_t address, const std::string &memorySection)
+    {
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Reading from address 0x" << address << " (" << memorySection << ")\n";
     }
 } // namespace gameboy

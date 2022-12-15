@@ -88,13 +88,13 @@ namespace gameboyTest
 
         for (uint16_t i = 0xE000; i < 0xFE00; i++)
         {
-            REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
-            REQUIRE_THROWS_AS(memory.write(i, 0x00), std::runtime_error);
+            memory[i] = 0x00;
+            memory.write(i, 0x01);
+            REQUIRE(memory.read(i) == 0x00);
         }
 
         for (uint16_t i = 0xFEA0; i < 0xFF00; i++)
         {
-            REQUIRE_THROWS_AS(memory.read(i), std::runtime_error);
             memory[i] = 0x00;
             memory.write(i, 0x01);
             REQUIRE(memory[i] == 0x00);
