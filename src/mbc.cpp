@@ -6,10 +6,9 @@
 #include "mbc.h" // MBC
 
 #include <fstream> // std::ofstream
-#include <iostream>
+#include <iostream> // std::cout
 #include <iterator> // std::ostreambuf_iterator
-#include <stdexcept> // std::runtime_error
-#include <utility>
+#include <utility> // std::move
 
 namespace gameboy
 {
@@ -24,9 +23,6 @@ namespace gameboy
             return;
 
         std::ofstream ramFile(filename);
-        if (!ramFile.is_open())
-            throw std::runtime_error("Could not open the RAM save file");
-
         std::copy(m_ram.begin(), m_ram.end(), std::ostreambuf_iterator<char>(ramFile));
         ramFile.close();
     }
