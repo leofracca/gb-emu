@@ -35,10 +35,19 @@ namespace gameboy
     class Cartridge
     {
     public:
+        /// Default constructor
+        Cartridge() = default;
+
         /**
          * @brief Free the memory used by the MBC
          */
         ~Cartridge();
+
+        /// Cartridge cannot be copied
+        Cartridge(const Cartridge &) = delete;
+
+        /// Cartridge cannot be assigned
+        Cartridge &operator=(const Cartridge &) = delete;
 
         /**
          * @brief Load the ROM into the cartridge
@@ -77,7 +86,7 @@ namespace gameboy
 
     private:
         std::string m_ROMFilename; ///< The filename of the ROM
-        MBC *m_MBC; ///< The MBC of the cartridge
+        MBC *m_MBC = nullptr; ///< The MBC of the cartridge
 
         std::string m_title; ///< The title of the cartridge (used for printing)
         std::string m_MBCAsString; ///< The MBC as a string (used for printing)

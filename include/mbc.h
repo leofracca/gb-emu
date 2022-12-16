@@ -34,6 +34,12 @@ namespace gameboy
 
         virtual ~MBC() = default;
 
+        /// MBC cannot be copied
+        MBC(const MBC &) = delete;
+
+        /// MBC cannot be assigned
+        MBC &operator=(const MBC &) = delete;
+
         /**
          * @brief Read a byte from the cartridge
          * @details Read a byte from the cartridge at the specified address and return it

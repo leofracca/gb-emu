@@ -31,6 +31,12 @@ namespace gameboy
          */
         ~Platform();
 
+        /// Platform cannot be copied
+        Platform(const Platform &) = delete;
+
+        /// Platform cannot be assigned
+        Platform &operator=(const Platform &) = delete;
+
         /**
          * @brief Update the window with the new frame buffer
          *

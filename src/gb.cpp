@@ -10,7 +10,7 @@ namespace gameboy
 
     int GB::run(const std::string &filename)
     {
-        Cartridge cartridge{};
+        Cartridge cartridge;
         bool cartridgeLoaded = cartridge.loadROM(filename);
         if (!cartridgeLoaded)
             return 1;
