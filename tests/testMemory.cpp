@@ -83,7 +83,9 @@ namespace gameboyTest
         {
             memory[i] = 0x00;
             memory.write(i, 0x01);
-            REQUIRE(memory.read(i) == 0x00);
+            REQUIRE(memory[i] == 0x00);
+            REQUIRE(memory.read(i) == 0x01);
+            REQUIRE(memory.read(i - 0x2000) == 0x01);
         }
 
         for (uint16_t i = 0xFEA0; i < 0xFF00; i++)

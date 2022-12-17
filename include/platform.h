@@ -48,7 +48,7 @@ namespace gameboy
          * @brief Get the input from the user
          *
          * @param input The input object
-         * @return True if the user wants to quit, false otherwise
+         * @return False if the user wants to quit, true otherwise
          */
         static bool processInput(Input &input);
 

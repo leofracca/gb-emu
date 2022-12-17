@@ -59,8 +59,11 @@ namespace gameboy
 
         // Echo RAM
         else if (address >= 0xE000 && address < 0xFE00)
-            // TODO: Forwards the read to the RAM (0xC000-0xDDFF)
+        {
+            // Forward the read to the WRAM (0xC000-0xDDFF)
             logInvalidReadOperation(address, "Echo RAM");
+            return m_memory[address - 0x2000];
+        }
 
         // Unusable memory
         else if (address >= 0xFEA0 && address < 0xFF00)
@@ -89,8 +92,11 @@ namespace gameboy
         {
             // Echo RAM
             if (address >= 0xE000 && address < 0xFE00)
-                // TODO: Forwards writes to the RAM (0xC000-0xDDFF)
+            {
+                // Forward the write to the WRAM (0xC000-0xDDFF)
                 logInvalidWriteOperation(address, value, "Echo RAM");
+                m_memory[address - 0x2000] = value;
+            }
 
             // Unusable memory
             else if (address >= 0xFEA0 && address < 0xFF00)
