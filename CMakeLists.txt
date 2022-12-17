@@ -16,11 +16,17 @@ option(USAN     OFF)
 # Coverage
 option(COVERAGE OFF)
 
-set(COMPILER_FLAGS
-    -O3
-    -Wall -Wextra -Wpedantic -Werror
-    $<$<BOOL:${USAN}>:-fsanitize=undefined -fno-omit-frame-pointer>
-)
+set(COMPILER_FLAGS -Wall -Wextra -Wpedantic -Werror)
+if (NOT COVERAGE)
+    set(COMPILER_FLAGS ${COMPILER_FLAGS} -O3)
+else ()
+    set(COMPILER_FLAGS ${COMPILER_FLAGS}
+        -O0
+        -g
+        $<$<BOOL:${USAN}>:-fsanitize=undefined -fno-omit-frame-pointer>
+    )
+endif()
+# message(STATUS "Compiler flags: ${COMPILER_FLAGS}")
 
 set(LINKER_FLAGS
     $<$<BOOL:${USAN}>:-fsanitize=undefined -fno-omit-frame-pointer>
