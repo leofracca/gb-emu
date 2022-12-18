@@ -57,7 +57,7 @@ namespace gameboy
         {
             return readROMBank(address);
         }
-        else if (address >= 0xA000 && address <= 0xBFFF) // https://gbdev.io/pandocs/MBC1.html#a000bfff--ram-bank-0003-if-any
+        else // https://gbdev.io/pandocs/MBC1.html#a000bfff--ram-bank-0003-if-any
         {
             if (m_ramEnabled)
             {
@@ -65,8 +65,6 @@ namespace gameboy
             }
             return 0xFF;
         }
-        else
-            return 0xFF;
     }
 
     void MBC1::write(uint16_t address, uint8_t value)
