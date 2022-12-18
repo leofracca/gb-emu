@@ -49,8 +49,7 @@ namespace gameboy
         uint8_t interrupt = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS) & m_memory.read(interrupt_registers::INTERRUPT_ENABLE_ADDRESS);
         if (interrupt == 0)
             return 0;
-        else
-            m_halted = false;
+        m_halted = false;
 
         // Interrupts are disabled
         if (!m_ime)
@@ -1697,19 +1696,20 @@ namespace gameboy
 
     void CPU::add(uint8_t n)
     {
-        uint16_t result = m_registers.a + n;
+        uint16_t resultFull = m_registers.a + n;
+        auto result = static_cast<uint8_t>(resultFull); // Get only the lower 8 bits of the result
 
         // Set the zero flag if the result is 0
-        m_registers.setFlag(flags::ZERO_FLAG, static_cast<uint8_t>(result) == 0);
+        m_registers.setFlag(flags::ZERO_FLAG, result == 0);
         // Set the subtract flag to 0
         m_registers.setFlag(flags::SUBTRACT_FLAG, false);
         // Set the half carry flag if there is a carry from bit 3
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (m_registers.a & 0x0F) + (n & 0x0F) > 0x0F);
         // Set the carry flag if there is a carry from bit 7
-        m_registers.setFlag(flags::CARRY_FLAG, result > 0xFF);
+        m_registers.setFlag(flags::CARRY_FLAG, resultFull > 0xFF);
 
         // Add n to the value of the register A
-        m_registers.a = static_cast<uint8_t>(result);
+        m_registers.a = result;
     }
 
     void CPU::adc(uint8_t n)
@@ -1847,7 +1847,7 @@ namespace gameboy
         m_registers.setFlag(flags::ZERO_FLAG, n == 0);
         // Set the subtract flag to 1
         m_registers.setFlag(flags::SUBTRACT_FLAG, true);
-        // Set the half-carry flag if there is a borrow from bit 4
+        // Set the half-carry flag if there is no borrow from bit 4
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (n & 0x0F) == 0x0F);
         // Carry flag not affected
     }
@@ -1922,7 +1922,7 @@ namespace gameboy
         // See https://en.wikipedia.org/wiki/Binary-coded_decimal
         // See https://ehaskins.com/2018-01-30%20Z80%20DAA/
 
-        uint8_t a = m_registers.a;
+        uint8_t &a = m_registers.a;
         uint8_t adjust = m_registers.getFlag(flags::CARRY_FLAG) ? 0x60 : 0x00;
 
         if (m_registers.getFlag(flags::HALF_CARRY_FLAG))
@@ -1948,8 +1948,6 @@ namespace gameboy
         m_registers.setFlag(flags::HALF_CARRY_FLAG, false);
         // Set the carry flag if there is a carry from bit 7
         m_registers.setFlag(flags::CARRY_FLAG, adjust >= 0x60);
-
-        m_registers.a = a;
     }
 
     void CPU::cpl()
