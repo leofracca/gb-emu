@@ -179,7 +179,7 @@ namespace gameboy
         }
     }
 
-    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.h
+    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.cpp
     void PPU::draw()
     {
         bool rowPixels[160] = {false};

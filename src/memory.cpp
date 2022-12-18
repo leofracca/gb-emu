@@ -174,7 +174,18 @@ namespace gameboy
         return m_memory[address];
     }
 
-    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/memory.cpp
+    void Memory::logInvalidWriteOperation(uint16_t address, uint8_t value, const std::string &memorySection)
+    {
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Writing value 0x" << +value << " to address 0x" << address << " (" << memorySection << ")\n";
+    }
+
+    void Memory::logInvalidReadOperation(uint16_t address, const std::string &memorySection)
+    {
+        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Reading from address 0x" << address << " (" << memorySection << ")\n";
+    }
+
+    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/mmu.cpp
+    // They are used to update the tile and sprite data
     void Memory::UpdateTile(uint16_t laddress)
     {
         uint16_t address = laddress & 0xFFFE;
@@ -221,15 +232,5 @@ namespace gameboy
         palette[1] = paletteColours[(value >> 2) & 0x3];
         palette[2] = paletteColours[(value >> 4) & 0x3];
         palette[3] = paletteColours[(value >> 6) & 0x3];
-    }
-
-    void Memory::logInvalidWriteOperation(uint16_t address, uint8_t value, const std::string &memorySection)
-    {
-        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Writing value 0x" << +value << " to address 0x" << address << " (" << memorySection << ")\n";
-    }
-
-    void Memory::logInvalidReadOperation(uint16_t address, const std::string &memorySection)
-    {
-        std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Reading from address 0x" << address << " (" << memorySection << ")\n";
     }
 } // namespace gameboy
