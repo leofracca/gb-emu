@@ -1738,9 +1738,9 @@ namespace gameboy
         m_registers.setFlag(flags::ZERO_FLAG, m_registers.a == n);
         // Set the subtract flag to 1
         m_registers.setFlag(flags::SUBTRACT_FLAG, true);
-        // Set the half-carry flag if there is no borrow from bit 4
+        // Set the half-carry flag if there is a borrow from bit 4
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (m_registers.a & 0x0F) < (n & 0x0F));
-        // Set the carry flag if there is no borrow
+        // Set the carry flag if there is a borrow
         m_registers.setFlag(flags::CARRY_FLAG, m_registers.a < n);
 
         // Subtract n from the value of the register A
@@ -1758,9 +1758,9 @@ namespace gameboy
         m_registers.setFlag(flags::ZERO_FLAG, result == 0);
         // Set the subtract flag to 1
         m_registers.setFlag(flags::SUBTRACT_FLAG, true);
-        // Set the half carry flag if there is no borrow from bit 4
+        // Set the half carry flag if there is a borrow from bit 4
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (m_registers.a & 0x0F) < (n & 0x0F) + carry);
-        // Set the carry flag if there is no borrow
+        // Set the carry flag if there is a borrow
         m_registers.setFlag(flags::CARRY_FLAG, resultFull < 0);
 
         // Set the value of the register A to the result
@@ -1818,9 +1818,9 @@ namespace gameboy
         m_registers.setFlag(flags::ZERO_FLAG, m_registers.a == n);
         // Set the subtract flag to 1
         m_registers.setFlag(flags::SUBTRACT_FLAG, true);
-        // Set the half-carry flag if there is no borrow from bit 4
+        // Set the half-carry flag if there is a borrow from bit 4
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (m_registers.a & 0x0F) < (n & 0x0F));
-        // Set the carry flag if there is no borrow
+        // Set the carry flag if there is a borrow
         m_registers.setFlag(flags::CARRY_FLAG, m_registers.a < n);
     }
 
@@ -1847,7 +1847,7 @@ namespace gameboy
         m_registers.setFlag(flags::ZERO_FLAG, n == 0);
         // Set the subtract flag to 1
         m_registers.setFlag(flags::SUBTRACT_FLAG, true);
-        // Set the half-carry flag if there is no borrow from bit 4
+        // Set the half-carry flag if there is a borrow from bit 4
         m_registers.setFlag(flags::HALF_CARRY_FLAG, (n & 0x0F) == 0x0F);
         // Carry flag not affected
     }

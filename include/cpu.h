@@ -220,8 +220,8 @@ namespace gameboy
          *          Flags affected:
          *            Z - Set if result is zero.
          *            N - Set.
-         *            H - Set if no borrow from bit 4.
-         *            C - Set if no borrow.
+         *            H - Set if borrow from bit 4.
+         *            C - Set if borrow.
          *
          * @param n The value to subtract from A.
          */
@@ -235,8 +235,8 @@ namespace gameboy
          *          Flags affected:
          *            Z - Set if result is zero.
          *            N - Set.
-         *            H - Set if no borrow from bit 4.
-         *            C - Set if no borrow.
+         *            H - Set if borrow from bit 4.
+         *            C - Set if borrow.
          *
          * @param n The value to subtract from A.
          */
@@ -297,8 +297,8 @@ namespace gameboy
          *          Flags affected:
          *            Z - Set if result is zero. (Set if A = n.)
          *            N - Set.
-         *            H - Set if no borrow from bit 4.
-         *            C - Set if no borrow. (Set if A < n.)
+         *            H - Set if borrow from bit 4.
+         *            C - Set if borrow. (Set if A < n.)
          *
          * @param n The value to compare with A.
          */
@@ -327,7 +327,7 @@ namespace gameboy
          *          Flags affected:
          *            Z - Set if result is zero.
          *            N - Set.
-         *            H - Set if no borrow from bit 4.
+         *            H - Set if borrow from bit 4.
          *            C - Not affected.
          *
          * @param n The register to decrement.
