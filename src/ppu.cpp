@@ -164,19 +164,21 @@ namespace gameboy
         uint8_t lyc = m_memory.read(ppu_registers::LYC_REG_ADDRESS);
 
         if (*m_ly == lyc)
+        {
             // Set the coincidence flag (bit 2 of the STAT register)
             *m_stat |= 0x04;
+
+            if (*m_stat & 0x40)
+            {
+                // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
+                uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
+                interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
+                m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
+            }
+        }
         else
             // Reset the coincidence flag (bit 2 of the STAT register)
             *m_stat &= 0xFB;
-
-        if (*m_ly == lyc && (*m_stat & 0x40))
-        {
-            // If the bit of the coincidence of the stat register is set (bit 6), set the interrupt flag
-            uint8_t interruptFlag = m_memory.read(interrupt_registers::INTERRUPT_FLAG_ADDRESS);
-            interruptFlag |= LCD_STATUS_INTERRUPT_FLAG_VALUE;
-            m_memory.write(interrupt_registers::INTERRUPT_FLAG_ADDRESS, interruptFlag);
-        }
     }
 
     // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.cpp
