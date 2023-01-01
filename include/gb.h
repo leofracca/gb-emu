@@ -53,7 +53,7 @@ namespace gameboy
          * @param input The Input
          * @return True if the user wants to quit, false otherwise
          */
-        bool updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input);
+        bool updatePlatform(uint32_t &lastCycleTime, PPU &ppu, Input &input);
 
         /**
          * @brief Save the current content of the RAM to a file

@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.0)
 project(GBEmu
-    DESCRIPTION "Gameboy Emulator"
+    DESCRIPTION "Game Boy Emulator"
     LANGUAGES CXX
 )
 
@@ -81,7 +81,7 @@ target_link_options(gbemu
 )
 
 target_link_libraries(gbemu_lib
-    PRIVATE SDL2::SDL2
+    PRIVATE ${SDL2_LIBRARIES}
 )
 target_link_libraries(gbemu
     PRIVATE gbemu_lib

@@ -21,7 +21,7 @@ namespace gameboy
         Timer timer(m_memory);
         Input input(m_memory);
 
-        auto lastCycleTime = SDL_GetTicks64();
+        auto lastCycleTime = SDL_GetTicks();
 
         do
         {
@@ -36,18 +36,18 @@ namespace gameboy
         return 0;
     }
 
-    bool GB::updatePlatform(uint64_t &lastCycleTime, PPU &ppu, Input &input)
+    bool GB::updatePlatform(uint32_t &lastCycleTime, PPU &ppu, Input &input)
     {
         if (!ppu.isRenderingEnabled())
             return true;
 
-        if (SDL_GetTicks64() - lastCycleTime < FRAMERATE)
-            SDL_Delay(FRAMERATE - SDL_GetTicks64() + lastCycleTime);
+        if (SDL_GetTicks() - lastCycleTime < FRAMERATE)
+            SDL_Delay(FRAMERATE - SDL_GetTicks() + lastCycleTime);
 
         m_platform.update(ppu.getFrameBuffer());
         ppu.setRenderingEnabled(false);
 
-        lastCycleTime = SDL_GetTicks64();
+        lastCycleTime = SDL_GetTicks();
 
         return Platform::processInput(input);
     }
