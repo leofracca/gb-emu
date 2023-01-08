@@ -136,8 +136,6 @@ namespace gameboy
          *
          * @param flag The flag to set
          * @param value The value to set the flag to
-         *
-         * @see RegisterFlag
          */
         void setFlag(uint8_t flag, bool value);
 
@@ -168,8 +166,6 @@ namespace gameboy
          * @param flag The flag to get the value of
          * @return true If the flag is set (1)
          * @return false If the flag is not set (0)
-         *
-         * @see RegisterFlag
          */
         [[nodiscard]] bool getFlag(uint8_t flag) const;
 

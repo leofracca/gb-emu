@@ -152,13 +152,6 @@ namespace gameboy
                 m_romBank = value;
             }
         }
-        else if (address <= 0x5FFF)
-        {
-            // Reset bits 5-6 of the ROM bank
-            m_romBank &= 0x9F;
-            // Set bits 5-6 of the ROM bank according to the value (bits 0-1)
-            m_romBank |= (value & 0x03) << 5;
-        }
         else if (address >= 0xA000 && address <= 0xBFFF)
         {
             if (m_ramEnabled)
