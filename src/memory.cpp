@@ -77,7 +77,7 @@ namespace gameboy
 
             return actionOrDirection == 0x20
                            ? (m_joypadState >> 4) | 0x20 // Direction
-                           : m_joypadState | 0x10; // Action
+                           : (m_joypadState & 0x0F) | 0x10; // Action
         }
 
         return m_memory[address];
@@ -126,12 +126,14 @@ namespace gameboy
 
             // DMA Transfer
             else if (address == 0xFF46)
+            {
+                // The written value specifies the transfer source address divided by $100
+                uint16_t sourceAddress = (value << 8);
                 for (uint16_t i = 0; i < 0xA0; i++)
                 {
-                    // The written value specifies the transfer source address divided by $100
-                    uint16_t sourceAddress = (value << 8);
                     write(0xFE00 + i, read(sourceAddress + i));
                 }
+            }
 
             // Update colour palette
             else if (address == 0xFF47)
