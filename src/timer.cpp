@@ -5,8 +5,6 @@
 
 #include "timer.h" // Timer
 
-using namespace gameboy::timer_registers;
-
 namespace gameboy
 {
     Timer::Timer(Memory &memory)
@@ -17,18 +15,18 @@ namespace gameboy
 
     void Timer::getRegisters()
     {
-        m_div = m_memory.read(DIV_REG_ADDRESS);
-        m_tima = m_memory.read(TIMA_REG_ADDRESS);
-        m_tma = m_memory.read(TMA_REG_ADDRESS);
-        m_tac = m_memory.read(TAC_REG_ADDRESS);
+        m_div = m_memory.read(timer_registers::DIV_REG_ADDRESS);
+        m_tima = m_memory.read(timer_registers::TIMA_REG_ADDRESS);
+        m_tma = m_memory.read(timer_registers::TMA_REG_ADDRESS);
+        m_tac = m_memory.read(timer_registers::TAC_REG_ADDRESS);
     }
 
     void Timer::setRegisters()
     {
-        m_memory.write(DIV_REG_ADDRESS, m_div);
-        m_memory.write(TIMA_REG_ADDRESS, m_tima);
-        m_memory.write(TMA_REG_ADDRESS, m_tma);
-        m_memory.write(TAC_REG_ADDRESS, m_tac);
+        m_memory.write(timer_registers::DIV_REG_ADDRESS, m_div);
+        m_memory.write(timer_registers::TIMA_REG_ADDRESS, m_tima);
+        m_memory.write(timer_registers::TMA_REG_ADDRESS, m_tma);
+        m_memory.write(timer_registers::TAC_REG_ADDRESS, m_tac);
     }
 
     void Timer::cycle(uint8_t cycles)
