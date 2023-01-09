@@ -51,7 +51,7 @@ namespace gameboy
          * @param lastCycleTime The last time the screen was updated
          * @param ppu The PPU
          * @param input The Input
-         * @return True if the user wants to quit, false otherwise
+         * @return False if the user wants to quit, true otherwise
          */
         bool updatePlatform(uint32_t &lastCycleTime, PPU &ppu, Input &input);
 
