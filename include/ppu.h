@@ -28,6 +28,8 @@ namespace gameboy
 
     namespace ppu_registers
     {
+        constexpr uint16_t OAM_ADDRESS = 0xFE00; ///< The start address of the OAM (Object Attribute Memory)
+
         constexpr uint16_t LCDC_REG_ADDRESS = 0xFF40; ///< The address of the LCD Control Register
         constexpr uint16_t STAT_REG_ADDRESS = 0xFF41; ///< The address of the LCD Status Register
         constexpr uint16_t SCY_REG_ADDRESS = 0xFF42; ///< The address of the Scroll Y Register (Background Y Position)
@@ -107,6 +109,8 @@ namespace gameboy
         uint8_t *m_scy; ///< The Scroll Y Register (Background Y Position)
         uint8_t *m_scx; ///< The Scroll X Register (Background X Position)
         uint8_t *m_ly; ///< The LY Register
+        uint8_t *m_wx; ///< The Window X Position Register (Window X Position)
+        uint8_t *m_wy; ///< The Window Y Position Register (Window Y Position)
 
         static constexpr uint8_t VBLANK_INTERRUPT_FLAG_VALUE = 0x01; ///< The bitmask of the VBLANK interrupt flag
         static constexpr uint8_t LCD_STATUS_INTERRUPT_FLAG_VALUE = 0x02; ///< The bitmask of the LCD Status interrupt flag
@@ -118,29 +122,26 @@ namespace gameboy
          */
         void setCoincidenceFlag();
 
-        // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.h
         /**
          * @brief Draw the lines on the screen
          *
-         * @see drawBackground
-         * @see drawWindow
-         * @see drawSprites
+         * @see renderBackground, renderWindow, renderSprites
          */
         void draw();
 
         /**
-         * @brief Draw the background on the screen
+         * @brief Draw the background
          */
-        void drawBackground(bool *rowPixels);
+        void renderBackground();
 
         /**
-         * @brief Draw the window on the screen
+         * @brief Draw the window
          */
-        void drawWindow();
+        void renderWindow();
 
         /**
-         * @brief Draw the sprites on the screen
+         * @brief Draw the sprites
          */
-        void drawSprites(const bool *rowPixels);
+        void renderSprites();
     };
 } // namespace gameboy

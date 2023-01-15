@@ -106,16 +106,8 @@ namespace gameboy
             else
                 m_memory[address] = value;
 
-            // VRAM
-            if (address >= 0x8000 && address < 0x9800)
-                UpdateTile(address);
-
-            // OAM
-            else if (address >= 0xFE00 && address < 0xFEA0)
-                UpdateSprite(address, value);
-
             // Check if the LCD has been disabled (bit 7 of LCDC register)
-            else if (address == 0xFF40)
+            if (address == 0xFF40)
             {
                 if (!(value & 0x80))
                 {
@@ -184,48 +176,6 @@ namespace gameboy
     void Memory::logInvalidReadOperation(uint16_t address, const std::string &memorySection)
     {
         std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Reading from address 0x" << address << " (" << memorySection << ")\n";
-    }
-
-    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/mmu.cpp
-    // They are used to update the tile and sprite data
-    void Memory::UpdateTile(uint16_t laddress)
-    {
-        uint16_t address = laddress & 0xFFFE;
-
-        uint16_t tile = (address >> 4) & 511;
-        uint16_t y = (address >> 1) & 7;
-
-        uint8_t bitIndex;
-        for (uint8_t x = 0; x < 8; x++)
-        {
-            bitIndex = 1 << (7 - x);
-
-            m_tiles[tile].pixels[y][x] = ((m_memory[address] & bitIndex) ? 1 : 0) + ((m_memory[address + 1] & bitIndex) ? 2 : 0);
-        }
-    }
-
-    void Memory::UpdateSprite(uint16_t address, uint8_t value)
-    {
-        uint16_t relativeAddress = address - 0xFE00;
-        Sprite *sprite = &m_sprites[relativeAddress >> 2];
-        sprite->ready = false;
-        switch (relativeAddress & 3)
-        {
-            case 0:
-                sprite->y = value - 16;
-                break;
-            case 1:
-                sprite->x = value - 8;
-                break;
-            case 2:
-                sprite->tile = value;
-                break;
-            case 3:
-                sprite->options.flags.value = value;
-                sprite->colourPalette = (sprite->options.flags.bits.paletteNumber) ? m_paletteOBP1 : m_paletteOBP0;
-                sprite->ready = true;
-                break;
-        }
     }
 
     void Memory::UpdatePalette(Colour (&palette)[4], uint8_t value)

@@ -29,6 +29,11 @@ namespace gameboy
     struct Colour
     {
         uint8_t colours[4]; ///< 0 - R, 1 - G, 2 - B, 3 - Transparency
+
+        uint8_t& operator[](const uint8_t index)
+        {
+            return colours[index];
+        }
     };
 
     constexpr Colour paletteColours[4] = {
@@ -45,14 +50,6 @@ namespace gameboy
     {
     public:
         /**
-         * @brief A tile is a 8x8 pixel image. Each tile is 16 bytes long.
-         */
-        struct Tile
-        {
-            uint8_t pixels[8][8] = {{0}}; ///< The pixels of the tile (8x8)
-        } m_tiles[384]; ///< There are 384 tiles
-
-        /**
          * @brief BG & Window Palette Data
          * @details This selects the shade of grays to use for the background (BG) & window pixels.
          *          Since each pixel uses 2 bits, the corresponding shade will be selected from here.
@@ -65,34 +62,26 @@ namespace gameboy
         };
 
         /**
-         * @brief All the information about the sprites
+         * @brief Object Palette 0 Data
+         * @details This selects the colour palette for sprite palette 0.
          */
-        struct Sprite
-        {
-            Colour *colourPalette; ///< The colour palette to use for the sprite
-            struct
-            {
-                union
-                {
-                    struct
-                    {
-                        uint8_t gbcPaletteNumber1 : 1;
-                        uint8_t gbcPaletteNumber2 : 1;
-                        uint8_t gbcPaletteNumber3 : 1;
-                        uint8_t gbcVRAMBank : 1;
-                        uint8_t paletteNumber : 1;
-                        uint8_t xFlip : 1;
-                        uint8_t yFlip : 1;
-                        uint8_t renderPriority : 1;
-                    } bits;
-                    uint8_t value;
-                } flags;
-            } options; ///< The options of the sprite
-            int y; ///< The y position of the sprite
-            int x; ///< The x position of the sprite
-            uint8_t tile; ///< The tile number of the sprite
-            bool ready; ///< True if the sprite is ready to be rendered
-        } m_sprites[40] = {}; ///< The sprites
+        Colour m_paletteOBP0[4] = {
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+        };
+
+        /**
+         * @brief Object Palette 1 Data
+         * @details This selects the colour palette for sprite palette 1.
+         */
+        Colour m_paletteOBP1[4] = {
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+                {0, 0, 0, 255},
+        };
 
         /**
          * @brief Construct a new Memory object
@@ -180,43 +169,6 @@ namespace gameboy
          */
         uint8_t m_joypadState = 0xFF; ///< A temporary variable used to store the joypad state when an interrupt is sent
         static constexpr uint16_t JOYPAD_ADDRESS = 0xFF00; ///< The address of the register containing info about the joypad
-
-        /**
-         * @brief Object Palette 0 Data
-         * @details This selects the colour palette for sprite palette 0.
-         */
-        Colour m_paletteOBP0[4] = {
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-        };
-
-        /**
-         * @brief Object Palette 1 Data
-         * @details This selects the colour palette for sprite palette 1.
-         */
-        Colour m_paletteOBP1[4] = {
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-                {0, 0, 0, 255},
-        };
-
-        /**
-         * @brief Update the tile at the specified address
-         *
-         * @param address The address of the tile
-         */
-        void UpdateTile(uint16_t address);
-
-        /**
-         * @brief Update the sprite at the specified address
-         *
-         * @param address The address of the sprite
-         * @param value The value to write
-         */
-        void UpdateSprite(uint16_t address, uint8_t value);
 
         /**
          * @brief Update the palette

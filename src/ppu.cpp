@@ -7,6 +7,8 @@
 
 #include "ppu.h" // PPU
 
+#include <any> // std::any
+
 namespace gameboy
 {
     PPU::PPU(Memory &memory)
@@ -17,6 +19,8 @@ namespace gameboy
         m_scy = &m_memory[ppu_registers::SCY_REG_ADDRESS];
         m_scx = &m_memory[ppu_registers::SCX_REG_ADDRESS];
         m_ly = &m_memory[ppu_registers::LY_REG_ADDRESS];
+        m_wx = &m_memory[ppu_registers::WX_REG_ADDRESS];
+        m_wy = &m_memory[ppu_registers::WY_REG_ADDRESS];
     }
 
     void PPU::cycle(uint8_t cycles)
@@ -181,159 +185,179 @@ namespace gameboy
             *m_stat &= 0xFB;
     }
 
-    // The following functions come from https://github.com/Mika412/NoobBoy/blob/master/src/ppu.cpp
     void PPU::draw()
     {
-        bool rowPixels[160] = {false};
-        drawBackground(rowPixels);
-        drawWindow();
-        drawSprites(rowPixels);
-    }
-
-    void PPU::drawBackground(bool *rowPixels)
-    {
-        uint16_t address = 0x9800;
-
-        // Background tile map address
-        if (*m_lcdc & 0x08)
-            address += 0x400;
-
-        // Background tile data address
-        address += ((*m_scy + *m_ly) / 8 * 32) % (32 * 32);
-
-        uint16_t start_row_address = address;
-        uint16_t end_row_address = address + 32;
-        address += (*m_scx >> 3);
-
-        int x = *m_scx & 7;
-        int y = (*m_ly + *m_scy) & 7;
-        int pixelOffset = *m_ly * 160;
-
-        int pixel = 0;
-        for (int i = 0; i < 21; i++)
+        // Render only if the LCD is enabled (bit 7 of the LCDC register)
+        if (*m_lcdc & 0x80)
         {
-            uint16_t tile_address = address + i;
-            if (tile_address >= end_row_address)
-                tile_address = (start_row_address + tile_address % end_row_address);
-
-            int tile = m_memory.read(tile_address);
-            if (!(*m_lcdc & 0x10) && tile < 128)
-                tile += 256;
-
-            for (; x < 8; x++)
-            {
-                if (pixel >= 160) break;
-
-                int colour = m_memory.m_tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory.m_paletteBGP[colour];
-                if (colour > 0)
-                    rowPixels[pixel] = true;
-                pixel++;
-            }
-            x = 0;
+            renderBackground();
+            renderWindow();
+            renderSprites();
         }
     }
 
-    void PPU::drawWindow()
+    void PPU::renderBackground()
     {
-        if (!(*m_lcdc & 0x20))
+        // Tile map area
+        uint16_t tileMapOffset = (*m_lcdc & 0x08) ? 0x9C00 : 0x9800;
+        // Tile data area
+        uint16_t tileDataOffset = (*m_lcdc & 0x10) ? 0x8000 : 0x8800;
+        bool unsignedTileNumbers = (tileDataOffset == 0x8000);
+
+        // Get the y coordinate of the tile
+        uint8_t y = *m_ly + *m_scy;
+        // Get the row of the pixel of the tile the scanline is on
+        uint16_t tileRow = (y / 8) * 32;
+
+        // Draw the scanline
+        auto bufferOffset = *m_ly * screen_size::SCREEN_WIDTH;
+        for (uint8_t pixel = 0; pixel < screen_size::SCREEN_WIDTH; pixel++)
+        {
+            uint8_t x = pixel + *m_scx;
+
+            uint16_t tileColumn = x / 8;
+            // Get the tile id number
+            std::any tileNumber = m_memory.read(tileMapOffset + tileRow + tileColumn);
+            if (!unsignedTileNumbers)
+                tileNumber = static_cast<int8_t>(std::any_cast<uint8_t>(tileNumber));
+
+            // Get the current tile address
+            uint16_t tileAddress = tileDataOffset;
+            if (unsignedTileNumbers)
+                tileAddress += (std::any_cast<uint8_t>(tileNumber) * 16);
+            else
+                tileAddress += ((std::any_cast<int8_t>(tileNumber) + 128) * 16);
+
+            uint8_t line = y % 8;
+            line *= 2; // Each line takes 2 bytes
+            uint8_t data1 = m_memory.read(tileAddress + line);
+            uint8_t data2 = m_memory.read(tileAddress + line + 1);
+
+            uint8_t colourBit = -((x % 8) - 7);
+            uint8_t colourId = ((data2 >> colourBit) & 1) << 1 | ((data1 >> colourBit) & 1);
+            m_frameBuffer[bufferOffset + pixel] = m_memory.m_paletteBGP[colourId];
+        }
+    }
+
+    void PPU::renderWindow()
+    {
+        // Check if window is enabled
+        if (!(*m_lcdc & 0x20) || *m_wy > *m_ly)
             return;
 
-        if (m_memory.read(ppu_registers::WY_REG_ADDRESS) > *m_ly)
-            return;
+        // Tile map area
+        uint16_t tileMapOffset = (*m_lcdc & 0x40) ? 0x9C00 : 0x9800;
+        // Tile data area
+        uint16_t tileDataOffset = (*m_lcdc & 0x10) ? 0x8000 : 0x8800;
+        bool unsignedTileNumbers = (tileDataOffset == 0x8000);
 
-        uint16_t address = 0x9800;
-        if (*m_lcdc & 0x40)
-            address += 0x400;
+        // Get the y coordinate of the tile
+        uint8_t y = *m_ly - *m_wy;
+        // Get the row of the pixel of the tile the scanline is on
+        uint16_t tileRow = tileMapOffset + (y / 8) * 32;
 
-        address += ((*m_ly - m_memory.read(ppu_registers::WY_REG_ADDRESS)) / 8) * 32;
-        int y = (*m_ly - m_memory.read(ppu_registers::WY_REG_ADDRESS)) & 7;
-        int x = 0;
-
-        unsigned pixelOffset = *m_ly * 160;
-        pixelOffset += m_memory.read(ppu_registers::WX_REG_ADDRESS) - 7;
-        for (uint16_t tile_address = address; tile_address < address + 20; tile_address++)
+        // Draw the scanline
+        auto bufferOffset = *m_ly * screen_size::SCREEN_WIDTH;
+        for (uint8_t pixel = 0; pixel < screen_size::SCREEN_WIDTH; pixel++)
         {
-            int tile = m_memory.read(tile_address);
+            if (pixel < *m_wx - 7)
+                continue;
 
-            if (!(*m_lcdc & 0x10) && tile < 128)
-                tile += 256;
+            uint8_t x = pixel - (*m_wx - 7);
 
-            for (; x < 8; x++)
-            {
-                if (pixelOffset > sizeof(m_frameBuffer)) continue;
-                int colour = m_memory.m_tiles[tile].pixels[y][x];
-                m_frameBuffer[pixelOffset++] = m_memory.m_paletteBGP[colour];
-            }
-            x = 0;
+            uint16_t tileColumn = x / 8;
+            // Get the tile id number
+            std::any tileNumber = m_memory.read(tileRow + tileColumn);
+            if (!unsignedTileNumbers)
+                tileNumber = static_cast<int8_t>(std::any_cast<uint8_t>(tileNumber));
+
+            // Get the current tile address
+            uint16_t tileAddress = tileDataOffset;
+            if (unsignedTileNumbers)
+                tileAddress += (std::any_cast<uint8_t>(tileNumber) * 16);
+            else
+                tileAddress += ((std::any_cast<int8_t>(tileNumber) + 128) * 16);
+
+            uint8_t line = y % 8;
+            line *= 2; // Each line takes 2 bytes
+            uint8_t data1 = m_memory.read(tileAddress + line);
+            uint8_t data2 = m_memory.read(tileAddress + line + 1);
+
+            uint8_t colourBit = -((x % 8) - 7);
+            uint8_t colourId = ((data2 >> colourBit) & 1) << 1 | ((data1 >> colourBit) & 1);
+            m_frameBuffer[bufferOffset + pixel] = m_memory.m_paletteBGP[colourId];
         }
     }
 
-    void PPU::drawSprites(const bool *rowPixels)
+    void PPU::renderSprites()
     {
-        int sprite_height = *m_lcdc & 0x04 ? 16 : 8;
+        // Check if sprites are enabled
+        if (!(*m_lcdc & 0x02))
+            return;
 
-        bool visible_sprites[40];
-        int sprite_row_count = 0;
-
-        for (int i = 39; i >= 0; i--)
+        for (int sprite = 0; sprite < 40; sprite++)
         {
-            auto sprite = m_memory.m_sprites[i];
+            uint8_t index = sprite * 4; // Each sprite takes 4 bytes
+            // Get the sprite attributes
+            auto y = static_cast<int16_t>(m_memory.read(ppu_registers::OAM_ADDRESS + index) - 16);
+            auto x = static_cast<int16_t>(m_memory.read(ppu_registers::OAM_ADDRESS + index + 1) - 8);
+            uint8_t tileIndex = m_memory.read(ppu_registers::OAM_ADDRESS + index + 2);
+            uint8_t flags = m_memory.read(ppu_registers::OAM_ADDRESS + index + 3);
 
-            if (!sprite.ready)
+            // Sprite size: 8x8 or 8x16
+            uint8_t height = (*m_lcdc & 0x04) ? 16 : 8;
+
+            // Check if the sprite is on the current scanline
+            if (*m_ly >= y && *m_ly < y + height)
             {
-                visible_sprites[i] = false;
-                continue;
-            }
+                // Get the sprite line
+                uint8_t line = *m_ly - y;
+                // Check if the sprite is y-flipped
+                if (flags & 0x40)
+                    line = -(line - (height - 1));
+                line *= 2; // Each line takes 2 bytes
 
-            if ((sprite.y > *m_ly) || ((sprite.y + sprite_height) <= *m_ly))
-            {
-                visible_sprites[i] = false;
-                continue;
-            }
+                // Get the sprite tile address
+                uint16_t tileAddress = 0x8000 + (tileIndex * 16) + line;
 
-            visible_sprites[i] = sprite_row_count++ <= 10;
-        }
+                uint8_t data1 = m_memory.read(tileAddress);
+                uint8_t data2 = m_memory.read(tileAddress + 1);
 
-        for (int i = 39; i >= 0; i--)
-        {
-            if (!visible_sprites[i])
-                continue;
+                // Draw the sprite
+                for (int pixel = 7; pixel >= 0; pixel--)
+                {
+                    uint8_t colourBit = pixel;
+                    // Check if the sprite is x-flipped
+                    if (flags & 0x20)
+                        colourBit = -((pixel - 7));
+                    uint8_t colourId = ((data2 >> colourBit) & 1) << 1 | ((data1 >> colourBit) & 1);
 
-            auto sprite = m_memory.m_sprites[i];
+                    // Check if the colour is not transparent
+                    if (colourId != 0)
+                    {
+                        int pixell = x + (7 - pixel);
+                        if ((pixell < 0) || (pixell > 159)) continue;
 
-            if ((sprite.x < -7) || (sprite.x >= 160))
-                continue;
+                        // Check if the sprite is behind the background
+                        if (flags & 0x80)
+                        {
+                            // Check if the background pixel is not white
+                            if (m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH + pixell][0] != 255 ||
+                                m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH + pixell][1] != 255 ||
+                                m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH + pixell][2] != 255 ||
+                                m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH + pixell][3] != 255)
+                            {
+                                continue;
+                            }
+                        }
 
-            // Flip vertically
-            int pixel_y = *m_ly - sprite.y;
-            pixel_y = sprite.options.flags.bits.yFlip ? (7 + 8 * (*m_lcdc & 0x04)) - pixel_y : pixel_y;
-
-            for (int x = 0; x < 8; x++)
-            {
-                int tile_num = sprite.tile & ((*m_lcdc & 0x04) ? 0xFE : 0xFF);
-                int colour;
-
-                int x_temp = sprite.x + x;
-                if (x_temp < 0 || x_temp >= 160)
-                    continue;
-
-                int pixelOffset = *m_ly * 160 + x_temp;
-
-                // Flip horizontally
-                uint8_t pixel_x = sprite.options.flags.bits.xFlip ? 7 - x : x;
-
-                if ((*m_lcdc & 0x04) && (pixel_y >= 8))
-                    colour = m_memory.m_tiles[tile_num + 1].pixels[pixel_y - 8][pixel_x];
-                else
-                    colour = m_memory.m_tiles[tile_num].pixels[pixel_y][pixel_x];
-
-                // Black is transparent
-                if (!colour)
-                    continue;
-
-                if (!rowPixels[x_temp] || !sprite.options.flags.bits.renderPriority)
-                    m_frameBuffer[pixelOffset] = sprite.colourPalette[colour];
+                        // Set the correct OBJ palette (bit 4 of the attributes of the sprite)
+                        if (flags & 0x10)
+                            m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH + pixell] = m_memory.m_paletteOBP1[colourId];
+                        else
+                            m_frameBuffer[*m_ly * screen_size::SCREEN_WIDTH +pixell] = m_memory.m_paletteOBP0[colourId];
+                    }
+                }
             }
         }
     }
