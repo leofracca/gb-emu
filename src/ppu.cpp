@@ -196,16 +196,24 @@ namespace gameboy
         }
     }
 
-    void PPU::renderBackground()
+    void PPU::renderTiles(bool isWindow)
     {
+        // Check if window is enabled
+        if (isWindow && (!(*m_lcdc & 0x20) || *m_wy > *m_ly))
+            return;
+
         // Tile map area
-        uint16_t tileMapOffset = (*m_lcdc & 0x08) ? 0x9C00 : 0x9800;
+        uint16_t tileMapOffset;
+        if (isWindow)
+            tileMapOffset = (*m_lcdc & 0x40) ? 0x9C00 : 0x9800;
+        else
+            tileMapOffset = (*m_lcdc & 0x08) ? 0x9C00 : 0x9800;
         // Tile data area
         uint16_t tileDataOffset = (*m_lcdc & 0x10) ? 0x8000 : 0x8800;
         bool unsignedTileNumbers = (tileDataOffset == 0x8000);
 
         // Get the y coordinate of the tile
-        uint8_t y = *m_ly + *m_scy;
+        uint8_t y = isWindow ? *m_ly - *m_wy : *m_ly + *m_scy;
         // Get the row of the pixel of the tile the scanline is on
         uint16_t tileRow = (y / 8) * 32;
 
@@ -213,7 +221,10 @@ namespace gameboy
         auto bufferOffset = *m_ly * screen_size::SCREEN_WIDTH;
         for (uint8_t pixel = 0; pixel < screen_size::SCREEN_WIDTH; pixel++)
         {
-            uint8_t x = pixel + *m_scx;
+            if (isWindow && pixel < *m_wx - 7)
+                continue;
+
+            uint8_t x = isWindow ? pixel - (*m_wx - 7) : pixel + *m_scx;
 
             uint16_t tileColumn = x / 8;
             // Get the tile id number
@@ -239,54 +250,14 @@ namespace gameboy
         }
     }
 
+    void PPU::renderBackground()
+    {
+        renderTiles(false);
+    }
+
     void PPU::renderWindow()
     {
-        // Check if window is enabled
-        if (!(*m_lcdc & 0x20) || *m_wy > *m_ly)
-            return;
-
-        // Tile map area
-        uint16_t tileMapOffset = (*m_lcdc & 0x40) ? 0x9C00 : 0x9800;
-        // Tile data area
-        uint16_t tileDataOffset = (*m_lcdc & 0x10) ? 0x8000 : 0x8800;
-        bool unsignedTileNumbers = (tileDataOffset == 0x8000);
-
-        // Get the y coordinate of the tile
-        uint8_t y = *m_ly - *m_wy;
-        // Get the row of the pixel of the tile the scanline is on
-        uint16_t tileRow = tileMapOffset + (y / 8) * 32;
-
-        // Draw the scanline
-        auto bufferOffset = *m_ly * screen_size::SCREEN_WIDTH;
-        for (uint8_t pixel = 0; pixel < screen_size::SCREEN_WIDTH; pixel++)
-        {
-            if (pixel < *m_wx - 7)
-                continue;
-
-            uint8_t x = pixel - (*m_wx - 7);
-
-            uint16_t tileColumn = x / 8;
-            // Get the tile id number
-            std::any tileNumber = m_memory.read(tileRow + tileColumn);
-            if (!unsignedTileNumbers)
-                tileNumber = static_cast<int8_t>(std::any_cast<uint8_t>(tileNumber));
-
-            // Get the current tile address
-            uint16_t tileAddress = tileDataOffset;
-            if (unsignedTileNumbers)
-                tileAddress += (std::any_cast<uint8_t>(tileNumber) * 16);
-            else
-                tileAddress += ((std::any_cast<int8_t>(tileNumber) + 128) * 16);
-
-            uint8_t line = y % 8;
-            line *= 2; // Each line takes 2 bytes
-            uint8_t data1 = m_memory.read(tileAddress + line);
-            uint8_t data2 = m_memory.read(tileAddress + line + 1);
-
-            uint8_t colourBit = -((x % 8) - 7);
-            uint8_t colourId = ((data2 >> colourBit) & 1) << 1 | ((data1 >> colourBit) & 1);
-            m_frameBuffer[bufferOffset + pixel] = m_memory.m_paletteBGP[colourId];
-        }
+        renderTiles(true);
     }
 
     void PPU::renderSprites()

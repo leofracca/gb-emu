@@ -131,13 +131,25 @@ namespace gameboy
 
         /**
          * @brief Draw the background
+         *
+         * @see renderTiles
          */
         void renderBackground();
 
         /**
          * @brief Draw the window
+         *
+         * @see renderTiles
          */
         void renderWindow();
+
+        /**
+         * @brief Draw the tiles (both background and window)
+         *
+         * @param isWindow True if the tiles are drawn in the window, false otherwise
+         * @see renderBackground, renderWindow
+         */
+        void renderTiles(bool isWindow);
 
         /**
          * @brief Draw the sprites
