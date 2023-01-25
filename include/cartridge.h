@@ -13,6 +13,7 @@
 
 #include "mbc.h" // MBC
 
+#include <memory> // std::unique_ptr
 #include <string> // std::string
 #include <vector> // std::vector
 
@@ -37,11 +38,6 @@ namespace gameboy
     public:
         /// Default constructor
         Cartridge() = default;
-
-        /**
-         * @brief Free the memory used by the MBC
-         */
-        ~Cartridge();
 
         /// Cartridge cannot be copied
         Cartridge(const Cartridge &) = delete;
@@ -86,7 +82,7 @@ namespace gameboy
 
     private:
         std::string m_ROMFilename; ///< The filename of the ROM
-        MBC *m_MBC = nullptr; ///< The MBC of the cartridge
+        std::unique_ptr<MBC> m_MBC; ///< The MBC of the cartridge
 
         std::string m_title; ///< The title of the cartridge (used for printing)
         std::string m_MBCAsString; ///< The MBC as a string (used for printing)

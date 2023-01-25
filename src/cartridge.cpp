@@ -12,11 +12,6 @@
 
 namespace gameboy
 {
-    Cartridge::~Cartridge()
-    {
-        delete m_MBC;
-    }
-
     bool Cartridge::loadROM(const std::string &filename)
     {
         // Save the filename without the extension
@@ -66,13 +61,13 @@ namespace gameboy
             case 0x08:
             case 0x09:
                 m_MBCAsString = "No MBC (ROM Only)";
-                m_MBC = new ROMOnly(std::move(m_rom), std::move(m_ram));
+                m_MBC = std::make_unique<ROMOnly>(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x01:
             case 0x02:
             case 0x03:
                 m_MBCAsString = "MBC1";
-                m_MBC = new MBC1(std::move(m_rom), std::move(m_ram));
+                m_MBC = std::make_unique<MBC1>(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x05:
             case 0x06:
@@ -82,7 +77,7 @@ namespace gameboy
                 if (m_ram.empty())
                     m_ram = std::vector<uint8_t>(512, 0x00);
 
-                m_MBC = new MBC2(std::move(m_rom), std::move(m_ram));
+                m_MBC = std::make_unique<MBC2>(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x0F:
             case 0x10:
@@ -90,7 +85,7 @@ namespace gameboy
             case 0x12:
             case 0x13:
                 m_MBCAsString = "MBC3";
-                m_MBC = new MBC3(std::move(m_rom), std::move(m_ram));
+                m_MBC = std::make_unique<MBC3>(std::move(m_rom), std::move(m_ram));
                 break;
             case 0x19:
             case 0x1A:
@@ -99,10 +94,11 @@ namespace gameboy
             case 0x1D:
             case 0x1E:
                 m_MBCAsString = "MBC5";
-                m_MBC = new MBC5(std::move(m_rom), std::move(m_ram));
+                m_MBC = std::make_unique<MBC5>(std::move(m_rom), std::move(m_ram));
                 break;
             default:
-                std::cout << std::hex << "\x1B[33m!!!\033[0m " << "Unknown cartridge type: " << +cartridgeType << std::endl;
+                std::cout << std::hex << "\x1B[33m!!!\033[0m "
+                          << "Unknown cartridge type: " << +cartridgeType << std::endl;
         }
     }
 
