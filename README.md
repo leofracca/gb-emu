@@ -17,7 +17,7 @@ An open source GameBoy emulator written in C++.
 At the moment, the emulator has been tested on Ubuntu and Fedora. On Ubuntu the required software can be installed with:
 
 ```shell
-sudo apt install git cmake g++ libsdl2-dev libboost-dev
+sudo apt install git cmake g++ libsdl2-dev libboost-program-options-dev
 ```
 
 On Fedora the required software can be installed with:
