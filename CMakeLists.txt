@@ -80,8 +80,11 @@ target_link_options(gbemu
     PRIVATE ${LINKER_FLAGS}
 )
 
+find_package(Boost COMPONENTS program_options REQUIRED)
+
 target_link_libraries(gbemu_lib
     PRIVATE ${SDL2_LIBRARIES}
+    Boost::program_options
 )
 target_link_libraries(gbemu
     PRIVATE gbemu_lib

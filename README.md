@@ -12,16 +12,18 @@ An open source GameBoy emulator written in C++.
 
 - [SDL2](https://www.libsdl.org/)
 
+- [Boost](https://www.boost.org/)
+
 At the moment, the emulator has been tested on Ubuntu and Fedora. On Ubuntu the required software can be installed with:
 
 ```shell
-sudo apt install git cmake g++ libsdl2-dev
+sudo apt install git cmake g++ libsdl2-dev libboost-dev
 ```
 
 On Fedora the required software can be installed with:
 
 ```shell
-sudo dnf install git make cmake g++ SDL2 SDL2-devel
+sudo dnf install git make cmake g++ SDL2 SDL2-devel boost-devel
 ```
 
 ## Building
