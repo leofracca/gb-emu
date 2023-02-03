@@ -1,9 +1,10 @@
 #include "gb.h" // GB
 
 #include <boost/program_options.hpp> // boost::program_options
-#include <iostream>
+#include <iostream> // std::cout, std::endl
+#include <optional> // std::optional
 
-int main(int argc, char *argv[])
+std::optional<boost::program_options::variables_map> handleArguments(int argc, char *argv[])
 {
     namespace po = boost::program_options;
     // Parse the command line arguments
@@ -17,26 +18,44 @@ int main(int argc, char *argv[])
     p.add("scale", 2);
     po::variables_map vm;
     po::store(
-            po::command_line_parser(argc, argv)
-                    .options(desc)
-                    .positional(p)
-                    .run(),
-            vm);
+        po::command_line_parser(argc, argv)
+            .options(desc)
+            .positional(p)
+            .run(),
+        vm);
     po::notify(vm);
+
     if (vm.count("help"))
     {
         std::cout << desc << std::endl;
-        return 0;
+        return {};
     }
     if (!vm.count("rom"))
     {
         std::cout << "No ROM file specified" << std::endl;
-        return 1;
+        return {};
+    }
+    if (vm["scale"].as<int>() < 1)
+    {
+        std::cout << "Scale must be greater than 0" << std::endl;
+        return {};
     }
 
+    return vm;
+}
+
+int main(int argc, char *argv[])
+{
+    auto vm = handleArguments(argc, argv);
+    if (!vm)
+        return 0;
+
+    auto scale = vm.value()["scale"].as<int>();
+    auto rom = vm.value()["rom"].as<std::string>();
+
     // Run the emulator
-    gameboy::GB gameboy(vm["scale"].as<int>());
-    if (gameboy.run(vm["rom"].as<std::string>()) == 1)
+    gameboy::GB gameboy(scale);
+    if (gameboy.run(rom) == 1)
         return 1; // An error occurred
     return 0;
 }
