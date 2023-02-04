@@ -4,8 +4,8 @@
 
 namespace gameboy
 {
-    GB::GB(const int scale)
-        : m_platform(scale)
+    GB::GB(const int scale, const bool maximize)
+        : m_platform(scale, maximize)
     {}
 
     int GB::run(const std::string &filename)

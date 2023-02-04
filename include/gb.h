@@ -26,8 +26,9 @@ namespace gameboy
          * @brief Create and initialize the emulator
          *
          * @param scale The scale of the window
+         * @param maximize True if the window should be maximized, false otherwise
          */
-        explicit GB(int scale);
+        explicit GB(int scale, bool maximize);
 
         /**
          * @brief Run the emulator

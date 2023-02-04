@@ -1,14 +1,21 @@
 #include "platform.h" // Platform
 #include "ppu.h" // SCREEN_WIDTH, SCREEN_HEIGHT
+#include <iostream>
 
 namespace gameboy
 {
-    Platform::Platform(const int scale)
+    Platform::Platform(const int scale, const bool maximize)
     {
         SDL_Init(SDL_INIT_VIDEO);
 
-        window = SDL_CreateWindow("GBEmu", 0, 0, screen_size::SCREEN_WIDTH * scale, screen_size::SCREEN_HEIGHT * scale, SDL_WINDOW_SHOWN);
-        SDL_SetWindowResizable(window, SDL_TRUE);
+        window = SDL_CreateWindow("GBEmu",
+                                  SDL_WINDOWPOS_CENTERED,
+                                  SDL_WINDOWPOS_CENTERED,
+                                  screen_size::SCREEN_WIDTH * scale,
+                                  screen_size::SCREEN_HEIGHT * scale,
+                                  SDL_WINDOW_RESIZABLE);
+        if (maximize)
+            SDL_MaximizeWindow(window);
 
         renderer = SDL_CreateRenderer(window, -1, 0);
         SDL_RenderSetLogicalSize(renderer, screen_size::SCREEN_WIDTH, screen_size::SCREEN_HEIGHT);

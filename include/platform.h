@@ -22,8 +22,9 @@ namespace gameboy
          * @brief Create and initialize the window
          *
          * @param scale The scale of the window
+         * @param maximize True if the window should be maximized, false otherwise
          */
-        explicit Platform(int scale);
+        explicit Platform(int scale, bool maximize);
 
         /**
          * @brief Destroy the window

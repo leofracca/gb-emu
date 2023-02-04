@@ -12,7 +12,8 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
     desc.add_options()
         ("help,h", "produce this help message")
         ("rom,r", po::value<std::string>(), "path to the ROM file")
-        ("scale,s", po::value<int>()->default_value(1), "initial scale of the window (default: 1)");
+        ("scale,s", po::value<int>()->default_value(1), "initial scale of the window (default: 1)")
+        ("maximize,m", "maximize the window on startup");
     po::positional_options_description p;
     p.add("rom", 1);
     p.add("scale", 2);
@@ -52,9 +53,10 @@ int main(int argc, char *argv[])
 
     auto scale = vm.value()["scale"].as<int>();
     auto rom = vm.value()["rom"].as<std::string>();
+    bool maximize = vm->count("maximize") > 0;
 
     // Run the emulator
-    gameboy::GB gameboy(scale);
+    gameboy::GB gameboy(scale, maximize);
     if (gameboy.run(rom) == 1)
         return 1; // An error occurred
     return 0;
